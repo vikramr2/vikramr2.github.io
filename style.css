@@ -104,3 +104,37 @@ li {
 a {
   text-decoration: none;
 }
+
+.card {
+  margin: auto;
+  width: 70%;
+}
+
+.card-img-top {
+  width: 400px;
+  height: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-container {
+  padding-top: 5px;
+  animation: 1s ease-out 0s 1 slideInFromBottom;
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.exit {
+  padding-top: 1%;
+  font-size: 40px;
+  text-align: right;
+}
