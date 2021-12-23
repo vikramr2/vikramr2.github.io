@@ -6,6 +6,13 @@
 	overflow:hidden;
 }
 
+#main2  {
+	position: relative;
+	margin: 0; 
+	height: 100%;
+	width:  100%;
+}
+
 canvas {
   margin: 0;
 	position: absolute;
@@ -137,4 +144,13 @@ a {
   padding-top: 1%;
   font-size: 40px;
   text-align: right;
+}
+
+.mb-3 {
+  position: relative;
+}
+
+.card {
+  max-height: 100%;
+  overflow:auto;
 }

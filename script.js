@@ -7,7 +7,7 @@ console.log("Change");
 
 //initialize canvas
 function setup() {
-	h = window.innerHeight;
+	h = window.innerHeight * 1.2;
 	w = window.innerWidth;
   	canvas = createCanvas(w, h);
   	canvas.parent("canv")
@@ -31,17 +31,17 @@ function draw() {
 	stroke(color(255, 255, 255));
 	//strokeWeight(4);
 
-	line(0, 2*h/3, w, 2*h/3);
+	line(0, 2*(h/1.2)/3, w, 2*(h/1.2)/3);
 
 	for (var i = 0; i < w/2; i += 50) {
-		line(w/2 - i, 2*h/3, w/2 - 2*i, h)
+		line(w/2 - i, 2*(h/1.2)/3, w/2 - 2*i, h)
 	} 
 
 	for (var i = 0; i < w/2; i += 50) {
-		line(w/2 + i, 2*h/3, w/2 + 2*i, h)
+		line(w/2 + i, 2*(h/1.2)/3, w/2 + 2*i, h)
 	} 
 
-	for (var i = 2*h/3 + (frame % 50); i < h; i += 50) {
+	for (var i = 2*(h/1.2)/3 + (frame % 50); i < h; i += 50) {
 		line(0, i, w, i);
 	}
 
@@ -49,7 +49,7 @@ function draw() {
 }
 
 window.onresize = function() {
-	h = window.innerHeight;
+	h = window.innerHeight * 1.2;
 	w = window.innerWidth;
 	canvas.resize(w, h);
 }
