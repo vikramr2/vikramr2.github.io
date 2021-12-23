@@ -15,7 +15,7 @@
 
 canvas {
   margin: 0;
-	position: absolute;
+	position: fixed;
 	z-index: -3;
 }
 
@@ -141,16 +141,15 @@ a {
 }
 
 .exit {
+  position: fixed;
   padding-top: 1%;
   font-size: 40px;
   text-align: right;
-}
-
-.mb-3 {
-  position: relative;
+  right: 0;
 }
 
 .card {
+  margin-top: 10px;
   max-height: 100%;
-  overflow:auto;
+  margin-bottom: 10px;
 }
