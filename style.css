@@ -55,9 +55,9 @@ canvas {
   bottom: 0;
   width: 100%;
   color: white;
-  text-align: center;
 }
 
 .dock {
   display: flex;
+  justify-content: center;
 }
