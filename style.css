@@ -7,6 +7,7 @@
 }
 
 canvas {
+  margin: 0;
 	position: absolute;
 	z-index: -3;
 }
@@ -37,6 +38,13 @@ canvas {
     blink-caret .5s step-end infinite;
 }
 
+h2 {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-family: monospace;
+}
+
 /* The typing effect */
 @keyframes typing {
   from { width: 0 }
@@ -60,4 +68,39 @@ canvas {
 .dock {
   display: flex;
   justify-content: center;
+}
+
+.icon {
+  padding: 5px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: inline;
+  float: left;
+  padding-left: 15px;
+}
+
+.container {
+  display: flex;
+  padding-top: 1%;
+  padding-left: 2%;
+}
+
+.logo-text {
+  font-size: 36px;
+}
+
+.main_list {
+  position:absolute;
+  right: 10px;
+}
+
+a {
+  text-decoration: none;
 }

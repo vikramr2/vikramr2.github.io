@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Vik R.</title>
+		<title>Vikram Ramavarapu</title>
 		<!-- P5 Library -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
 		<!-- Define inlined JavaScript -->
@@ -10,14 +10,29 @@
 	</head>
 	<body id="main">
 		<div id="canv"></div>
+		<nav class="nav">
+            <div class="container">
+                <div class="logo">
+                    <h2 class="logo-text">&#x0C35;&#x0C3F;.</h2>
+                </div>
+                <div id="mainListDiv" class="main_list">
+                    <ul class="navlinks">
+                        <li><a href="pages/about.html" id = "about" class = "nav-link-typewriter"><h2>about</h2></a></li>
+                        <li><a href="pages/projects.html" id = "projects" class = "nav-link-typewriter"><h2>projects</h2></a></li>
+						<li><a href="assets/Vikram_Resume.pdf" download id = "experience" class = "nav-link-typewriter"><h2>experience</h2></a></li>
+						<li><a href="pages/projects.html" id = "journal" class = "nav-link-typewriter"><h2>vik's journal</h2></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 		<div class="typewriter">
 			<h1 class="title" id="title">Vikram R.&nbsp;</h1>
 		</div>
 		<div class="footer">
 			<div class="dock">
-				<a id="git" href="https://github.com/vikramr2"><img src="assets/github.png" height="30" width="30"></a>
-				<a id="linkedin" classhref="https://www.linkedin.com/in/vikram-ramavarapu-972433195/"><img src="assets/linkedin.png" height="30" width="30"></a>
-				<a id="beat" href="https://soundcloud.com/idkbeats-1234/bolly-on-some-molly"><img src="assets/soundcloud.png" height="30" width="30"></a>
+				<a class="icon" id="git" href="https://github.com/vikramr2"><img src="assets/github.png" height="30" width="30"></a>
+				<a class="icon" id="linkedin" href="https://www.linkedin.com/in/vikram-ramavarapu-972433195/"><img src="assets/linkedin.png" height="30" width="30"></a>
+				<a class="icon" id="beat" href="https://soundcloud.com/idkbeats-1234/bolly-on-some-molly"><img src="assets/soundcloud.png" height="30" width="30"></a>
 
 				<script>
 					window.onload = initDivMouseOver;
@@ -26,62 +41,36 @@
 						var git = document.getElementById("git");
 						var linkedin = document.getElementById("linkedin");
 						var beat = document.getElementById("beat");
+						var about = document.getElementById("about");
+						var projects = document.getElementById("projects");
+						var experience = document.getElementById("experience");
+						var journal = document.getElementById("journal");
 
 						var message = document.getElementById("title");
 
-						git.onmouseover = function() {
+						var reset = (newmsg) => {
 							var parent = message.parentElement;
 							parent.removeChild(message);
 							message = parent.appendChild(document.createElement("h1"));
 							message.className = "title";
 							message.id = "title";
-							message.innerHTML = "Check out my projects!";
+							message.innerHTML = newmsg
 						}
 
-						git.onmouseout = function() {
-							var parent = message.parentElement;
-							parent.removeChild(message);
-							message = parent.appendChild(document.createElement("h1"));
-							message.className = "title";
-							message.id = "title";
-							message.innerHTML = "Vikram R.";
-						}
-
-						linkedin.onmouseover = function() {
-							var parent = message.parentElement;
-							parent.removeChild(message);
-							message = parent.appendChild(document.createElement("h1"));
-							message.className = "title";
-							message.id = "title";
-							message.innerHTML = "Connect with me!";
-						}
-
-						linkedin.onmouseout = function() {
-							var parent = message.parentElement;
-							parent.removeChild(message);
-							message = parent.appendChild(document.createElement("h1"));
-							message.className = "title";
-							message.id = "title";
-							message.innerHTML = "Vikram R.";
-						}
-
-						beat.onmouseover = function() {
-							var parent = message.parentElement;
-							parent.removeChild(message);
-							message = parent.appendChild(document.createElement("h1"));
-							message.className = "title";
-							message.id = "title";
-							message.innerHTML = "Check out my beat with Roman!";
-						}
-
-						beat.onmouseout = function() {
-							var parent = message.parentElement;
-							parent.removeChild(message);
-							message = parent.appendChild(document.createElement("h1"));
-							message.className = "title";
-							message.id = "title";
-							message.innerHTML = "Vikram R.";
-						}
+						git.onmouseover = function() { reset("Check out my projects!"); }
+						git.onmouseout = function() { reset("Vikram R."); }
+						linkedin.onmouseover = function() { reset("Connect with me!"); }
+						linkedin.onmouseout = function() { reset("Vikram R."); }
+						beat.onmouseover = function() { reset("Check out my beat with Roman!"); }
+						beat.onmouseout = function() { reset("Vikram R."); }
+						about.onmouseover = function() { reset("Learn about me..."); }
+						about.onmouseout = function() { reset("Vikram R."); }
+						projects.onmouseover = function() { reset("My showcase!"); }
+						projects.onmouseout = function() { reset("Vikram R."); }
+						experience.onmouseover = function() { reset("hire me plz..."); }
+						experience.onmouseout = function() { reset("Vikram R."); }
+						journal.onmouseover = function() { reset("Random thoughts n stuff"); }
+						journal.onmouseout = function() { reset("Vikram R."); }
 					}
 				</script>
 			</div>

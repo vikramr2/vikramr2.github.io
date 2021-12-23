@@ -3,17 +3,19 @@ var h;
 var w;
 
 var frame = 0;
+console.log("Change");
 
 //initialize canvas
 function setup() {
-	h = windowHeight;
-	w = windowWidth;
-  let cnv = createCanvas(w, h);
-  cnv.parent("canv")
+	h = window.innerHeight;
+	w = window.innerWidth;
+  	canvas = createCanvas(w, h);
+  	canvas.parent("canv")
 }
 
 //updating function
 function draw() {
+	console.log(w, h);
 	background(255, 255, 255);
 
 	bottomColor = [255, 184, 219]
@@ -44,4 +46,10 @@ function draw() {
 	}
 
 	frame++; 
+}
+
+window.onresize = function() {
+	h = window.innerHeight;
+	w = window.innerWidth;
+	canvas.resize(w, h);
 }
