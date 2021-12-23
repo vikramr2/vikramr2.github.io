@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Interactive Line Design</title>
+		<title>Vik R.</title>
 		<!-- P5 Library -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
 		<!-- Define inlined JavaScript -->
@@ -12,6 +12,79 @@
 		<div id="canv"></div>
 		<div class="typewriter">
 			<h1 class="title" id="title">Vikram R.&nbsp;</h1>
+		</div>
+		<div class="footer">
+			<div class="dock">
+				<a id="git" href="https://github.com/vikramr2"><img src="assets/github.png" height="30" width="30"></a>
+				<a id="linkedin" classhref="https://www.linkedin.com/in/vikram-ramavarapu-972433195/"><img src="assets/linkedin.png" height="30" width="30"></a>
+				<a id="beat" href="https://soundcloud.com/idkbeats-1234/bolly-on-some-molly"><img src="assets/soundcloud.png" height="30" width="30"></a>
+
+				<script>
+					window.onload = initDivMouseOver;
+
+					function initDivMouseOver() {
+						var git = document.getElementById("git");
+						var linkedin = document.getElementById("linkedin");
+						var beat = document.getElementById("beat");
+
+						var message = document.getElementById("title");
+
+						git.onmouseover = function() {
+							var parent = message.parentElement;
+							parent.removeChild(message);
+							message = parent.appendChild(document.createElement("h1"));
+							message.className = "title";
+							message.id = "title";
+							message.innerHTML = "Check out my projects!";
+						}
+
+						git.onmouseout = function() {
+							var parent = message.parentElement;
+							parent.removeChild(message);
+							message = parent.appendChild(document.createElement("h1"));
+							message.className = "title";
+							message.id = "title";
+							message.innerHTML = "Vikram R.";
+						}
+
+						linkedin.onmouseover = function() {
+							var parent = message.parentElement;
+							parent.removeChild(message);
+							message = parent.appendChild(document.createElement("h1"));
+							message.className = "title";
+							message.id = "title";
+							message.innerHTML = "Connect with me!";
+						}
+
+						linkedin.onmouseout = function() {
+							var parent = message.parentElement;
+							parent.removeChild(message);
+							message = parent.appendChild(document.createElement("h1"));
+							message.className = "title";
+							message.id = "title";
+							message.innerHTML = "Vikram R.";
+						}
+
+						beat.onmouseover = function() {
+							var parent = message.parentElement;
+							parent.removeChild(message);
+							message = parent.appendChild(document.createElement("h1"));
+							message.className = "title";
+							message.id = "title";
+							message.innerHTML = "Check out my beat with Roman!";
+						}
+
+						beat.onmouseout = function() {
+							var parent = message.parentElement;
+							parent.removeChild(message);
+							message = parent.appendChild(document.createElement("h1"));
+							message.className = "title";
+							message.id = "title";
+							message.innerHTML = "Vikram R.";
+						}
+					}
+				</script>
+			</div>
 		</div>
 	</body>
 </html>

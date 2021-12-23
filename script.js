@@ -43,6 +43,5 @@ function draw() {
 		line(0, i, w, i);
 	}
 
-
 	frame++; 
 }
