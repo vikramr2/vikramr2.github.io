@@ -33,7 +33,7 @@
 			<div class="dock">
 				<a class="icon" id="git" href="https://github.com/vikramr2"><img src="assets/github.png" height="30" width="30"></a>
 				<a class="icon" id="linkedin" href="https://www.linkedin.com/in/vikram-ramavarapu-972433195/"><img src="assets/linkedin.png" height="30" width="30"></a>
-				<a class="icon" id="beat" href="https://soundcloud.com/idkbeats-1234/bolly-on-some-molly"><img src="assets/soundcloud.png" height="30" width="30"></a>
+				<a class="icon" id="webs" href="pages/websites.html"><img src="https://toppng.com/uploads/preview/world-icon-web-icon-white-11563010874xluuy00vry.png" height="30" width="30"></a>
 
 				<script>
 					window.onload = initDivMouseOver;
@@ -46,6 +46,7 @@
 						var projects = document.getElementById("projects");
 						var experience = document.getElementById("experience");
 						var journal = document.getElementById("journal");
+						var webs = document.getElementById("webs");
 
 						var message = document.getElementById("title");
 
@@ -62,8 +63,6 @@
 						git.onmouseout         = function() { reset("Vikram R."); }
 						linkedin.onmouseover   = function() { reset("Connect with me!"); }
 						linkedin.onmouseout    = function() { reset("Vikram R."); }
-						beat.onmouseover       = function() { reset("Check out my beat with Roman!"); }
-						beat.onmouseout        = function() { reset("Vikram R."); }
 						about.onmouseover      = function() { reset("Learn about me..."); }
 						about.onmouseout       = function() { reset("Vikram R."); }
 						projects.onmouseover   = function() { reset("My showcase!"); }
@@ -72,6 +71,8 @@
 						experience.onmouseout  = function() { reset("Vikram R."); }
 						journal.onmouseover    = function() { reset("Random thoughts n stuff"); }
 						journal.onmouseout     = function() { reset("Vikram R."); }
+						webs.onmouseover       = function() { reset("Other Websites I made!"); }
+						webs.onmouseout        = function() { reset("Vikram R."); }
 					}
 				</script>
 			</div>
