@@ -1,15 +1,17 @@
 @media only screen and (max-device-width: 480px) {
-  html { 
+  body { 
     margin:0;
     padding:0;
+    top: -20;
     background: linear-gradient(#b5ccff, #ffb8dc) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    z-index: -100;
   }
   .card-container {
-    background: linear-gradient(#b5ccff, #ffb8dc) no-repeat center center fixed; 
+    height: 100%;
   }
   canvas {display: none}
 }
@@ -142,6 +144,7 @@ a {
 }
 
 .card-container {
+  height: 100%;
   padding-top: 5px;
   animation: 1s ease-out 0s 1 slideInFromBottom;
 }
