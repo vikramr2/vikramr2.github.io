@@ -13,6 +13,7 @@
     font-size: 80px;
   }
   canvas { display: none; }
+  .cred { display: none; }
 }
 
 #main  {
