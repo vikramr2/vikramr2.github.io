@@ -16,6 +16,13 @@
   .cred {
     display: none;
   }
+  .typewriter h1 {
+    font-size: 80px;
+  }
+  .icon {
+    width: 60px;
+    height: 60px;
+  }
   canvas {display: none}
 }
 
