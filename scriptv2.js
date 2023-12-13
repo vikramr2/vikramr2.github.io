@@ -48,7 +48,7 @@ class Particle {
 let particles = [];
 
 function setup() {
-	canvas = createCanvas(window.innerWidth, window.innerHeight * 1.2);
+	canvas = createCanvas(screen.width, screen.height * 1.2);
 	canvas.parent("canv")
 	for(let i = 0;i<width/10;i++){
 		particles.push(new Particle());
@@ -65,8 +65,8 @@ function draw() {
 }
 	
 
-window.onresize = function() {
+/*window.onresize = function() {
 	h = window.innerHeight * 1.2;
 	w = window.innerWidth;
 	canvas.resize(w, h);
-}
+}*/
