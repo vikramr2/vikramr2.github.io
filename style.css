@@ -157,3 +157,11 @@ a {
   animation-duration: 2s; /* Duration of the animation */
   animation-fill-mode: forwards; /* Ensures the element remains in the final state */
 }
+
+.cred {
+  text-align: center;
+}
+
+.artcreds {
+  color: aqua;
+}
