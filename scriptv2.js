@@ -64,7 +64,7 @@ class Particle {
 let particles = [];
 
 function setup() {
-	canvas = createCanvas(screen.width, screen.height * 1.2);
+	canvas = createCanvas(max(screen.width, windowWidth), max(screen.height, windowHeight) * 1.2);
 	canvas.parent("canv")
 	for(let i = 0;i<width/10;i++){
 		particles.push(new Particle());
