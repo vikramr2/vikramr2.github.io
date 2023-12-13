@@ -2,6 +2,22 @@
 var h;
 var w;
 
+if ( typeof( DeviceMotionEvent ) !== "undefined" && typeof( DeviceMotionEvent.requestPermission ) === "function" ) {
+	// (optional) Do something before API request prompt.
+	DeviceMotionEvent.requestPermission()
+		.then( response => {
+		// (optional) Do something after API prompt dismissed.
+		if ( response == "granted" ) {
+			window.addEventListener( "devicemotion", (e) => {
+				// do something for 'e' here.
+			})
+		}
+	})
+		.catch( console.error )
+} else {
+	//alert( "DeviceMotionEvent is not defined" );
+}
+
 // this class describes the properties of a single particle.
 class Particle {
 	// setting the co-ordinates, radius and the
