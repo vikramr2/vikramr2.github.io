@@ -3,23 +3,14 @@
     margin:0;
     padding:0;
     top: -20;
-    background: linear-gradient(#b5ccff, #ffb8dc) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
     z-index: -100;
   }
   .card-container {
     height: 100%;
   }
-  .cred {
-    display: none;
-  }
   .typewriter h1 {
     font-size: 80px;
   }
-  canvas {display: none}
 }
 
 #main  {
