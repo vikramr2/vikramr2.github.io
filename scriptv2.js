@@ -71,7 +71,7 @@ function isMobileDevice() {
 function setup() {
 	console.log(isMobileDevice())
 	if (isMobileDevice()) {
-		canvas = createCanvas(displayWidth, displayHeight);
+		canvas = createCanvas(windowWidth, windowHeight);
 		pixelDensity(1);
 	} else {
 		canvas = createCanvas(screen.width, screen.height * 1.2);
