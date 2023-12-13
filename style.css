@@ -4,6 +4,7 @@
     padding:0;
     top: -20;
     z-index: -100;
+    background-color: black;
   }
   .card-container {
     height: 100%;
@@ -11,6 +12,7 @@
   .typewriter h1 {
     font-size: 80px;
   }
+  canvas { display: none; }
 }
 
 #main  {
