@@ -69,12 +69,13 @@ function isMobileDevice() {
 }
 
 function setup() {
+	console.log(isMobileDevice())
 	if (isMobileDevice()) {
 		canvas = createCanvas(displayWidth, displayHeight * 1.2);
 	} else {
 		canvas = createCanvas(screen.width, screen.height * 1.2);
 	}
-	
+
 	canvas.parent("canv")
 	for(let i = 0;i<width/10;i++){
 		particles.push(new Particle());
