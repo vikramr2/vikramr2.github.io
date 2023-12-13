@@ -63,8 +63,18 @@ class Particle {
 // an array to add multiple particles
 let particles = [];
 
+function isMobileDevice() {
+    let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    return /iPhone|iPad|iPod|Android/i.test(userAgent);
+}
+
 function setup() {
-	canvas = createCanvas(max(screen.width, windowWidth), max(screen.height, windowHeight) * 1.2);
+	if (isMobileDevice()) {
+		canvas = createCanvas(displayWidth, displayHeight * 1.2);
+	} else {
+		canvas = createCanvas(screen.width, screen.height * 1.2);
+	}
+	
 	canvas.parent("canv")
 	for(let i = 0;i<width/10;i++){
 		particles.push(new Particle());
