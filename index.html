@@ -27,7 +27,7 @@
                 <div id="mainListDiv" class="main_list">
                     <ul class="navlinks">
                         <li><a href="pages/about.html" id = "about" class = "nav-link-typewriter"><h2>about</h2></a></li>
-						<li><a href="pages/research.html" id = "journal" class = "nav-link-typewriter"><h2>research</h2></a></li>
+						<li><a href="pages/research.html" id = "research" class = "nav-link-typewriter"><h2>research</h2></a></li>
                         <li><a href="pages/projects.html" id = "projects" class = "nav-link-typewriter"><h2>software</h2></a></li>
 						<li><a href="assets/Vikram_Resume.pdf" download id = "experience" class = "nav-link-typewriter"><h2>experience</h2></a></li>
 						<li><a href="pages/journal.html" id = "journal" class = "nav-link-typewriter"><h2>journal</h2></a></li>
@@ -55,8 +55,7 @@
 						var projects = document.getElementById("projects");
 						var experience = document.getElementById("experience");
 						var journal = document.getElementById("journal");
-						var webs = document.getElementById("webs");
-
+						var research = document.getElementById("research");
 						var message = document.getElementById("title");
 
 						var reset = (newmsg) => {
@@ -80,8 +79,8 @@
 						experience.onmouseout  = function() { reset("Vikram R."); }
 						journal.onmouseover    = function() { reset("Random thoughts n stuff"); }
 						journal.onmouseout     = function() { reset("Vikram R."); }
-						webs.onmouseover       = function() { reset("Other Websites I made!"); }
-						webs.onmouseout        = function() { reset("Vikram R."); }
+						research.onmouseover   = function() { reset("My Research"); }
+						research.onmouseout    = function() { reset("Vikram R."); }
 					}
 				</script>
 			</div>
