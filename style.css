@@ -127,13 +127,15 @@ a {
 .card {
   margin: auto;
   width: 70%;
+  padding-top: 10px;
 }
 
 .card-img-top {
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 10px;
 }
 
 .card-container {
@@ -164,4 +166,11 @@ a {
 
 .artcreds {
   color: aqua;
+}
+
+.card.mb-3.about {
+  display: flex;
+  flex-direction: row; /* Aligns children (img and text) in a row */
+  align-items: flex-start; /* Aligns items at the start of the cross axis */
+  padding: 10px;
 }
