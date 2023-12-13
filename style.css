@@ -174,3 +174,25 @@ a {
   align-items: flex-start; /* Aligns items at the start of the cross axis */
   padding: 10px;
 }
+
+.reveal .slides section.past {
+  transform: translateY(-100%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.reveal .slides section.future {
+  transform: translateY(100%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.exitlink {
+  z-index: 9999;
+}
+
+.spacerss {
+  color: white;
+}
+
+.card-text.lower {
+  margin-top: 20px
+}
