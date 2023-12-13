@@ -39,29 +39,24 @@ canvas {
 
 
 .title {
-	font-family: 'Courier New', monospace;
-	font-size: 40px;
-	position: absolute;
-	left: 0;
-    line-height: 200px;
-    margin-top: 20%;
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    width: 100%;
+	/*width: 29ch;*/
+  animation-name: fadeIn;
+  animation-duration: 2s; /* Duration of the animation */
+  animation-fill-mode: forwards; /* Ensures the element remains in the final state */
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 /* DEMO-SPECIFIC STYLES */
 .typewriter h1 {
-  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
   font-family: monospace;
-  overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: .15em solid blueviolet; /* The typwriter cursor */
-  white-space: nowrap; /* Keeps the content on a single line */
-  letter-spacing: .15em; /* Adjust as needed */
-  animation: 
-    typing 3.5s steps(30, end),
-    blink-caret .5s step-end infinite;
+  font-size: 44px;
+  flex-direction: column;
+  color: #E0F2F1;
 }
 
 h2 {
@@ -71,16 +66,14 @@ h2 {
   font-family: monospace;
 }
 
-/* The typing effect */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-/* The typewriter cursor effect */
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: blueviolet; }
+/* Define the keyframes for fade-in */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
 }
 
 .footer {
@@ -146,18 +139,6 @@ a {
 .card-container {
   height: 100%;
   padding-top: 5px;
-  animation: 1s ease-out 0s 1 slideInFromBottom;
-}
-
-@keyframes slideInFromBottom {
-  0% {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .exit {
@@ -172,4 +153,7 @@ a {
   margin-top: 10px;
   max-height: 100%;
   margin-bottom: 10px;
+  animation-name: fadeIn;
+  animation-duration: 2s; /* Duration of the animation */
+  animation-fill-mode: forwards; /* Ensures the element remains in the final state */
 }

@@ -2,78 +2,68 @@
 var h;
 var w;
 
-var clouds;
-var ys = [];
-var xs = [];
-
-var frame = 0;
-console.log("Change");
-
-//initialize canvas
-function setup() {
-	h = window.innerHeight * 1.2;
-	w = window.innerWidth;
-
-	clouds = [
-		loadImage("assets/clouds/cloud0.png"),
-		loadImage("assets/clouds/cloud1.png"),
-		loadImage("assets/clouds/cloud2.png"),
-		loadImage("assets/clouds/cloud3.png"),
-		loadImage("assets/clouds/cloud4.png"),
-		loadImage("assets/clouds/cloud5.png")
-	];
-
-	for (var elem of clouds) { 
-		ys.push(Math.random()*(h/2-300)); 
-		xs.push(Math.random()*w*3);
+// this class describes the properties of a single particle.
+class Particle {
+// setting the co-ordinates, radius and the
+// speed of a particle in both the co-ordinates axes.
+	constructor(){
+	this.x = random(0,width);
+	this.y = random(0,height);
+	this.r = random(1,8);
+	this.xSpeed = random(-2,2);
+	this.ySpeed = random(-1,1.5);
 	}
 
-  	canvas = createCanvas(w, h);
-  	canvas.parent("canv")
-}
-
-//updating function
-function draw() {
-	console.log(w, h);
-	background(255, 255, 255);
-	
-	bottomColor = [255, 184, 219]
-	remColor = [181 - 255, 204 - 184, 255 - 219]
-
-	for (var i = 0; i < h; i++) {
-		midColor = [bottomColor[0] + remColor[0]*i/h, bottomColor[1] + remColor[1]*i/h, bottomColor[2] + remColor[2]*i/h]
-		stroke(color(midColor[0], midColor[1], midColor[2]))
-		strokeWeight(1);
-		line(0, i, w, i)
+// creation of a particle.
+	createParticle() {
+	noStroke();
+	fill('rgba(200,169,169,0.5)');
+	circle(this.x,this.y,this.r);
 	}
 
-	for (var i = 0; i < clouds.length; i++) {
-		image(clouds[i], xs[i], ys[i]);
-		xs[i] += 2
-		if (xs[i] > 3*w) {
-			xs[i] = -w/4;
+// setting the particle in motion.
+	moveParticle() {
+	if(this.x < 0 || this.x > width)
+		this.xSpeed*=-1;
+	if(this.y < 0 || this.y > height)
+		this.ySpeed*=-1;
+	this.x+=this.xSpeed;
+	this.y+=this.ySpeed;
+	}
+
+// this function creates the connections(lines)
+// between particles which are less than a certain distance apart
+	joinParticles(particles) {
+	particles.forEach(element =>{
+		let dis = dist(this.x,this.y,element.x,element.y);
+		if(dis<85) {
+		stroke('rgba(255,255,255,0.2)');
+		line(this.x,this.y,element.x,element.y);
 		}
+	});
 	}
-
-	stroke(color(255, 255, 255));
-	//strokeWeight(4);
-
-	line(0, 2*(h/1.2)/3, w, 2*(h/1.2)/3);
-
-	for (var i = 0; i < w/2; i += 50) {
-		line(w/2 - i, 2*(h/1.2)/3, w/2 - 2*i, h)
-	} 
-
-	for (var i = 0; i < w/2; i += 50) {
-		line(w/2 + i, 2*(h/1.2)/3, w/2 + 2*i, h)
-	} 
-
-	for (var i = 2*(h/1.2)/3 + (frame % 50); i < h; i += 50) {
-		line(0, i, w, i);
-	}
-
-	frame++; 
 }
+
+// an array to add multiple particles
+let particles = [];
+
+function setup() {
+	canvas = createCanvas(window.innerWidth, window.innerHeight * 1.2);
+	canvas.parent("canv")
+	for(let i = 0;i<width/10;i++){
+	particles.push(new Particle());
+	}
+}
+
+function draw() {
+	background('#0f0f0f');
+	for(let i = 0;i<particles.length;i++) {
+	particles[i].createParticle();
+	particles[i].moveParticle();
+	particles[i].joinParticles(particles.slice(i));
+	}
+}
+	
 
 window.onresize = function() {
 	h = window.innerHeight * 1.2;
