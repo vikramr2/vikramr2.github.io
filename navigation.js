@@ -34,6 +34,7 @@ async function loadSectionContent(section) {
                     imageAlt: card.imageAlt,
                     imageWidth: card.imageWidth,
                     imageHeight: card.imageHeight,
+                    imageScale: card.imageScale,
                     header: card.header,
                     body: body
                 };
@@ -225,9 +226,19 @@ window.getCurrentSection = function() { return currentSection; };
 // Render a single card
 function renderCard(card, isAboutStyle = false) {
     if (isAboutStyle) {
+        // Build style attribute for scaling if imageScale is provided
+        let styleAttr = '';
+        if (card.imageScale) {
+            const scalePercent = card.imageScale;
+            styleAttr = `style="width: ${scalePercent}% !important; height: auto !important; max-width: ${scalePercent}%;"`;
+        } else if (card.imageWidth || card.imageHeight) {
+            // Use explicit width/height if provided
+            styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
+        }
+
         return `
             <div class="card mb-3 about about-home">
-                <img src="${card.image}" class="card-img-top" alt="${card.imageAlt}" ${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}>
+                <img src="${card.image}" class="card-img-top" alt="${card.imageAlt}" ${styleAttr}>
                 <div class="card-body">
                     ${card.body}
                 </div>
