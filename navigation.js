@@ -4,6 +4,11 @@ let contentData = {};
 // Function to convert paragraphs array to HTML
 function paragraphsToHTML(paragraphs) {
     return paragraphs.map(p => {
+        // If it's an array, treat it as a bulleted list
+        if (Array.isArray(p)) {
+            const listItems = p.map(item => `<li class="card-text">${item}</li>`).join('\n                        ');
+            return `<ul style="list-style-type: disc; padding-left: 20px;">\n                        ${listItems}\n                    </ul>`;
+        }
         // If paragraph contains HTML tags already (like <b>, <a>, <ul>, <img>, etc.), use as is
         if (p.includes('<') && p.includes('>')) {
             return p;
@@ -226,19 +231,24 @@ window.getCurrentSection = function() { return currentSection; };
 // Render a single card
 function renderCard(card, isAboutStyle = false) {
     if (isAboutStyle) {
-        // Build style attribute for scaling if imageScale is provided
-        let styleAttr = '';
-        if (card.imageScale) {
-            const scalePercent = card.imageScale;
-            styleAttr = `style="width: ${scalePercent}% !important; height: auto !important; max-width: ${scalePercent}%;"`;
-        } else if (card.imageWidth || card.imageHeight) {
-            // Use explicit width/height if provided
-            styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
+        // Only render image if card.image is not empty
+        let imageHTML = '';
+        if (card.image && card.image.trim() !== '') {
+            // Build style attribute for scaling if imageScale is provided
+            let styleAttr = '';
+            if (card.imageScale) {
+                const scalePercent = card.imageScale;
+                styleAttr = `style="width: ${scalePercent}% !important; height: auto !important; max-width: ${scalePercent}%;"`;
+            } else if (card.imageWidth || card.imageHeight) {
+                // Use explicit width/height if provided
+                styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
+            }
+            imageHTML = `<img src="${card.image}" class="card-img-top" alt="${card.imageAlt || ''}" ${styleAttr}>`;
         }
 
         return `
             <div class="card mb-3 about about-home">
-                <img src="${card.image}" class="card-img-top" alt="${card.imageAlt}" ${styleAttr}>
+                ${imageHTML}
                 <div class="card-body">
                     ${card.body}
                 </div>

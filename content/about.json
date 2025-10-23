@@ -9,10 +9,24 @@
         "<b>Research Interests</b>: I'm fortunate to be advised by Prof. George Chacko, with guidance from Prof. Tandy Warnow. I'm interested in problems in <b>network science</b> (<b>graph theory</b>, <b>social networks</b>, etc.) and more recently, <b>natural language processing (NLP)</b>. I've been working with using techniques from the aforementioned areas to study information diffusion and community formation across a variety of social networks. My core work in my group prior to the introduction of NLP has been in developing scalable algorithms for analyzing large-scale networks, with applications in social biological networks.",
         "Prior to my PhD, I completed a Master's degree in Bioinformatics at UIUC as well, where I worked with Prof. Mohammed El-Kebir on computational methods for studying cancer metastasis.",
         "<b>Hobbies and Miscellaneous</b>",
-        "I enjoy longboarding. I love animals: I ride and take care of horses and have three cats <em>(swipe to see them!)</em>. I'm passionate about languages (though I have varying proficiency in them): I speak English, Telugu, Japanese (~N4 level), and I learned Spanish in high school and college.",
+        "I enjoy longboarding. I love animals: I ride and take care of horses and have three cats <em>(scroll to see them!)</em>. I'm passionate about languages (though I have varying proficiency in them): I speak English, Telugu, Japanese (~N4 level), and I learned Spanish in high school and college.",
         "",
         "<b>Please reach out!</b>",
         "<a href=\"mailto:vikramr2@illinois.edu\">vikramr2@illinois.edu</a>"
+      ]
+    },
+    {
+      "image": "",
+      "imageAlt": "",
+      "paragraphs": [
+        "<b>News</b>",
+        [
+          "<b>April 2025</b>: I contributed to a paper on cancer metastasis graph inference that was accepted at RECOMB 2025! You can view it <a href=\"https://link.springer.com/chapter/10.1007/978-3-031-90252-9_34\">here</a>",
+          "<b>September 2024</b>: My work at NII on cross-lingual information diffusion in citation networks was accepted at JCDL 2024!",
+          "<b>August 2024</b>: Started my PhD program at UIUC!",
+          "<b>August 2024</b>: Graduated with my Master's in Bioinformatics from UIUC!",
+          "<b>December 2023</b>: I will be in Tokyo, Japan from March-July 2024 as a research intern at the National Institute of Informatics (NII)! I'll be working with Prof. Chifumi Nishioka on information diffusion in citation networks."
+        ]
       ]
     },
     {
@@ -36,7 +50,7 @@
       "imageAlt": "Pixie",
       "imageScale": 30,
       "paragraphs": [
-        "<b>Pixie</b>: Pixie is a sweet horse that I ride and take care of at a local stable."
+        "<b>Pixie</b>: Pixie is a sweet horse that I ride and take care of at a local stable. I only had front-facing pictures of both horses haha."
       ]
     },
     {
