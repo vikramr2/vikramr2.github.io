@@ -75,6 +75,14 @@ h2 {
   padding: 0;
   color: #fff;
   font-family: monospace;
+  opacity: 0.8;
+  font-weight: normal;
+  transition: opacity 0.3s ease, font-weight 0.3s ease;
+}
+
+.nav-link-active h2 {
+  opacity: 1;
+  font-weight: bold;
 }
 
 /* Define the keyframes for fade-in */

@@ -171,6 +171,15 @@ function loadSection(section, skipAnimation = false) {
         titleElement.innerHTML = getCurrentDefaultTitle();
     }
 
+    // Update active navigation link
+    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
+        link.classList.remove('nav-link-active');
+    });
+    const activeLink = document.getElementById(section);
+    if (activeLink) {
+        activeLink.classList.add('nav-link-active');
+    }
+
     const isAboutStyle = (section === 'about' || section === 'research');
 
     // Render all cards stacked vertically

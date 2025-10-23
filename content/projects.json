@@ -9,15 +9,6 @@
       ]
     },
     {
-      "header": "CM++ - A Pipeline Software for Well-Connected Community Detection",
-      "paragraphs": [
-        "Community detection is the process of partitioning a very large graph into smaller \"meso-scale\" subgraphs. The definition of a \"good\" community is very amorphous. As such we created a generalizable community detection pipeline that allows users to switch between stages of operations (community detection with their specified algorithm, size filtering, tree filtering, statistics computation). We also created a stage in the pipeline that \"chisels\" computed communities into well-connected communities (illustrated below) through pruning and mincuts. This software was created within <a href=\"http://tandy.cs.illinois.edu/bibliometrics.html\">Prof. George Chacko and Prof. Tandy Warnow's</a> group.",
-        "<img src=\"assets/cm_process.jpeg\" alt=\"Card image\" width=\"500\"><br>",
-        "<a href=\"https://illinois-or-research-analytics.github.io/cm_pipeline/\" class=\"btn btn-primary\">Go to Docs Page!</a>",
-        "<a href=\"https://github.com/illinois-or-research-analytics/cm_pipeline\" class=\"btn btn-primary\">View Source Code!</a>"
-      ]
-    },
-    {
       "header": "Voice-Activated Digital Home Assistant Application/Skill Development: Instructional Support and Recommendation Application Development for Older Adults with Mobility Disabilities",
       "paragraphs": [
         "This project is under the Human Factors and Aging Laboratory at the University of Illinois and TechSAge at Georgia Tech. I developed an Alexa application that delivers instructional material and curation of other Alexa apps and functionalities to older adults and those living with mobility disabilities. The application follows heuristics such as recognition vs. recall, error handling, etc. so that those unfamiliar with technology can easily use this voice based app.",
