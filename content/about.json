@@ -1,0 +1,17 @@
+{
+  "cards": [
+    {
+      "image": "assets/me.jpeg",
+      "imageAlt": "Vikram Ramavarapu",
+      "paragraphs": [
+        "<b>Hey guys!</b>",
+        "My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign.",
+        "My current research interests are quite broad, encompassing a wide spectrum of interdisciplinarity. Central to my focus is the application of network science and its methodologies across various domains such as social science and computational biology. I also have another interest in high-performance and scientific computing. I enjoy using multithreading and parallelism to accelerate computation involved in the aforementioned areas.",
+        "<b>Hobbies and Miscellaneous</b>",
+        "I enjoy longboarding. I am also learning how to ride a horse, and I've been pretty consistent with that as well! I speak four languages with varying proficiency: English (I'll leave it up to you to judge), Telugu (my mother tongue), Japanese (I lived in Japan for a while), and Spanish (I took a few classes in college).",
+        "<b>Please reach out!</b>",
+        "<a href=\"mailto:vikramr2@illinois.edu\">vikramr2@illinois.edu</a>"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "cards": [
+    {
+      "header": "MACH2-Viz - An Interactive Visual Tool for Exploring and Studying Cancer Metastasis",
+      "paragraphs": [
+        "Cancer mostly becomes lethal in the later stages of metastasis. With this in mind, under Prof. Mohammed El-Kebir's group, we introduce MACH2, an improvement over the previous <a href=\"https://github.com/raphael-group/machina\">MACHINA</a> algorithm, that infers metastatic history given a clonal tree and returns a solution space per primary tumor location. I created an interactive visualization tool that allows the user to examine the infered metastatic history solution space for a given patient. The user can also enforce prior knowledge or beliefs on the nature of the patient's cancer, such as known migrations and known absences of migrations. There are also features for visualizing polytomy resolution in the clone tree, comparing solutions, and summarizing the solution space.",
+        "<img src=\"assets/mach2viz.jpeg\" alt=\"Card image\" width=\"600\"><br>",
+        "<a href=\"https://elkebir-group.github.io/mach2-viz/#/\" class=\"btn btn-primary\">Open Application</a>"
+      ]
+    },
+    {
+      "header": "CM++ - A Pipeline Software for Well-Connected Community Detection",
+      "paragraphs": [
+        "Community detection is the process of partitioning a very large graph into smaller \"meso-scale\" subgraphs. The definition of a \"good\" community is very amorphous. As such we created a generalizable community detection pipeline that allows users to switch between stages of operations (community detection with their specified algorithm, size filtering, tree filtering, statistics computation). We also created a stage in the pipeline that \"chisels\" computed communities into well-connected communities (illustrated below) through pruning and mincuts. This software was created within <a href=\"http://tandy.cs.illinois.edu/bibliometrics.html\">Prof. George Chacko and Prof. Tandy Warnow's</a> group.",
+        "<img src=\"assets/cm_process.jpeg\" alt=\"Card image\" width=\"500\"><br>",
+        "<a href=\"https://illinois-or-research-analytics.github.io/cm_pipeline/\" class=\"btn btn-primary\">Go to Docs Page!</a>",
+        "<a href=\"https://github.com/illinois-or-research-analytics/cm_pipeline\" class=\"btn btn-primary\">View Source Code!</a>"
+      ]
+    },
+    {
+      "header": "Voice-Activated Digital Home Assistant Application/Skill Development: Instructional Support and Recommendation Application Development for Older Adults with Mobility Disabilities",
+      "paragraphs": [
+        "This project is under the Human Factors and Aging Laboratory at the University of Illinois and TechSAge at Georgia Tech. I developed an Alexa application that delivers instructional material and curation of other Alexa apps and functionalities to older adults and those living with mobility disabilities. The application follows heuristics such as recognition vs. recall, error handling, etc. so that those unfamiliar with technology can easily use this voice based app.",
+        "<img src=\"assets/reco.jpeg\" alt=\"Card image\" width=\"500\">",
+        "<br>",
+        "<a href=\"https://techsage.gatech.edu/development/d4\" class=\"btn btn-primary\">Go to Project Page!</a>",
+        "<a href=\"https://github.com/vikramr2/HelpRecoSkill\" class=\"btn btn-primary\">View Source Code!</a>"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,61 @@
-// Content data for each section
-const contentData = {
+// Content data loaded from JSON files
+let contentData = {};
+
+// Function to convert paragraphs array to HTML
+function paragraphsToHTML(paragraphs) {
+    return paragraphs.map(p => {
+        // If paragraph contains HTML tags already (like <b>, <a>, <ul>, <img>, etc.), use as is
+        if (p.includes('<') && p.includes('>')) {
+            return p;
+        }
+        // Otherwise, wrap in <p> tag
+        return `<p class="card-text">${p}</p>`;
+    }).join('\n                    ');
+}
+
+// Function to load JSON content for a section
+async function loadSectionContent(section) {
+    try {
+        const response = await fetch(`content/${section}.json`);
+        const data = await response.json();
+
+        // Transform the JSON data into the format expected by the existing code
+        return {
+            cards: data.cards.map(card => {
+                let body = '';
+
+                // If there are paragraphs, convert them to HTML
+                if (card.paragraphs) {
+                    body = paragraphsToHTML(card.paragraphs);
+                }
+
+                return {
+                    image: card.image,
+                    imageAlt: card.imageAlt,
+                    imageWidth: card.imageWidth,
+                    imageHeight: card.imageHeight,
+                    header: card.header,
+                    body: body
+                };
+            })
+        };
+    } catch (error) {
+        console.error(`Error loading content for ${section}:`, error);
+        return { cards: [] };
+    }
+}
+
+// Load all content on initialization
+async function loadAllContent() {
+    const sections = ['about', 'research', 'projects', 'experience', 'journal'];
+
+    for (const section of sections) {
+        contentData[section] = await loadSectionContent(section);
+    }
+}
+
+// Old hardcoded content data (keeping as backup/reference)
+const contentDataOld = {
     about: {
         cards: [
             {
@@ -146,6 +202,26 @@ const contentData = {
 let currentSection = 'about';
 let currentCardIndex = 0;
 
+// Default title text for each section
+const sectionTitles = {
+    'about': 'Vikram R.',
+    'research': 'My Research',
+    'projects': 'My showcase!',
+    'experience': 'Work experience',
+    'journal': 'Random thoughts n stuff'
+};
+
+// Function to get the current default title
+function getCurrentDefaultTitle() {
+    return sectionTitles[currentSection] || 'Vikram R.';
+}
+
+// Make it globally accessible
+window.getCurrentDefaultTitle = getCurrentDefaultTitle;
+
+// Also expose currentSection for debugging
+window.getCurrentSection = function() { return currentSection; };
+
 // Render a single card
 function renderCard(card, isAboutStyle = false) {
     if (isAboutStyle) {
@@ -178,6 +254,12 @@ function loadSection(section, skipAnimation = false) {
     const data = contentData[section];
 
     if (!data) return;
+
+    // Update the title to the section's default text
+    const titleElement = document.getElementById('title');
+    if (titleElement) {
+        titleElement.innerHTML = getCurrentDefaultTitle();
+    }
 
     const isAboutStyle = (section === 'about' || section === 'research');
     const hasMultipleCards = data.cards.length > 1;
@@ -251,7 +333,10 @@ function navigateCard(direction) {
 }
 
 // Initialize navigation
-function initNavigation() {
+async function initNavigation() {
+    // Load all content from JSON files first
+    await loadAllContent();
+
     const navLinks = {
         'about': document.getElementById('about'),
         'research': document.getElementById('research'),

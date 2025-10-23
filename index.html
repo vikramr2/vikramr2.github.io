@@ -51,7 +51,6 @@
 				<a class="icon" id="git" href="https://github.com/vikramr2"><img src="assets/github.png" height="30" width="30"></a>
 				<a class="icon" id="linkedin" href="https://www.linkedin.com/in/vikram-ramavarapu-972433195/"><img src="assets/linkedin.png" height="30" width="30"></a>
 				<a class="icon" id="instagram" href="https://www.instagram.com/vikktoryos"><img src="assets/instagram.png" height="30" width="30"></a>
-				<a class="icon" id="web" href="pages/websites.html"><img src="assets/web.png" height="30" width="30"></a>
 				<script>
 					window.onload = initDivMouseOver;
 
@@ -64,7 +63,6 @@
 						var experience = document.getElementById("experience");
 						var journal = document.getElementById("journal");
 						var research = document.getElementById("research");
-						var web = document.getElementById("web");
 
 						var reset = (newmsg) => {
 							var message = document.getElementById("title");
@@ -78,23 +76,21 @@
 						}
 
 						git.onmouseover        = function() { reset("Check out my projects!"); }
-						git.onmouseout         = function() { reset("Vikram R."); }
+						git.onmouseout         = function() { reset(getCurrentDefaultTitle()); }
 						linkedin.onmouseover   = function() { reset("Connect with me!"); }
-						linkedin.onmouseout    = function() { reset("Vikram R."); }
+						linkedin.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						about.onmouseover      = function() { reset("Learn about me..."); }
-						about.onmouseout       = function() { reset("Vikram R."); }
+						about.onmouseout       = function() { reset(getCurrentDefaultTitle()); }
 						projects.onmouseover   = function() { reset("My showcase!"); }
-						projects.onmouseout    = function() { reset("Vikram R."); }
+						projects.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						experience.onmouseover = function() { reset("Work experience"); }
-						experience.onmouseout  = function() { reset("Vikram R."); }
+						experience.onmouseout  = function() { reset(getCurrentDefaultTitle()); }
 						journal.onmouseover    = function() { reset("Random thoughts n stuff"); }
-						journal.onmouseout     = function() { reset("Vikram R."); }
+						journal.onmouseout     = function() { reset(getCurrentDefaultTitle()); }
 						research.onmouseover   = function() { reset("My Research"); }
-						research.onmouseout    = function() { reset("Vikram R."); }
+						research.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						instagram.onmouseover  = function() { reset("Follow me!"); }
-						instagram.onmouseout   = function() { reset("Vikram R."); }
-						web.onmouseover        = function() { reset("A lil webdev portfolio"); }
-						web.onmouseout         = function() { reset("Vikram R."); }
+						instagram.onmouseout   = function() { reset(getCurrentDefaultTitle()); }
 					}
 				</script>
 			</div>
