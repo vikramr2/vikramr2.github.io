@@ -45,6 +45,8 @@
 		<div class="typewriter">
 			<h1 class="title" id="title">Vikram R.</h1>
 		</div>
+		<div class="nav-arrow nav-arrow-left" id="nav-arrow-left">&#10094;</div>
+		<div class="nav-arrow nav-arrow-right" id="nav-arrow-right">&#10095;</div>
 		<div class="card-container-home"></div>
 		<div class="footer">
 			<div class="dock">
@@ -63,6 +65,8 @@
 						var experience = document.getElementById("experience");
 						var journal = document.getElementById("journal");
 						var research = document.getElementById("research");
+						var navArrowLeft = document.getElementById("nav-arrow-left");
+						var navArrowRight = document.getElementById("nav-arrow-right");
 
 						var reset = (newmsg) => {
 							var message = document.getElementById("title");
@@ -91,6 +95,10 @@
 						research.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						instagram.onmouseover  = function() { reset("Follow me!"); }
 						instagram.onmouseout   = function() { reset(getCurrentDefaultTitle()); }
+						navArrowLeft.onmouseover  = function() { reset("Use arrow keys to navigate ←→"); }
+						navArrowLeft.onmouseout   = function() { reset(getCurrentDefaultTitle()); }
+						navArrowRight.onmouseover = function() { reset("Use arrow keys to navigate ←→"); }
+						navArrowRight.onmouseout  = function() { reset(getCurrentDefaultTitle()); }
 					}
 				</script>
 			</div>

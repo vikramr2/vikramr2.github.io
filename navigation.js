@@ -273,29 +273,9 @@ function loadSection(section, skipAnimation = false) {
     }
 
     const isAboutStyle = (section === 'about' || section === 'research');
-    const hasMultipleCards = data.cards.length > 1;
 
-    // Add or remove carousel class
-    if (hasMultipleCards) {
-        container.classList.add('has-carousel');
-    } else {
-        container.classList.remove('has-carousel');
-    }
-
-    // Clear and render
-    container.innerHTML = renderCard(data.cards[0], isAboutStyle);
-
-    // Add carousel controls if multiple cards
-    if (hasMultipleCards) {
-        const carouselControls = document.createElement('div');
-        carouselControls.className = 'carousel-controls';
-        carouselControls.innerHTML = `
-            <button class="carousel-btn carousel-prev" onclick="navigateCard(-1)">&#10094; Previous</button>
-            <span class="carousel-indicator">${currentCardIndex + 1} / ${data.cards.length}</span>
-            <button class="carousel-btn carousel-next" onclick="navigateCard(1)">Next &#10095;</button>
-        `;
-        container.appendChild(carouselControls);
-    }
+    // Render all cards stacked vertically
+    container.innerHTML = data.cards.map(card => renderCard(card, isAboutStyle)).join('');
 
     // Only trigger fade-in animation if not initial load (CSS handles initial load)
     if (!skipAnimation) {
@@ -306,41 +286,20 @@ function loadSection(section, skipAnimation = false) {
     }
 }
 
-// Navigate between cards
-function navigateCard(direction) {
-    const data = contentData[currentSection];
-    if (!data) return;
 
-    currentCardIndex += direction;
+// Section order for arrow key navigation
+const sectionOrder = ['about', 'research', 'projects', 'experience', 'journal'];
+
+// Navigate to next/previous section
+function navigateSection(direction) {
+    const currentIndex = sectionOrder.indexOf(currentSection);
+    let newIndex = currentIndex + direction;
 
     // Wrap around
-    if (currentCardIndex < 0) currentCardIndex = data.cards.length - 1;
-    if (currentCardIndex >= data.cards.length) currentCardIndex = 0;
+    if (newIndex < 0) newIndex = sectionOrder.length - 1;
+    if (newIndex >= sectionOrder.length) newIndex = 0;
 
-    const container = document.querySelector('.card-container-home');
-    const isAboutStyle = (currentSection === 'about' || currentSection === 'research');
-    const card = data.cards[currentCardIndex];
-
-    // Fade out
-    container.style.opacity = '0';
-
-    setTimeout(() => {
-        // Update card content
-        const cardHTML = renderCard(card, isAboutStyle);
-        const carouselControls = `
-            <div class="carousel-controls">
-                <button class="carousel-btn carousel-prev" onclick="navigateCard(-1)">&#10094; Previous</button>
-                <span class="carousel-indicator">${currentCardIndex + 1} / ${data.cards.length}</span>
-                <button class="carousel-btn carousel-next" onclick="navigateCard(1)">Next &#10095;</button>
-            </div>
-        `;
-        container.innerHTML = cardHTML + carouselControls;
-
-        // Fade in
-        setTimeout(() => {
-            container.style.opacity = '1';
-        }, 50);
-    }, 300);
+    loadSection(sectionOrder[newIndex]);
 }
 
 // Initialize navigation
@@ -365,6 +324,34 @@ async function initNavigation() {
             });
         }
     });
+
+    // Add arrow key navigation
+    document.addEventListener('keydown', (e) => {
+        // Ignore if user is typing in an input field
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            navigateSection(1); // Next section
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            navigateSection(-1); // Previous section
+        }
+    });
+
+    // Add click handlers to navigation arrows
+    const navArrowLeft = document.getElementById('nav-arrow-left');
+    const navArrowRight = document.getElementById('nav-arrow-right');
+
+    if (navArrowLeft) {
+        navArrowLeft.addEventListener('click', () => navigateSection(-1));
+    }
+
+    if (navArrowRight) {
+        navArrowRight.addEventListener('click', () => navigateSection(1));
+    }
 
     // Load the about section on initial page load (skip animation since CSS handles it)
     loadSection('about', true);
