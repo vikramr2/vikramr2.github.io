@@ -22,42 +22,29 @@
         "<b>News</b>",
         [
           "<b>April 2025</b>: I contributed to a paper on cancer metastasis graph inference that was accepted at RECOMB 2025! You can view it <a href=\"https://link.springer.com/chapter/10.1007/978-3-031-90252-9_34\">here</a>",
-          "<b>September 2024</b>: My work at NII on cross-lingual information diffusion in citation networks was accepted at JCDL 2024!",
+          "<b>September 2024</b>: My work at NII on cross-lingual information diffusion in citation networks was accepted at JCDL 2024! You can view it <a href=\"https://dl.acm.org/doi/pdf/10.1145/3677389.3702567\">here</a>",
           "<b>August 2024</b>: Started my PhD program at UIUC!",
           "<b>August 2024</b>: Graduated with my Master's in Bioinformatics from UIUC!",
-          "<b>December 2023</b>: I will be in Tokyo, Japan from March-July 2024 as a research intern at the National Institute of Informatics (NII)! I'll be working with Prof. Chifumi Nishioka on information diffusion in citation networks."
+          "<b>December 2023</b>: I will be in Tokyo, Japan from March–July 2024 as a research intern at the National Institute of Informatics (NII)! I'll be working with Prof. Chifumi Nishioka on information diffusion in citation networks."
         ]
       ]
     },
     {
-      "image": "assets/chai_kali.jpeg",
-      "imageAlt": "My cats: chai and kali",
+      "image": [
+        "assets/chai_kali.jpeg",
+        "assets/lokhi.jpeg",
+        "assets/pixie.jpeg",
+        "assets/oreo.jpeg"
+      ],
+      "imageAlt": "Cats and Horses",
       "imageScale": 30,
       "paragraphs": [
-        "<b>Chai and Kali</b>: Chai is the gray tabby, and Kali is the black cat."
-      ]
-    },
-    {
-      "image": "assets/lokhi.jpeg",
-      "imageAlt": "My cat: Lokhi",
-      "imageScale": 30,
-      "paragraphs": [
-        "<b>Lokhi</b>: Lokhi is my kitten. She was a stray that we actually found in our garage!"
-      ]
-    },
-    {
-      "image": "assets/pixie.jpeg",
-      "imageAlt": "Pixie",
-      "imageScale": 30,
-      "paragraphs": [
-        "<b>Pixie</b>: Pixie is a sweet horse that I ride and take care of at a local stable. I only had front-facing pictures of both horses haha."
-      ]
-    },
-    {
-      "image": "assets/oreo.jpeg",
-      "imageAlt": "Oreo",
-      "imageScale": 30,
-      "paragraphs": [
+        "<b>Chai and Kali</b>: Chai is the gray tabby, and Kali is the black cat.",
+        "",
+        "<b>Lokhi</b>: Lokhi is my kitten. She was a stray that we actually found in our garage!",
+        "",
+        "<b>Pixie</b>: Pixie is a sweet horse that I ride and take care of at a local stable. I only had front-facing pictures of both horses haha.",
+        "",
         "<b>Oreo</b>: Oreo is another horse that I ride at the same stable as Pixie."
       ]
     }

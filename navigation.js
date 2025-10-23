@@ -233,14 +233,29 @@ function renderCard(card, isAboutStyle = false) {
     if (isAboutStyle) {
         // Only render image if card.image is not empty
         let imageHTML = '';
-        if (card.image && card.image.trim() !== '') {
-            // Build style attribute for scaling if imageScale is provided
+
+        // Check if image is an array (multiple images)
+        if (Array.isArray(card.image) && card.image.length > 0) {
+            const images = card.image.map((img, index) => {
+                let styleAttr = '';
+                if (card.imageScale) {
+                    const scalePercent = card.imageScale;
+                    styleAttr = `style="width: ${scalePercent}% !important; height: auto !important; max-width: ${scalePercent}%;"`;
+                } else if (card.imageWidth || card.imageHeight) {
+                    styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
+                }
+                const alt = Array.isArray(card.imageAlt) ? (card.imageAlt[index] || '') : (card.imageAlt || '');
+                return `<img src="${img}" class="card-img-gallery" alt="${alt}" ${styleAttr}>`;
+            }).join('\n                ');
+
+            imageHTML = `<div class="card-img-gallery-container">\n                ${images}\n            </div>`;
+        } else if (card.image && typeof card.image === 'string' && card.image.trim() !== '') {
+            // Single image
             let styleAttr = '';
             if (card.imageScale) {
                 const scalePercent = card.imageScale;
                 styleAttr = `style="width: ${scalePercent}% !important; height: auto !important; max-width: ${scalePercent}%;"`;
             } else if (card.imageWidth || card.imageHeight) {
-                // Use explicit width/height if provided
                 styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
             }
             imageHTML = `<img src="${card.image}" class="card-img-top" alt="${card.imageAlt || ''}" ${styleAttr}>`;
