@@ -14,7 +14,7 @@
         "Cancer mostly becomes lethal in the later stages of metastasis. In a research project in Prof. Mohammed El-Kebir's group, we introduce MACH2, an improvement over the previous <a href=\"https://github.com/raphael-group/machina\">MACHINA</a> algorithm, that infers metastatic history given a clonal tree and returns a solution space of possible metastatic histories. However, there are several challenged with a vast solution space and the MACH2 tool in general:",
         "",
         [
-          "If an oncologist/physicial has no experience with programming, how would they be able to use a command-line tool like MACH2?",
+          "If an oncologist/physician has no experience with programming, how would they be able to use a command-line tool like MACH2?",
           "How can an oncologist/physician utilize their prior knowledge properly when filtering through the solution space?"
         ],
         "With MACH2-Viz, we address these challenges by providing an easy-to-use web application that allows users to upload their data files, visualize the inferred migration graphs, and filter through the solution space using prior knowledge such as known migration events or anatomical site constraints. Suppose a physician knows that a metastasis from the liver to the brain is unlikely. In that case, they can set this constraint in MACH2-Viz, which will filter out all migration histories that include this event. The interactive visualizations help users better understand the complex migration patterns of metastatic cancers and make informed decisions based on the inferred histories.",
