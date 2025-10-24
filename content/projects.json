@@ -1,9 +1,23 @@
 {
   "cards": [
     {
+      "header": "CRISPR Historian Chatbot",
+      "paragraphs": [
+        "I developed a Retrieval-Augmented Generation (RAG) chatbot that answers questions about the history of CRISPR. We chose CRISPR due to its rich and complex history, starting from it's discovery in 1987 as a mere identification of repeated sequences in E. coli to its current status as a revolutionary gene-editing technology. Moreover, there's even a debate about who actually discovered CRISPR– Francisco Mojica or Jennifer Doudna and Emmanuelle Charpentier? The chatbot is built using LangChain, Google's open-source Gemma model hosted by Ollama, and a vector database (Pinecone) to store and retrieve relevant documents. The chatbot can provide detailed answers about key milestones, researchers involved, and the evolution of CRISPR technology over the years.",
+        "<img src=\"assets/crispr_bot.jpeg\" alt=\"Card image\" width=\"600\"><br>",
+        "<a href=\"https://github.com/vikramr2/crispr-historian-chatbot\" class=\"btn btn-primary\">View Source Code!</a>"
+      ]
+    },
+    {
       "header": "MACH2-Viz - An Interactive Visual Tool for Exploring and Studying Cancer Metastasis",
       "paragraphs": [
-        "Cancer mostly becomes lethal in the later stages of metastasis. With this in mind, under Prof. Mohammed El-Kebir's group, we introduce MACH2, an improvement over the previous <a href=\"https://github.com/raphael-group/machina\">MACHINA</a> algorithm, that infers metastatic history given a clonal tree and returns a solution space per primary tumor location. I created an interactive visualization tool that allows the user to examine the infered metastatic history solution space for a given patient. The user can also enforce prior knowledge or beliefs on the nature of the patient's cancer, such as known migrations and known absences of migrations. There are also features for visualizing polytomy resolution in the clone tree, comparing solutions, and summarizing the solution space.",
+        "Cancer mostly becomes lethal in the later stages of metastasis. In a research project in Prof. Mohammed El-Kebir's group, we introduce MACH2, an improvement over the previous <a href=\"https://github.com/raphael-group/machina\">MACHINA</a> algorithm, that infers metastatic history given a clonal tree and returns a solution space of possible metastatic histories. However, there are several challenged with a vast solution space and the MACH2 tool in general:",
+        "",
+        [
+          "If an oncologist/physicial has no experience with programming, how would they be able to use a command-line tool like MACH2?",
+          "How can an oncologist/physician utilize their prior knowledge properly when filtering through the solution space?"
+        ],
+        "With MACH2-Viz, we address these challenges by providing an easy-to-use web application that allows users to upload their data files, visualize the inferred migration graphs, and filter through the solution space using prior knowledge such as known migration events or anatomical site constraints. Suppose a physician knows that a metastasis from the liver to the brain is unlikely. In that case, they can set this constraint in MACH2-Viz, which will filter out all migration histories that include this event. The interactive visualizations help users better understand the complex migration patterns of metastatic cancers and make informed decisions based on the inferred histories.",
         "<img src=\"assets/mach2viz.jpeg\" alt=\"Card image\" width=\"600\"><br>",
         "<a href=\"https://elkebir-group.github.io/mach2-viz/#/\" class=\"btn btn-primary\">Open Application</a>"
       ]
@@ -11,7 +25,9 @@
     {
       "header": "Voice-Activated Digital Home Assistant Application/Skill Development: Instructional Support and Recommendation Application Development for Older Adults with Mobility Disabilities",
       "paragraphs": [
-        "This project is under the Human Factors and Aging Laboratory at the University of Illinois and TechSAge at Georgia Tech. I developed an Alexa application that delivers instructional material and curation of other Alexa apps and functionalities to older adults and those living with mobility disabilities. The application follows heuristics such as recognition vs. recall, error handling, etc. so that those unfamiliar with technology can easily use this voice based app.",
+        "This project is under the Human Factors and Aging Laboratory at the University of Illinois and TechSAge at Georgia Tech. The median age of the US propulation is increasing, leading to a growing number of older adults who may face mobility challenges. Moreover, tech is advancing rapidly, and older adults may find it difficult to keep up with the latest devices and applications. All this considered, it's understandable to see why older adults who live in assisted living facilities or retirement homes may find it difficult to stay connected with their loved ones or access necessary information and services. I developed a voice-activated digital home assistant application/skill that provides instructional support and recommendations tailored to the needs of older adults with mobility disabilities. The application offers easy-to-follow instructions for various tasks, such as medication reminders, exercise routines, and social engagement activities. Additionally, it provides personalized recommendations for applications and services that can enhance their quality of life. We deployed this application at a local retirement home.",
+        "",
+        "One feedback I found especially memorable was from a lady who talked about how the application helped her stay connected with her children and grandchildren who lived far away. She mentioned that she could easily make video calls and send messages using the voice commands, which made her feel less isolated and more engaged with her family.",
         "<img src=\"assets/reco.jpeg\" alt=\"Card image\" width=\"500\">",
         "<br>",
         "<a href=\"https://techsage.gatech.edu/development/d4\" class=\"btn btn-primary\">Go to Project Page!</a>",
