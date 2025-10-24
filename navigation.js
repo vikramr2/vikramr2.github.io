@@ -3,19 +3,49 @@ let contentData = {};
 
 // Function to convert paragraphs array to HTML
 function paragraphsToHTML(paragraphs) {
-    return paragraphs.map(p => {
+    const result = [];
+    let i = 0;
+
+    while (i < paragraphs.length) {
+        const p = paragraphs[i];
+
+        // Check if this is the start of a code block
+        if (p === '```') {
+            // Collect all lines until we find the closing ```
+            const codeLines = [];
+            i++; // Move past the opening ```
+
+            while (i < paragraphs.length && paragraphs[i] !== '```') {
+                codeLines.push(paragraphs[i]);
+                i++;
+            }
+
+            // Add the code block HTML
+            const codeContent = codeLines.join('\n');
+            result.push(`<pre style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto;"><code>${codeContent}</code></pre>`);
+
+            i++; // Move past the closing ```
+            continue;
+        }
+
         // If it's an array, treat it as a bulleted list
         if (Array.isArray(p)) {
             const listItems = p.map(item => `<li class="card-text">${item}</li>`).join('\n                        ');
-            return `<ul style="list-style-type: disc; padding-left: 20px;">\n                        ${listItems}\n                    </ul>`;
+            result.push(`<ul style="list-style-type: disc; padding-left: 20px;">\n                        ${listItems}\n                    </ul>`);
         }
         // If paragraph contains HTML tags already (like <b>, <a>, <ul>, <img>, etc.), use as is
-        if (p.includes('<') && p.includes('>')) {
-            return p;
+        else if (p.includes('<') && p.includes('>')) {
+            result.push(p);
         }
         // Otherwise, wrap in <p> tag
-        return `<p class="card-text">${p}</p>`;
-    }).join('\n                    ');
+        else {
+            result.push(`<p class="card-text">${p}</p>`);
+        }
+
+        i++;
+    }
+
+    return result.join('\n                    ');
 }
 
 // Function to render PDF viewer using iframe (simpler and more reliable)
@@ -35,7 +65,9 @@ function renderPDFViewer(pdfUrl) {
 // Function to load JSON content for a section
 async function loadSectionContent(section) {
     try {
-        const response = await fetch(`content/${section}.json`);
+        const response = await fetch(`content/${section}.json`, {
+            cache: 'no-store'
+        });
         const data = await response.json();
 
         // Transform the JSON data into the format expected by the existing code
