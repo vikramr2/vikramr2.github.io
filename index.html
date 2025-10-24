@@ -55,6 +55,7 @@
 				<a class="icon" id="git" href="https://github.com/vikramr2"><img src="assets/github.png" height="30" width="30"></a>
 				<a class="icon" id="linkedin" href="https://www.linkedin.com/in/vikram-ramavarapu-972433195/"><img src="assets/linkedin.png" height="30" width="30"></a>
 				<a class="icon" id="instagram" href="https://www.instagram.com/vikktoryos"><img src="assets/instagram.png" height="30" width="30"></a>
+				<a class="icon" id="scholar" href="https://scholar.google.com/citations?user=e-wizMQAAAAJ&hl=en"><img src="assets/scholar.png" height="35" width="35"></a>
 				<script>
 					window.onload = initDivMouseOver;
 
@@ -62,6 +63,7 @@
 						var git = document.getElementById("git");
 						var linkedin = document.getElementById("linkedin");
 						var instagram = document.getElementById("instagram");
+						var scholar = document.getElementById("scholar");
 						var about = document.getElementById("about");
 						var projects = document.getElementById("projects");
 						var experience = document.getElementById("experience");
@@ -97,6 +99,8 @@
 						research.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						instagram.onmouseover  = function() { reset("Follow me!"); }
 						instagram.onmouseout   = function() { reset(getCurrentDefaultTitle()); }
+						scholar.onmouseover    = function() { reset("View my publications!"); }
+						scholar.onmouseout     = function() { reset(getCurrentDefaultTitle()); }
 						navArrowLeft.onmouseover  = function() { reset("Use arrow keys to navigate ←→"); }
 						navArrowLeft.onmouseout   = function() { reset(getCurrentDefaultTitle()); }
 						navArrowRight.onmouseover = function() { reset("Use arrow keys to navigate ←→"); }
