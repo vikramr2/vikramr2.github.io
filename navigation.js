@@ -59,7 +59,8 @@ async function loadSectionContent(section) {
                     imageHeight: card.imageHeight,
                     imageScale: card.imageScale,
                     header: card.header,
-                    body: body
+                    body: body,
+                    paragraphs: card.paragraphs // Preserve original paragraphs for metadata extraction
                 };
             })
         };
@@ -81,6 +82,8 @@ async function loadAllContent() {
 // Current state
 let currentSection = 'about';
 let currentCardIndex = 0;
+let journalView = 'list'; // 'list' or 'detail'
+let currentJournalIndex = null;
 
 // Default title text for each section
 const sectionTitles = {
@@ -101,6 +104,98 @@ window.getCurrentDefaultTitle = getCurrentDefaultTitle;
 
 // Also expose currentSection for debugging
 window.getCurrentSection = function() { return currentSection; };
+
+// Journal list view renderer
+function renderJournalList() {
+    const data = contentData['journal'];
+    if (!data || !data.cards) return '';
+
+    const listItems = data.cards.map((card, index) => {
+        // Extract the date from the first paragraph if it exists
+        let date = '';
+        if (card.paragraphs && card.paragraphs.length > 0) {
+            const firstPara = card.paragraphs[0];
+            // Check if it's a date (contains <b> tags)
+            if (typeof firstPara === 'string' && firstPara.includes('<b>')) {
+                date = firstPara.replace(/<\/?b>/g, '');
+            }
+        }
+
+        return `
+            <div class="journal-list-item" data-index="${index}">
+                <h3>${card.header}</h3>
+                ${date ? `<div class="journal-date">${date}</div>` : ''}
+            </div>
+        `;
+    }).join('');
+
+    return `<div class="journal-list">${listItems}</div>`;
+}
+
+// Journal detail view renderer
+function renderJournalDetail(index) {
+    const data = contentData['journal'];
+    if (!data || !data.cards || !data.cards[index]) return '';
+
+    const card = data.cards[index];
+
+    return `
+        <div class="journal-detail">
+            <button class="journal-back-button">Back to Journal List</button>
+            <div class="card">
+                <h5 class="card-header">${card.header}</h5>
+                <div class="card-body">
+                    ${card.body}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Load journal list view
+function loadJournalList() {
+    journalView = 'list';
+    currentJournalIndex = null;
+    const container = document.querySelector('.card-container-home');
+    container.innerHTML = renderJournalList();
+
+    // Add click handlers to list items
+    container.querySelectorAll('.journal-list-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const index = parseInt(item.getAttribute('data-index'));
+            loadJournalDetail(index);
+        });
+    });
+}
+
+// Load journal detail view
+function loadJournalDetail(index) {
+    journalView = 'detail';
+    currentJournalIndex = index;
+    const container = document.querySelector('.card-container-home');
+
+    // Fade out
+    container.style.opacity = '0';
+
+    setTimeout(() => {
+        container.innerHTML = renderJournalDetail(index);
+
+        // Add click handler to back button
+        const backButton = container.querySelector('.journal-back-button');
+        if (backButton) {
+            backButton.addEventListener('click', () => {
+                container.style.opacity = '0';
+                setTimeout(() => {
+                    loadJournalList();
+                    container.style.opacity = '1';
+                }, 150);
+            });
+        }
+
+        // Fade in
+        container.style.opacity = '1';
+    }, 150);
+}
 
 // Render a single card
 function renderCard(card, isAboutStyle = false) {
@@ -178,6 +273,12 @@ function loadSection(section, skipAnimation = false) {
     const activeLink = document.getElementById(section);
     if (activeLink) {
         activeLink.classList.add('nav-link-active');
+    }
+
+    // Handle journal section with list/detail view
+    if (section === 'journal') {
+        loadJournalList();
+        return;
     }
 
     const isAboutStyle = (section === 'about' || section === 'research');

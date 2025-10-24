@@ -1,7 +1,40 @@
 {
   "cards": [
     {
+      "header": "Technosolutionism",
+      "date": "10/12/2025",
+      "paragraphs": [
+        "<b>10/12/2025</b>",
+        "",
+        "It's been a while since I've written in my journal. Today I had some thoughts about this paper I read recently. If you want to read more, here's the link: <a href=\"https://sorelle.friedler.net/papers/sts_fat2019.pdf\">Fairness and Abstraction in Sociotechnical Systems</a>. The paper mentions these 'traps' in the design of a sociotechnical system, i.e. a system that is designed with the intention of being applied to a social context. One of these traps is 'technosolutionism', which is the ever so hopeful belief that every problem has a technological solution. Whenever I'm coming up with an idea for research or a project, I've often made it a point to try and work backwards from the application to the technology. With this in mind, I realize that sometimes I fall into the trap of technosolutionism, where I get excited about a new technology and believe it's the solution to a problem when it reality it may be the case that <b>no technology is needed at all</b>.",
+        "",
+        "Many times even, it seems that there have been cases of the 'illusion of a solution', where a technology is proposed as a solution to a problem, but it doesn't actually address the root cause of the problem. For example, during the initial advent of dating apps, many people thought that it would streamline the process of finding a partner and make it easier for people to connect (hell, my parents met on one). However, over time, it became clear that dating apps also introduced new problems, such as superficiality, objectification, and a focus on quantity over quality in relationships. In today's world, dating apps have attempted to sort of 'patch' these issues with features like detailed profiles, compatibility algorithms, and prompts to encourage more meaningful conversations. However, these solutions often feel like band-aids on a deeper issue of how technology can sometimes distort human connection rather than enhance it. The actual friction of the dating process is essential for human nature itself, and no amount of technology can change that fundamental truth. And just to generalize this point further, technology serves two main purposes:",
+        [
+          "To streamline an existing process or system, making it more efficient or effective.",
+          "To enable the measurement of something that was previously difficult or impossible to measure."
+        ],
+        "With respect to the first point in particular, in many cases, friction is essential to the process itself. For example, the Estonian voting system became the first country to implement online voting in 2005. While the system may have streamlined the voting process, it was met with significant criticism and skepticism from the public, who were concerned about the security and integrity of the voting process. In this case, the friction of traditional voting methods (e.g., in-person voting, paper ballots) was seen as a necessary safeguard against fraud and manipulation. By removing this friction, the online voting system introduced new risks and vulnerabilities that undermined public trust in the electoral process. [<a href=\"https://en.wikipedia.org/wiki/Electronic_voting_in_Estonia\">Reference</a>]",
+        "",
+        "Some caveats to the aforementioned points:",
+        [
+          "Not all technological solutions are inherently bad or misguided. Many technologies have had a positive impact on society and have addressed real problems effectively.",
+          "The effectiveness of a technological solution often depends on how well it is designed, implemented, and integrated into the social context it aims to address. I used to develop Alexa apps for older adults at a local retirement home. It made me realize how important it is to consider the approach and intent is a key component of the solution, rather than simply whether technology is being used or not."
+        ],
+        "Technosolutionism is an insanely difficult trap to avoid, especially due to the complexity of the trap itself. While the paper sparked a lot of these thoughts, there was definitely not enough space to explore it in depth. I think it's important to be aware of the potential pitfalls of technosolutionism and to approach technological solutions with a critical and reflective mindset. Considering some of these main points:",
+        [
+          "What does my system streamline or improve? Is this friction necessary to the process itself?",
+          "Am I addressing the root cause of the problem, or just treating the symptoms?",
+          "Am I considering the social context and potential unintended consequences of my solution?",
+          "Does my approach and intent align with the needs and values of the community I'm trying to serve?"
+        ],
+        "By doing so, we can ensure that technology is used in a way that truly benefits society and addresses real problems effectively.",
+        "I'll try to update this journal more often! With varying degrees of success and seriousness haha. Check out the other entry I have titled 'Recursion on a Trash Can' for a more lighthearted read :)",
+        "<b>#ViksJournal</b>"
+      ]
+    },
+    {
       "header": "Recursion on a Trash Can",
+      "date": "8/25/2022",
       "paragraphs": [
         "<b>8/25/2022</b>",
         "If you want to replace a trash can, you need to throw away the old trash can right?",
