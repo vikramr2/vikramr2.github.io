@@ -41,8 +41,8 @@ canvas {
 	/*width: 29ch;*/
   opacity: 0;
   animation-name: fadeIn;
-  animation-duration: 2s; /* Duration of the animation */
-  animation-delay: 1.5s; /* Start after logo animation completes */
+  animation-duration: 1s; /* Duration of the animation */
+  animation-delay: 0.75s; /* Start after logo animation completes */
   animation-fill-mode: forwards; /* Ensures the element remains in the final state */
   overflow: hidden;
   white-space: nowrap;
@@ -272,7 +272,7 @@ a {
   max-height: 100%;
   margin-bottom: 10px;
   animation-name: fadeIn;
-  animation-duration: 2s; /* Duration of the animation */
+  animation-duration: 1s; /* Duration of the animation */
   animation-fill-mode: forwards; /* Ensures the element remains in the final state */
 }
 
@@ -296,8 +296,8 @@ a {
 
 .card-container-home {
   opacity: 0;
-  animation: fadeIn 2s ease-in-out forwards;
-  animation-delay: 1.5s;
+  animation: fadeIn 1s ease-in-out forwards;
+  animation-delay: 0.75s;
   padding-top: 0px;
   margin-top: -20px;
   display: flex;
@@ -339,8 +339,8 @@ a {
   z-index: 100;
   padding: 20px;
   font-family: monospace;
-  animation: arrowIntro 4s ease-in-out forwards, arrowPulse 3s ease-in-out infinite;
-  animation-delay: 2s, 6s;
+  animation: arrowIntro 2s ease-in-out forwards, arrowPulse 1.5s ease-in-out infinite;
+  animation-delay: 1s, 3s;
 }
 
 .nav-arrow:hover {
