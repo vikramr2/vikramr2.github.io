@@ -1,6 +1,37 @@
 // Content data loaded from JSON files
 let contentData = {};
 
+// Function to process LaTeX equations in text
+function processLatex(text) {
+    // Process display math ($$...$$) first to avoid conflicts with inline math
+    text = text.replace(/\$\$(.*?)\$\$/g, (match, equation) => {
+        try {
+            return katex.renderToString(equation.trim(), {
+                displayMode: true,
+                throwOnError: false
+            });
+        } catch (e) {
+            console.error('KaTeX error:', e);
+            return match; // Return original if there's an error
+        }
+    });
+
+    // Process inline math ($...$)
+    text = text.replace(/\$(.*?)\$/g, (match, equation) => {
+        try {
+            return katex.renderToString(equation.trim(), {
+                displayMode: false,
+                throwOnError: false
+            });
+        } catch (e) {
+            console.error('KaTeX error:', e);
+            return match; // Return original if there's an error
+        }
+    });
+
+    return text;
+}
+
 // Function to convert paragraphs array to HTML
 function paragraphsToHTML(paragraphs) {
     const result = [];
@@ -30,16 +61,16 @@ function paragraphsToHTML(paragraphs) {
 
         // If it's an array, treat it as a bulleted list
         if (Array.isArray(p)) {
-            const listItems = p.map(item => `<li class="card-text">${item}</li>`).join('\n                        ');
+            const listItems = p.map(item => `<li class="card-text">${processLatex(item)}</li>`).join('\n                        ');
             result.push(`<ul style="list-style-type: disc; padding-left: 20px;">\n                        ${listItems}\n                    </ul>`);
         }
         // If paragraph contains HTML tags already (like <b>, <a>, <ul>, <img>, etc.), use as is
         else if (p.includes('<') && p.includes('>')) {
-            result.push(p);
+            result.push(processLatex(p));
         }
         // Otherwise, wrap in <p> tag
         else {
-            result.push(`<p class="card-text">${p}</p>`);
+            result.push(`<p class="card-text">${processLatex(p)}</p>`);
         }
 
         i++;

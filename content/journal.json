@@ -1,6 +1,43 @@
 {
   "cards": [
     {
+      "header": "Turning a grain of rice into a black hole",
+      "date": "10/26/2025",
+      "paragraphs": [
+        "<b>10/26/2025</b>",
+        "",
+        "A grain of rice is pretty small, right? But considering that it's small:",
+        [
+          "If we keep it's mass, how small would it need to become to turn into a black hole?",
+          "How heavy would it need to become to turn into a black hole?"
+        ],
+        "Let's answer the first question! First, we need to understand the Schawrzschild radius, which can be calculated using the formula:",
+        "",
+        "$$r_s = \\frac{2GM}{c^2}$$",
+        "",
+        "Great! Now let's assume that this is a grain of Jasmine rice, which has a mass of approximately $0.02$ grams (or $2 * 10^{-5}$ kg). And just to offend some people, I'm going let $G=10$ in classic engineer fashion. Plugging in the values, we get:",
+        "",
+        "$$r_s = \\frac{2 * 10 * 2 * 10^{-5}}{(3 * 10^8)^2} = 4.44 * 10^{-21} \\text{ meters}$$",
+        "",
+        "Okay yeah it looks like even for something as small as a grain of rice, the Schwarzschild radius is still insanely small. To put this into perspective, the radius of a proton is approximately $0.84 * 10^{-15}$ meters (According to Wikipedia), which is about $10^6$ times larger than the Schwarzschild radius we calculated for the grain of rice.",
+        "Well, that's pretty interesting, but let's move on to the second question: How heavy would the grain of rice need to be to turn into a black hole, assuming it retains its original size?",
+        "",
+        "It's roughly the same calculation, but this time we need to solve for mass $M$ instead:",
+        "",
+        "$$M = \\frac{r_s c^2}{2G}$$",
+        "",
+        "Assuming the grain of rice has a radius of approximately $2$ millimeters (or $2 * 10^{-3}$ meters), we can plug in the values to get:",
+        "",
+        "$$M = \\frac{2 * 10^{-3} * (3 * 10^8)^2}{2 * 10} = 9 * 10^{12} \\text{ kg}$$",
+        "",
+        "That's pretty massive. Not to mention, this is the perfect set up for a particular kind of joke, but unfortunately, I'd like to keep this journal entry somewhat professional.",
+        "",
+        "<b>#ViksJournal #Physics #BlackHoles</b>"
+        "",
+        "P.S. Looks like LaTeX rendering is working now! Yay~"
+      ]
+    },
+    {
       "header": "Who even is this guy??",
       "date": "10/24/2025",
       "paragraphs": [
