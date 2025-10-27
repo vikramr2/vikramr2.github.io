@@ -480,6 +480,44 @@ async function initNavigation() {
         navArrowRight.addEventListener('click', () => navigateSection(1));
     }
 
+    // Add touch/swipe navigation for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    const minSwipeDistance = 50; // Minimum distance for a swipe to register
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Check if horizontal swipe is more significant than vertical
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Only register if swipe is long enough
+            if (Math.abs(deltaX) > minSwipeDistance) {
+                if (deltaX > 0) {
+                    // Swipe right - go to previous section
+                    navigateSection(-1);
+                } else {
+                    // Swipe left - go to next section
+                    navigateSection(1);
+                }
+            }
+        }
+    }
+
     // Add click handler to logo
     const logo = document.querySelector('.telugu-logo');
     if (logo) {
