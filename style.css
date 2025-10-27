@@ -152,7 +152,7 @@ html, body {
     width: 100%;
   }
 
-  /* Image improvements */
+  /* Image improvements - make images responsive and fit within cards */
   .card-img-top {
     width: 150px;
     height: 150px;
@@ -167,6 +167,19 @@ html, body {
   .card-img-gallery-container {
     gap: 10px;
     margin-bottom: 10px;
+  }
+
+  /* Make all images in cards responsive */
+  .card img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .card-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
   }
 
   /* Icon/Footer improvements - make more touchable */
@@ -227,9 +240,23 @@ html, body {
     font-size: 16px;
   }
 
-  /* PDF viewer improvements */
+  /* PDF viewer improvements - hide iframe on mobile, show download only */
   .pdf-iframe-container {
-    height: 400px;
+    display: none !important;
+  }
+
+  .pdf-viewer-container {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .pdf-download {
+    padding: 0;
+  }
+
+  .pdf-download .btn {
+    font-size: 18px;
+    padding: 15px 30px;
   }
 
   /* Improve link touch targets */
