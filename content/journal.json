@@ -15,7 +15,7 @@
         "",
         "$$r_s = \\frac{2GM}{c^2}$$",
         "",
-        "Great! Now let's assume that this is a grain of Jasmine rice, which has a mass of approximately $0.02$ grams (or $2 * 10^{-5}$ kg). And just to offend some people, I'm going let $G=10$ in classic engineer fashion. Plugging in the values, we get:",
+        "Great! Now let's assume that this is a grain of Jasmine rice, which has a mass of approximately $0.02$ grams (or $2 * 10^{-5}$ kg). And just to offend some people, I'm going let $G=10$ in classic engineer fashion (because $\\pi$ is also 3 amirite?). Plugging in the values, we get:",
         "",
         "$$r_s = \\frac{2 * 10 * 2 * 10^{-5}}{(3 * 10^8)^2} = 4.44 * 10^{-21} \\text{ meters}$$",
         "",
