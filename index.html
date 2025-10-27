@@ -24,7 +24,7 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 		<!-- Define inlined JavaScript -->
-		<script type="text/javascript" src="navigation.js?v=12"></script>
+		<script type="text/javascript" src="navigation.js?v=13"></script>
 		<link
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
             rel="stylesheet"
@@ -91,7 +91,10 @@
 							message.innerHTML = newmsg
 						}
 
-						git.onmouseover        = function() { reset("Check out my projects!"); }
+						git.onmouseover        = function() {
+							const isMobile = window.innerWidth <= 768;
+							reset(isMobile ? "My projects" : "Check out my projects!");
+						}
 						git.onmouseout         = function() { reset(getCurrentDefaultTitle()); }
 						linkedin.onmouseover   = function() { reset("Connect with me!"); }
 						linkedin.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
@@ -110,7 +113,10 @@
 						research.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						instagram.onmouseover  = function() { reset("Follow me!"); }
 						instagram.onmouseout   = function() { reset(getCurrentDefaultTitle()); }
-						scholar.onmouseover    = function() { reset("View my publications!"); }
+						scholar.onmouseover    = function() {
+							const isMobile = window.innerWidth <= 768;
+							reset(isMobile ? "Papers" : "View my publications!");
+						}
 						scholar.onmouseout     = function() { reset(getCurrentDefaultTitle()); }
 						navArrowLeft.onmouseover  = function() { reset("Use arrow keys to navigate ←→"); }
 						navArrowLeft.onmouseout   = function() { reset(getCurrentDefaultTitle()); }
