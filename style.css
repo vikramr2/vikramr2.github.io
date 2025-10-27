@@ -19,36 +19,83 @@ html, body {
     height: 100%;
   }
 
-  /* Title and header improvements */
-  .typewriter {
-    padding-top: 60px;
+  /* Fix logo and navigation positioning to prevent overlap */
+  .nav {
+    position: relative;
+    z-index: 100;
+    min-height: 60px;
   }
 
-  .typewriter h1 {
-    font-size: 48px;
-    padding: 0 20px;
+  .container {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .telugu-logo {
+    width: 60px;
+    height: 60px;
+    animation: moveToCornerMobile 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards !important;
+  }
+
+  /* Mobile-specific logo animation */
+  @keyframes moveToCornerMobile {
+    0% {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.5);
+      z-index: 1000;
+    }
+    100% {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      transform: translate(0, 0) scale(1);
+      z-index: 1000;
+    }
+  }
+
+  /* Make navigation stack better on mobile */
+  .main_list {
+    position: relative;
+    right: 0;
+    width: 100%;
     text-align: center;
+    margin-top: 10px;
+  }
+
+  .navlinks ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .navlinks li {
+    padding-left: 6px;
+    padding-right: 6px;
+    float: none;
   }
 
   /* Navigation improvements */
   h2 {
-    font-size: 18px;
+    font-size: 14px;
   }
 
-  .container {
-    padding-top: 2%;
-    padding-left: 3%;
-    padding-right: 3%;
+  /* Title and header improvements - more space from navigation */
+  .typewriter {
+    padding-top: 140px;
   }
 
-  .navlinks li {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  .telugu-logo {
-    width: 80px;
-    height: 80px;
+  .typewriter h1 {
+    font-size: 36px;
+    padding: 0 15px;
+    text-align: center;
   }
 
   /* Card improvements for better readability */
@@ -72,6 +119,16 @@ html, body {
     font-size: 16px;
     line-height: 1.6;
     margin-bottom: 12px;
+  }
+
+  /* Stack images above text on mobile */
+  .card.mb-3.about {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .card.mb-3.about .card-body {
+    width: 100%;
   }
 
   /* Image improvements */
@@ -116,9 +173,10 @@ html, body {
 
   /* Card container improvements */
   .card-container-home {
-    max-height: calc(100vh - 150px);
+    max-height: calc(100vh - 280px);
     padding: 0 10px;
     gap: 15px;
+    margin-top: 0px;
   }
 
   /* Journal list improvements */
