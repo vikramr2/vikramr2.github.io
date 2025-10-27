@@ -1,5 +1,13 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 @media only screen and (max-device-width: 768px) {
-  body { 
+  body {
     margin:0;
     padding:0;
     top: -20;
@@ -17,10 +25,31 @@
 
 #main  {
 	position: relative;
-	margin: 0; 
+	margin: 0;
 	height: 100%;
 	width:  100%;
 	overflow:hidden;
+}
+
+/* Ensure Vanta canvas stays in background and doesn't block interactions */
+#main canvas {
+	pointer-events: none !important;
+	z-index: -3 !important;
+}
+
+/* Ensure specific elements are above the Vanta background */
+.typewriter, .card-container-home {
+	position: relative;
+	z-index: 1;
+}
+
+.nav {
+	position: relative;
+	z-index: 100;
+}
+
+.footer, .nav-arrow {
+	z-index: 100;
 }
 
 #main2  {
@@ -34,6 +63,10 @@ canvas {
   margin: 0;
 	position: fixed;
 	z-index: -3;
+}
+
+#canv {
+	display: none;
 }
 
 
