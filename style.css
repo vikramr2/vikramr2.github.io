@@ -109,13 +109,14 @@ html, body {
 
   /* Title and header improvements - better spacing without logo */
   .typewriter {
-    padding-top: 100px;
+    padding-top: 70px;
   }
 
   .typewriter h1 {
     font-size: 40px;
     padding: 0 15px;
     text-align: center;
+    line-height: 1.2;
   }
 
   /* Card improvements for better readability */
@@ -193,7 +194,7 @@ html, body {
 
   /* Card container improvements */
   .card-container-home {
-    max-height: calc(100vh - 240px);
+    max-height: calc(100vh - 210px);
     padding: 0 10px;
     gap: 15px;
     margin-top: 0px;

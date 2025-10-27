@@ -157,9 +157,24 @@ const sectionTitles = {
     'journal': 'Random thoughts n stuff'
 };
 
+// Mobile-specific shorter titles
+const sectionTitlesMobile = {
+    'about': 'Vikram R.',
+    'research': 'My Research',
+    'projects': 'My showcase!',
+    'experience': 'Work experience',
+    'journal': 'Random thoughts'
+};
+
+// Check if mobile device
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
 // Function to get the current default title
 function getCurrentDefaultTitle() {
-    return sectionTitles[currentSection] || 'Vikram R.';
+    const titles = isMobile() ? sectionTitlesMobile : sectionTitles;
+    return titles[currentSection] || 'Vikram R.';
 }
 
 // Make it globally accessible

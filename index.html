@@ -24,12 +24,12 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 		<!-- Define inlined JavaScript -->
-		<script type="text/javascript" src="navigation.js?v=11"></script>
+		<script type="text/javascript" src="navigation.js?v=12"></script>
 		<link
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
             rel="stylesheet"
         />
-		<link rel="stylesheet" href="style.css?v=3">
+		<link rel="stylesheet" href="style.css?v=4">
 		<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 	</head>
 	<body id="main">
@@ -101,7 +101,10 @@
 						projects.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						experience.onmouseover = function() { reset("Work experience"); }
 						experience.onmouseout  = function() { reset(getCurrentDefaultTitle()); }
-						journal.onmouseover    = function() { reset("Random thoughts n stuff"); }
+						journal.onmouseover    = function() {
+							const isMobile = window.innerWidth <= 768;
+							reset(isMobile ? "Random thoughts" : "Random thoughts n stuff");
+						}
 						journal.onmouseout     = function() { reset(getCurrentDefaultTitle()); }
 						research.onmouseover   = function() { reset("My Research"); }
 						research.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
