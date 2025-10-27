@@ -34,7 +34,7 @@ html, body {
     padding-right: 10px;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0px;
   }
 
   .telugu-logo {
@@ -90,7 +90,7 @@ html, body {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    padding: 20px 0;
+    padding: 10px 0 15px 0;
     width: 100%;
     position: relative;
     z-index: 200;
@@ -120,7 +120,8 @@ html, body {
 
   /* Title and header improvements - better spacing without logo */
   .typewriter {
-    padding-top: 20px;
+    padding-top: 0px;
+    margin-top: -10px;
   }
 
   .typewriter h1 {
@@ -128,6 +129,8 @@ html, body {
     padding: 0 15px;
     text-align: center;
     line-height: 1.2;
+    height: auto;
+    margin: 0;
   }
 
   /* Card improvements for better readability */
