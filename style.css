@@ -95,7 +95,7 @@ html, body {
     width: 100%;
     position: relative;
     z-index: 200;
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
   }
 
   .nav-dot {
@@ -228,7 +228,8 @@ html, body {
     max-height: calc(100vh - 210px);
     padding: 0 10px 180px 10px;
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 10px !important;
+    padding-top: 10px !important;
     padding-bottom: 180px !important;
   }
 
