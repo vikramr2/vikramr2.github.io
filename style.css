@@ -37,26 +37,45 @@ html, body {
   }
 
   .telugu-logo {
-    width: 60px;
-    height: 60px;
-    animation: moveToCornerMobile 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards !important;
+    width: 80px;
+    height: 80px;
+    animation: logoMobileFadeOut 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards !important;
   }
 
-  /* Mobile-specific logo animation */
-  @keyframes moveToCornerMobile {
+  /* Mobile-specific logo animation - animate then fade out */
+  @keyframes logoMobileFadeOut {
     0% {
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(1.5);
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 1;
+      z-index: 1000;
+    }
+    50% {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 1;
+      z-index: 1000;
+    }
+    80% {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 1;
       z-index: 1000;
     }
     100% {
       position: fixed;
-      top: 10px;
-      left: 10px;
-      transform: translate(0, 0) scale(1);
-      z-index: 1000;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 0;
+      z-index: -1;
+      pointer-events: none;
     }
   }
 
@@ -66,34 +85,35 @@ html, body {
     right: 0;
     width: 100%;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 0px;
   }
 
   .navlinks ul {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 8px;
+    padding-top: 10px;
   }
 
   .navlinks li {
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
     float: none;
   }
 
   /* Navigation improvements */
   h2 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
-  /* Title and header improvements - more space from navigation */
+  /* Title and header improvements - better spacing without logo */
   .typewriter {
-    padding-top: 140px;
+    padding-top: 100px;
   }
 
   .typewriter h1 {
-    font-size: 36px;
+    font-size: 40px;
     padding: 0 15px;
     text-align: center;
   }
@@ -173,7 +193,7 @@ html, body {
 
   /* Card container improvements */
   .card-container-home {
-    max-height: calc(100vh - 280px);
+    max-height: calc(100vh - 240px);
     padding: 0 10px;
     gap: 15px;
     margin-top: 0px;
