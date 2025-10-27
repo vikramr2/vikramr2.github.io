@@ -79,27 +79,32 @@ html, body {
     }
   }
 
-  /* Make navigation stack better on mobile */
+  /* Hide text navigation on mobile and show dot navigation instead */
   .main_list {
-    position: relative;
-    right: 0;
-    width: 100%;
-    text-align: center;
-    margin-top: 0px;
+    display: none;
   }
 
-  .navlinks ul {
+  .dot-navigation {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding-top: 10px;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 0;
+    width: 100%;
   }
 
-  .navlinks li {
-    padding-left: 8px;
-    padding-right: 8px;
-    float: none;
+  .nav-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-dot.active {
+    background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.2);
   }
 
   /* Navigation improvements */
@@ -468,6 +473,11 @@ h2 {
 .main_list {
   position:absolute;
   right: 10px;
+}
+
+/* Dot navigation - hidden on desktop */
+.dot-navigation {
+  display: none;
 }
 
 a {

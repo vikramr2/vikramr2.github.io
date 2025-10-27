@@ -368,6 +368,15 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
         activeLink.classList.add('nav-link-active');
     }
 
+    // Update active dot for mobile navigation
+    document.querySelectorAll('.nav-dot').forEach(dot => {
+        dot.classList.remove('active');
+    });
+    const activeDot = document.querySelector(`.nav-dot[data-section="${section}"]`);
+    if (activeDot) {
+        activeDot.classList.add('active');
+    }
+
     // Handle journal section with list/detail view
     if (section === 'journal') {
         loadJournalList();
@@ -464,6 +473,16 @@ async function initNavigation() {
                 loadSection(section);
             });
         }
+    });
+
+    // Add click handlers to dot navigation
+    document.querySelectorAll('.nav-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+            const section = dot.getAttribute('data-section');
+            if (section) {
+                loadSection(section);
+            }
+        });
     });
 
     // Add arrow key navigation
