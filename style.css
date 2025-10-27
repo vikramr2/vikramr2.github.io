@@ -120,7 +120,7 @@ html, body {
 
   /* Title and header improvements - better spacing without logo */
   .typewriter {
-    padding-top: 70px;
+    padding-top: 20px;
   }
 
   .typewriter h1 {
