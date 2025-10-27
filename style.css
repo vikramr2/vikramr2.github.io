@@ -23,18 +23,19 @@ html, body {
   .nav {
     position: relative;
     z-index: 100;
-    min-height: 60px;
+    min-height: auto;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 
   .container {
     display: flex;
     flex-direction: column;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px 10px 0 10px;
     justify-content: center;
     align-items: center;
     gap: 0px;
+    margin-bottom: 0;
   }
 
   .telugu-logo {
@@ -90,10 +91,11 @@ html, body {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    padding: 10px 0 15px 0;
+    padding: 10px 0 5px 0;
     width: 100%;
     position: relative;
     z-index: 200;
+    margin-bottom: 0;
   }
 
   .nav-dot {
@@ -120,8 +122,8 @@ html, body {
 
   /* Title and header improvements - better spacing without logo */
   .typewriter {
-    padding-top: 0px;
-    margin-top: -10px;
+    padding-top: 0px !important;
+    margin-top: 0px !important;
   }
 
   .typewriter h1 {
@@ -129,8 +131,8 @@ html, body {
     padding: 0 15px;
     text-align: center;
     line-height: 1.2;
-    height: auto;
-    margin: 0;
+    height: auto !important;
+    margin: 0 !important;
   }
 
   /* Card improvements for better readability */
