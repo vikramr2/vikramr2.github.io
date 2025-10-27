@@ -358,6 +358,45 @@ function navigateSection(direction) {
     loadSection(sectionOrder[newIndex]);
 }
 
+// Function to replay initial animations
+function replayInitialAnimations() {
+    const logo = document.querySelector('.telugu-logo');
+    const logoChar = document.querySelector('.telugu-char');
+    const title = document.getElementById('title');
+    const cardContainer = document.querySelector('.card-container-home');
+
+    // Remove animations
+    logo.style.animation = 'none';
+    logoChar.style.animation = 'none';
+    if (title) title.style.animation = 'none';
+    cardContainer.style.animation = 'none';
+
+    // Force reflow
+    void logo.offsetWidth;
+    void logoChar.offsetWidth;
+    if (title) void title.offsetWidth;
+    void cardContainer.offsetWidth;
+
+    // Re-apply animations
+    logo.style.animation = 'moveToCorner 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards';
+    logoChar.style.animation = 'drawOnStartup 2s ease-in-out forwards';
+    if (title) {
+        title.style.opacity = '0';
+        title.style.animation = 'fadeIn 1s 0.75s forwards';
+    }
+    cardContainer.style.opacity = '0';
+    cardContainer.style.animation = 'fadeIn 1s ease-in-out 0.75s forwards';
+
+    // Clear inline styles after animations complete so CSS hover works again
+    const clearInlineStyles = () => {
+        logo.style.animation = '';
+        logoChar.style.animation = '';
+    };
+
+    // Listen for the logo animation to end (longest animation is 2s for logoChar)
+    logoChar.addEventListener('animationend', clearInlineStyles, { once: true });
+}
+
 // Initialize navigation
 async function initNavigation() {
     // Load all content from JSON files first
@@ -408,6 +447,20 @@ async function initNavigation() {
 
     if (navArrowRight) {
         navArrowRight.addEventListener('click', () => navigateSection(1));
+    }
+
+    // Add click handler to logo
+    const logo = document.querySelector('.telugu-logo');
+    if (logo) {
+        logo.addEventListener('click', () => {
+            // Replay animations
+            replayInitialAnimations();
+
+            // Load about section after a short delay to ensure animation starts
+            setTimeout(() => {
+                loadSection('about', true, true);
+            }, 50);
+        });
     }
 
     // Function to load section from hash
