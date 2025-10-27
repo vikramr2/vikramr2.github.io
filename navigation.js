@@ -185,11 +185,16 @@ function renderJournalDetail(index) {
 }
 
 // Load journal list view
-function loadJournalList() {
+function loadJournalList(updateHash = true) {
     journalView = 'list';
     currentJournalIndex = null;
     const container = document.querySelector('.card-container-home');
     container.innerHTML = renderJournalList();
+
+    // Update the URL hash
+    if (updateHash) {
+        window.history.replaceState(null, null, '#journal');
+    }
 
     // Add click handlers to list items
     container.querySelectorAll('.journal-list-item').forEach(item => {
@@ -201,10 +206,15 @@ function loadJournalList() {
 }
 
 // Load journal detail view
-function loadJournalDetail(index) {
+function loadJournalDetail(index, updateHash = true) {
     journalView = 'detail';
     currentJournalIndex = index;
     const container = document.querySelector('.card-container-home');
+
+    // Update the URL hash
+    if (updateHash) {
+        window.history.replaceState(null, null, `#journal/${index}`);
+    }
 
     // Fade out
     container.style.opacity = '0';
@@ -283,7 +293,7 @@ function renderCard(card, isAboutStyle = false) {
 }
 
 // Load content for a section
-function loadSection(section, skipAnimation = false) {
+function loadSection(section, skipAnimation = false, updateHash = true) {
     currentSection = section;
     currentCardIndex = 0;
 
@@ -291,6 +301,11 @@ function loadSection(section, skipAnimation = false) {
     const data = contentData[section];
 
     if (!data) return;
+
+    // Update the URL hash
+    if (updateHash) {
+        window.history.replaceState(null, null, `#${section}`);
+    }
 
     // Update the title to the section's default text
     const titleElement = document.getElementById('title');
@@ -395,8 +410,57 @@ async function initNavigation() {
         navArrowRight.addEventListener('click', () => navigateSection(1));
     }
 
-    // Load the about section on initial page load (skip animation since CSS handles it)
-    loadSection('about', true);
+    // Function to load section from hash
+    function loadFromHash() {
+        const hash = window.location.hash.substring(1); // Remove the '#'
+
+        if (hash) {
+            // Check if it's a journal detail view (e.g., journal/0)
+            if (hash.startsWith('journal/')) {
+                const parts = hash.split('/');
+                const journalIndex = parseInt(parts[1]);
+
+                if (!isNaN(journalIndex)) {
+                    // Load journal section first, then load the detail
+                    currentSection = 'journal';
+                    const titleElement = document.getElementById('title');
+                    if (titleElement) {
+                        titleElement.innerHTML = getCurrentDefaultTitle();
+                    }
+
+                    // Update active navigation link
+                    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
+                        link.classList.remove('nav-link-active');
+                    });
+                    const activeLink = document.getElementById('journal');
+                    if (activeLink) {
+                        activeLink.classList.add('nav-link-active');
+                    }
+
+                    loadJournalDetail(journalIndex, false);
+                } else {
+                    loadSection('journal', true, false);
+                }
+            } else if (sectionOrder.includes(hash)) {
+                // Load the section from the hash
+                loadSection(hash, true, false);
+            } else {
+                // Invalid hash, load about
+                loadSection('about', true);
+            }
+        } else {
+            // No hash, load about section
+            loadSection('about', true);
+        }
+    }
+
+    // Listen for hash changes (back/forward navigation)
+    window.addEventListener('hashchange', () => {
+        loadFromHash();
+    });
+
+    // Load initial section from hash
+    loadFromHash();
 }
 
 // Load on page ready
