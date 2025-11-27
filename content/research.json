@@ -1,14 +1,28 @@
 {
   "cards": [
     {
+      "image": "assets/reccs.jpeg",
+      "imageAlt": "RECCS Logo",
+      "imageScale": 30,
+      "paragraphs": [
+        "<b>RECCS+/++: Large Scale Community-Aware Network Generation</b>",
+        "",
+        "<b>Vikram Ramavarapu</b>, <a href=https://alfredjynx.github.io/>João Alfredo Cardoso Lamy</a>, <a href=https://davidbader.net/authors/dindoost-mohammad/>Mohammad Dindoost</a>, <a href=https://davidbader.net/>David A. Bader</a>",
+        "<em>Under Review</em> [<a href=https://arxiv.org/abs/2511.19717>Preprint</a>]",
+        "",
+        "REalistic Cluster Connecivity Simulator (RECCS) is a synthetic network generator designed to replicate the structural properties of real-world networks, both at the global (network) and local (community) levels. RECCS+ enhances the original RECCS model by incorporating parallelism into the generation process, and RECCS++ further extends this by introducting algorithmic optimizations that significantly improve performance. These advancements enable the RECCS to generate realistic synthetic networks at the scale of over 100 million nodes, and arounf 2 billion edges, making it suitable for large-scale network analysis and simulations.",
+        "<a href=\"https://github.com/illinois-or-research-analytics/reccs\" class=\"btn btn-primary\">View Source Code!</a>"
+      ]
+    },
+    {
       "image": "assets/abm_icon.jpg",
       "imageAlt": "Agent-Based Modeling",
-      "imageScale": 20,
+      "imageScale": 30,
       "paragraphs": [
         "<b>An Agent-based Model of Citation Behavior</b>",
         "",
         "<a href=https://sites.google.com/view/chackogroup/home>George Chacko</a>, <a href=https://minhyukpark.com/>Minhyuk Park</a>, <b>Vikram Ramavarapu</b>, <a href=https://www.cs.purdue.edu/homes/ayg/>Ananth Grama</a>, <a href=https://siebelschool.illinois.edu/about/people/faculty/pdr>Pablo Robles-Granda</a>, <a href=https://tandy.cs.illinois.edu/>Tandy Warnow</a>",
-        "<em>Under Review</em> [<a href=https://arxiv.org/pdf/2503.06579>Preprint</a>]",
+        "<em>Accepted: Applied Network Science (ANS)</em> [<a href=https://arxiv.org/pdf/2503.06579>Preprint</a>]",
         "",
         "We introduce an agent-based model (ABM) to simulate citation behavior in scholarly articles. Our model incorporates various factors influencing citation decisions, including preferential attachment, recency, paper quality, and relevance (which is proxied by the neighborhood of the paper). By simulating the citation process, we aim to understand the dynamics of citation networks and the emergence of influential papers within academic communities. The ABM allows us to explore how different strategies and behaviors impact the overall structure of citation networks."
       ]
@@ -16,8 +30,7 @@
     {
       "image": "assets/mach2_icon.jpg",
       "imageAlt": "Migration History",
-      "imageWidth": "425",
-      "imageHeight": "325",
+      "imageScale": 30,
       "paragraphs": [
         "<b>Characterizing the Solution Space of Migration Histories of Metastatic Cancers with MACH2</b>",
         "",
@@ -33,11 +46,12 @@
     {
       "image": "assets/multiling.png",
       "imageAlt": "Multilingual Citation Network",
+      "imageScale": 30,
       "paragraphs": [
         "<b>Exploration of Multi-Lingual Community Structure in Scholarly Articles</b>",
         "",
         "<b>Vikram Ramavarapu</b>, <a href=https://kdb.iimc.kyoto-u.ac.jp/profile/en.96de96257c06ce30.html>Chifumi Nishioka</a>",
-        "<em>ACM/IEEE Joint Conference on Digital Libraries (JCDL) (2024)</em>[<a href=https://dl.acm.org/doi/pdf/10.1145/3677389.3702567>Paper</a>]",
+        "<em>ACM/IEEE Joint Conference on Digital Libraries (JCDL) (2024)</em> [<a href=https://dl.acm.org/doi/pdf/10.1145/3677389.3702567>Paper</a>]",
         "",
         "During my time at the National Institute of Informatics (国立情報学研究所) in Tokyo, I explored how cross lingual citation can divide a network of citing publications into communities. We used a dataset of 7 million papers from a corroborated dataset across OpenCitations, CrossRef, and OpenAlex. Langdetect was used to identify the language of each publication, and a multilingual BERT-based model was used to identify the topics of each publication.",
         "<em>Image: A visualization of a citation network across languages. Each color represents a different language, and the size of the node represents the number of citations the paper has. NOTE: This is a mockup and not the actual visualization.</em>"
