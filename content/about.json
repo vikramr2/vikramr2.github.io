@@ -6,10 +6,18 @@
       "paragraphs": [
         "<b>Hey guys!</b>",
         "My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign.",
-        "<b>Research Interests</b>: I'm fortunate to be advised by Prof. George Chacko, with guidance from Prof. Tandy Warnow. I'm interested in problems in <b>network science</b> (<b>graph theory</b>, <b>social networks</b>, etc.) and more recently, <b>natural language processing (NLP)</b>. I've been working with using techniques from the aforementioned areas to study information diffusion and community formation across a variety of social networks. My core work in my group prior to the introduction of NLP has been in developing scalable algorithms for analyzing large-scale networks, with applications in social and biological networks.",
-        "Prior to my PhD, I completed a Master's degree in <b>Bioinformatics</b> at UIUC as well, where I worked with Prof. Mohammed El-Kebir on computational methods for studying cancer metastasis.",
-        "",
-        "<b>Hobbies and Miscellaneous</b>: I enjoy longboarding. I love animals: I ride and take care of horses and have three cats <em>(scroll to see them!)</em>. I'm passionate about languages (though I have varying proficiency in them): I speak English, Telugu, Japanese (~N4 level), and I learned Spanish in high school and college.",
+        "<b>Research Interests</b>:",
+        ""
+      ],
+      "research_short": "I'm interested in \"computation to help us understand us\".",
+      "research_long": "The general theme I like to tie my diverse interests together with is the idea of \"computation to help us understand us\". There's a really common doctrine in behavioral science that says that our human behaviors have multiple levels of abstraction, from social to psychological to neurological (<a href=https://www.issep.org/features/the-social-neuroscience-of-authenticity#:~:text=The%20doctrine%20of%20multilevel%20analysis%20proposes%20that%20human%20thought%20and%20behavior%20can%20be%20understood%20at%20different%20levels%20of%20organization%2C%20ranging%20from%20the%20neuroscientific%20(a%20%E2%80%9Cmicroscopic%E2%80%9D%20level%20of%20analysis)%20to%20the%20social%20psychological%20(a%20%E2%80%9Cmacroscopic%E2%80%9D%20level%20of%20analysis).>link</a>). Under the mentorship of my PhD advisors (<a href=https://ischool.illinois.edu/people/bertram-ludascher>Prof. Bertram Ludäscher</a> at UIUC and <a href=https://mcml.ai/research/groups/diesner/>Prof. Jana Diesner</a> at TUM), I am working on computational models to understand the diffusion of textual information in social networks. I'm also interested in using large language models (LLMs) as a tool to help us understand human cognition and creativity. Under the mentorship of <a href=https://www.ornl.gov/staff-profile/ramakrishnan-ramki-kannan>Prof. Ramki Kannan</a> and <a href=https://www.ornl.gov/staff-profile/ashish-gautam>Ashish Gautam</a> at ORNL, I am also working on a newfound interest of mine: neuromorphic computing, which is the design of computing systems inspired by the human brain. It's a particularly interesting way of using models of inference to understand our own neurological processes."
+    },
+    {
+      "image": "",
+      "imageAlt": "",
+      "paragraphs": [
+        "<b>Hobbies and Miscellaneous</b>",
+        "I enjoy longboarding. I love animals: I ride and take care of horses and have three cats <em>(scroll to see them!)</em>. I'm passionate about languages (though I have varying proficiency in them): I speak English, Telugu, Japanese (~N4 level), and I learned Spanish in high school and college.",
         "",
         "<b>Please reach out!</b>",
         "<a href=\"mailto:vikramr2@illinois.edu\">vikramr2 at illinois dot edu</a>"
@@ -21,7 +29,8 @@
       "paragraphs": [
         "<b>News</b>",
         [
-          "<b>January 2026</b>: I will be doing a research internship at Oak Ridge National Laboratory (ORNL), working with <a href=https://www.ornl.gov/staff-profile/ramakrishnan-ramki-kannan>Prof. Ramki Kannan</a> on graph-based neuromorphic computing!",
+          "<b>May 2026</b>: I will be giving an oral presentation about my work on combinatorially creative LLM agents for hypothesis generation in neuromorphic computing at the 2026 International Green and Sustainable Computing Conference (IGSC)!",
+          "<b>January 2026</b>: I will be doing a research internship at Oak Ridge National Laboratory (ORNL), working with <a href=https://www.ornl.gov/staff-profile/ramakrishnan-ramki-kannan>Prof. Ramki Kannan</a> and <a href=https://www.ornl.gov/staff-profile/ashish-gautam>Ashish Gautam</a> on designing LLM agents for neuromorphic computing!",
           "<b>November 2025</b>: Our work on simulating citation behavior using agent-based modeling was accepted at Applied Network Science (ANS)!",
           "<b>April 2025</b>: I contributed to a paper on cancer metastasis graph inference that was accepted at RECOMB 2025! You can view it <a href=\"https://link.springer.com/chapter/10.1007/978-3-031-90252-9_34\">here</a>",
           "<b>September 2024</b>: My work at NII on cross-lingual information diffusion in citation networks was accepted at JCDL 2024! You can view it <a href=\"https://dl.acm.org/doi/pdf/10.1145/3677389.3702567\">here</a>",

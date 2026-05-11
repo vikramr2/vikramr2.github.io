@@ -32,6 +32,38 @@ function processLatex(text) {
     return text;
 }
 
+// Build the research interest tab widget HTML
+function buildResearchTabWidget(shortText, longText) {
+    return `<div class="research-tabs">
+        <div class="research-tab-buttons">
+            <button class="research-tab-btn active" data-tab="short">Short</button>
+            <button class="research-tab-btn" data-tab="long">Long</button>
+        </div>
+        <div class="research-tab-content">
+            <div class="research-tab-panel active" data-panel="short">
+                <p class="card-text">${shortText}</p>
+            </div>
+            <div class="research-tab-panel" data-panel="long">
+                <p class="card-text">${longText}</p>
+            </div>
+        </div>
+    </div>`;
+}
+
+// Wire up research tab click handlers after about section renders
+function initResearchTabs(container) {
+    container.querySelectorAll('.research-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.getAttribute('data-tab');
+            const widget = btn.closest('.research-tabs');
+            widget.querySelectorAll('.research-tab-btn').forEach(b => b.classList.remove('active'));
+            widget.querySelectorAll('.research-tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            widget.querySelector(`.research-tab-panel[data-panel="${tab}"]`).classList.add('active');
+        });
+    });
+}
+
 // Function to convert paragraphs array to HTML
 function paragraphsToHTML(paragraphs) {
     const result = [];
@@ -112,7 +144,17 @@ async function loadSectionContent(section) {
                 }
                 // If there are paragraphs, convert them to HTML
                 else if (card.paragraphs) {
-                    body = paragraphsToHTML(card.paragraphs);
+                    // Inject research tab widget if this card has research_short/research_long
+                    if (card.research_short && card.research_long) {
+                        const tabWidget = buildResearchTabWidget(card.research_short, card.research_long);
+                        // Replace the first empty string after "Research Interests" with the widget
+                        const paragraphs = card.paragraphs.map(p => (p === '' ? null : p));
+                        const firstEmpty = paragraphs.indexOf(null);
+                        if (firstEmpty !== -1) paragraphs[firstEmpty] = tabWidget;
+                        body = paragraphsToHTML(paragraphs.filter(p => p !== null));
+                    } else {
+                        body = paragraphsToHTML(card.paragraphs);
+                    }
                 }
 
                 return {
@@ -387,6 +429,11 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
 
     // Render all cards stacked vertically
     container.innerHTML = data.cards.map(card => renderCard(card, isAboutStyle)).join('');
+
+    // Wire up research tab widget if present
+    if (section === 'about') {
+        initResearchTabs(container);
+    }
 
     // Only trigger fade-in animation if not initial load (CSS handles initial load)
     if (!skipAnimation) {
