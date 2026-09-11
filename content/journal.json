@@ -1,6 +1,7 @@
 {
   "cards": [
     {
+      "index": "godel-einstein-wittgenstein",
       "header": "Gödel, Einstein, and Wittgenstein: Another Eternal Golden Braid",
       "date": "12/28/2025",
       "paragraphs": [
@@ -81,6 +82,7 @@
       ]
     },
     {
+      "index": "grain-of-rice-black-hole",
       "header": "Turning a grain of rice into a black hole",
       "date": "10/26/2025",
       "paragraphs": [
@@ -118,6 +120,7 @@
       ]
     },
     {
+      "index": "who-even-is-this-guy",
       "header": "Who even is this guy??",
       "date": "10/24/2025",
       "paragraphs": [
@@ -168,6 +171,7 @@
       ]
     },
     {
+      "index": "technosolutionism",
       "header": "Technosolutionism",
       "date": "10/12/2025",
       "paragraphs": [
@@ -200,6 +204,7 @@
       ]
     },
     {
+      "index": "recursion-on-a-trash-can",
       "header": "Recursion on a Trash Can",
       "date": "8/25/2022",
       "paragraphs": [

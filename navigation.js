@@ -158,6 +158,7 @@ async function loadSectionContent(section) {
                 }
 
                 return {
+                    index: card.index,
                     image: card.image,
                     imageAlt: card.imageAlt,
                     imageWidth: card.imageWidth,
@@ -241,8 +242,10 @@ function renderJournalList() {
             }
         }
 
+        const slug = card.index || index;
+
         return `
-            <div class="journal-list-item" data-index="${index}">
+            <div class="journal-list-item" data-index="${slug}">
                 <h3>${card.header}</h3>
                 ${date ? `<div class="journal-date">${date}</div>` : ''}
             </div>
@@ -252,12 +255,27 @@ function renderJournalList() {
     return `<div class="journal-list">${listItems}</div>`;
 }
 
-// Journal detail view renderer
-function renderJournalDetail(index) {
+// Find a journal card by its slug (index field), falling back to numeric array index
+function findJournalCardIndex(slug) {
     const data = contentData['journal'];
-    if (!data || !data.cards || !data.cards[index]) return '';
+    if (!data || !data.cards) return -1;
 
-    const card = data.cards[index];
+    const bySlug = data.cards.findIndex(card => card.index === slug);
+    if (bySlug !== -1) return bySlug;
+
+    const numeric = parseInt(slug);
+    if (!isNaN(numeric) && data.cards[numeric]) return numeric;
+
+    return -1;
+}
+
+// Journal detail view renderer
+function renderJournalDetail(slug) {
+    const data = contentData['journal'];
+    const arrIndex = findJournalCardIndex(slug);
+    if (!data || !data.cards || arrIndex === -1) return '';
+
+    const card = data.cards[arrIndex];
 
     return `
         <div class="journal-detail">
@@ -287,28 +305,28 @@ function loadJournalList(updateHash = true) {
     // Add click handlers to list items
     container.querySelectorAll('.journal-list-item').forEach(item => {
         item.addEventListener('click', () => {
-            const index = parseInt(item.getAttribute('data-index'));
-            loadJournalDetail(index);
+            const slug = item.getAttribute('data-index');
+            loadJournalDetail(slug);
         });
     });
 }
 
 // Load journal detail view
-function loadJournalDetail(index, updateHash = true) {
+function loadJournalDetail(slug, updateHash = true) {
     journalView = 'detail';
-    currentJournalIndex = index;
+    currentJournalIndex = slug;
     const container = document.querySelector('.card-container-home');
 
     // Update the URL hash
     if (updateHash) {
-        window.history.replaceState(null, null, `#journal/${index}`);
+        window.history.replaceState(null, null, `#journal/${slug}`);
     }
 
     // Fade out
     container.style.opacity = '0';
 
     setTimeout(() => {
-        container.innerHTML = renderJournalDetail(index);
+        container.innerHTML = renderJournalDetail(slug);
 
         // Add click handler to back button
         const backButton = container.querySelector('.journal-back-button');
@@ -618,12 +636,13 @@ async function initNavigation() {
         const hash = window.location.hash.substring(1); // Remove the '#'
 
         if (hash) {
-            // Check if it's a journal detail view (e.g., journal/0)
+            // Check if it's a journal detail view (e.g., journal/grain-of-rice-black-hole)
             if (hash.startsWith('journal/')) {
                 const parts = hash.split('/');
-                const journalIndex = parseInt(parts[1]);
+                const journalSlug = parts[1];
+                const journalArrIndex = findJournalCardIndex(journalSlug);
 
-                if (!isNaN(journalIndex)) {
+                if (journalArrIndex !== -1) {
                     // Load journal section first, then load the detail
                     currentSection = 'journal';
                     const titleElement = document.getElementById('title');
@@ -640,7 +659,7 @@ async function initNavigation() {
                         activeLink.classList.add('nav-link-active');
                     }
 
-                    loadJournalDetail(journalIndex, false);
+                    loadJournalDetail(journalSlug, false);
                 } else {
                     loadSection('journal', true, false);
                 }
