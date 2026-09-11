@@ -842,3 +842,45 @@ a {
   border-radius: 0 4px 4px 4px;
   padding: 12px 16px;
 }
+
+/* Hover info card */
+.info-hover {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted #82B1FF;
+}
+
+.info-hover .info-hover-card {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: #1e1e1e;
+  color: #82B1FF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 20;
+}
+
+.info-hover .info-hover-card::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1e1e1e;
+}
+
+.info-hover:hover .info-hover-card {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
