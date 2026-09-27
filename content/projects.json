@@ -2,6 +2,8 @@
   "cards": [
     {
       "header": "CRISPR Historian Chatbot",
+      "shortTitle": "CRISPR Chatbot",
+      "emoji": "🧫",
       "paragraphs": [
         "I developed a Retrieval-Augmented Generation (RAG) chatbot that answers questions about the history of CRISPR. We chose CRISPR due to its rich and complex history, starting from it's discovery in 1987 as a mere identification of repeated sequences in E. coli to its current status as a revolutionary gene-editing technology. Moreover, there's even a debate about who actually discovered CRISPR– Francisco Mojica or Jennifer Doudna and Emmanuelle Charpentier? The chatbot is built using LangChain, Google's open-source Gemma model hosted by Ollama, and a vector database (Pinecone) to store and retrieve relevant documents. The chatbot can provide detailed answers about key milestones, researchers involved, and the evolution of CRISPR technology over the years.",
         "<img src=\"assets/crispr_bot.jpeg\" alt=\"Card image\" width=\"600\"><br>",
@@ -10,6 +12,8 @@
     },
     {
       "header": "MACH2-Viz - An Interactive Visual Tool for Exploring and Studying Cancer Metastasis",
+      "shortTitle": "MACH2-Viz",
+      "emoji": "🩺",
       "paragraphs": [
         "Cancer mostly becomes lethal in the later stages of metastasis. In a research project in Prof. Mohammed El-Kebir's group, we introduce MACH2, an improvement over the previous <a href=\"https://github.com/raphael-group/machina\">MACHINA</a> algorithm, that infers metastatic history given a clonal tree and returns a solution space of possible metastatic histories. However, there are several challenged with a vast solution space and the MACH2 tool in general:",
         "",
@@ -24,6 +28,8 @@
     },
     {
       "header": "Voice-Activated Digital Home Assistant Application/Skill Development: Instructional Support and Recommendation Application Development for Older Adults with Mobility Disabilities",
+      "shortTitle": "Voice Assistant for Older Adults",
+      "emoji": "🗣️",
       "paragraphs": [
         "This project is under the Human Factors and Aging Laboratory at the University of Illinois and TechSAge at Georgia Tech. The median age of the US propulation is increasing, leading to a growing number of older adults who may face mobility challenges. Moreover, tech is advancing rapidly, and older adults may find it difficult to keep up with the latest devices and applications. All this considered, it's understandable to see why older adults who live in assisted living facilities or retirement homes may find it difficult to stay connected with their loved ones or access necessary information and services. I developed a voice-activated digital home assistant application/skill that provides instructional support and recommendations tailored to the needs of older adults with mobility disabilities. The application offers easy-to-follow instructions for various tasks, such as medication reminders, exercise routines, and social engagement activities. Additionally, it provides personalized recommendations for applications and services that can enhance their quality of life. We deployed this application at a local retirement home.",
         "",
