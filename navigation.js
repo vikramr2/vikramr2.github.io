@@ -502,6 +502,9 @@ function setActiveNav(section) {
         dot.classList.toggle('active', dot.getAttribute('data-section') === section);
     });
     moveNavDroplet(section);
+
+    // Lets the background (glass.js) react, e.g. by moving its camera
+    window.dispatchEvent(new CustomEvent('sectionchange', { detail: { section } }));
 }
 
 // Load content for a section

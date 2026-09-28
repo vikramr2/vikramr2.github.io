@@ -1,10 +1,16 @@
 // Liquid glass renderer.
 //
-// A three.js scene of wireframe polyhedra drifts in zero gravity behind the
-// page: cannon-es simulates them as convex rigid bodies that bounce off each
-// other and the edges of the screen, and the pointer is an invisible body
-// that pushes them around. Bodies close to each other are linked by faint
-// lines, so the scene reads as a network whose shape keeps changing.
+// A three.js scene of wireframe polyhedra sits behind the page, simulated by
+// cannon-es as convex rigid bodies. The pointer is an invisible body that
+// pushes them around, and bodies close to each other are linked by faint
+// lines, so the scene reads as a network whose shape keeps changing. Two
+// scenes are available:
+//
+//   fall   (default)        the shapes drop onto a grid floor and pile up;
+//                           each section of the site views the pile from its
+//                           own camera angle, and navigating pans between them
+//   drift  (?scene=drift)   the shapes float in zero gravity inside the
+//                           screen, bouncing off each other and the edges
 //
 // The scene is rendered into an offscreen texture, and then composited to the
 // screen. Every element marked with a data-glass attribute is rendered as a
@@ -38,14 +44,36 @@ const BACKGROUND = 0x000000;
 const TINT = 0x000000;
 const HUES = [0xf4a93b, 0xf07167, 0x2ec4b6, 0x9d7cf2, 0x7fb8ff]; // marigold, coral, lagoon, iris, sky
 
-// Scene layout
-const CAMERA_Z = 16;
+const SCENE = new URLSearchParams(location.search).get('scene') === 'drift' ? 'drift' : 'fall';
+const FALL = SCENE === 'fall';
+
 const FOV = 40;
+
+// Drift scene: the camera looks down -z at a box as wide as the screen
+const CAMERA_Z = 16;
 const Z_BACK = -3.5;
 const Z_FRONT = 2.5;
-const LINK_DISTANCE = 5.2;
 
-// Spin, in radians per second. Bodies get extra rotational inertia so
+// Fall scene: a floor at y = 0, and a camera orbiting a point above the pile
+const FALL_TARGET = new THREE.Vector3(0, 0.9, 0);
+const FALL_ARENA = 6;            // invisible walls keep the pile within this half-width
+const POINTER_HEIGHT = 0.55;     // the pointer body rolls along the floor at this height
+const CAMERA_MOVE_SECONDS = 1.8;
+
+// One view of the pile per section: angles in degrees, distance in scene
+// units, and lower: how far down the screen to frame the pile (as a fraction
+// of its height), so it shows below the section's content where there is room
+const SECTION_VIEWS = {
+    about:      { azimuth: 0,    elevation: 20, distance: 13,   lower: 0.14 },
+    research:   { azimuth: -55,  elevation: 32, distance: 12,   lower: 0.06 },
+    projects:   { azimuth: 62,   elevation: 12, distance: 12.5, lower: 0.06 },
+    experience: { azimuth: 150,  elevation: 40, distance: 12,   lower: 0.2 },
+    journal:    { azimuth: -140, elevation: 26, distance: 11,   lower: 0.3 }
+};
+
+const LINK_DISTANCE = FALL ? 2.6 : 5.2;
+
+// Drift scene spin, in radians per second. Bodies get extra rotational inertia so
 // collisions put little spin into them; a hit can still push a body past its
 // cruising spin, up to a hard ceiling, and the excess then bleeds away over
 // about a second, so hits read as a slow tumble rather than a spinning top.
@@ -202,6 +230,26 @@ const POINT_FS = `
         float halo = exp(-d * d * 7.0) * 0.5 * (1.0 - smoothstep(0.75, 1.0, d));
         float a = max(core, halo) * vFade;
         gl_FragColor = vec4(mix(uColor, vec3(1.0), core * 0.35) * a, a);
+    }`;
+
+// Floor grid for the fall scene, fading out away from the pile
+const FLOOR_VS = `
+    varying vec3 vWorld;
+    void main() {
+        vec4 world = modelMatrix * vec4(position, 1.0);
+        vWorld = world.xyz;
+        gl_Position = projectionMatrix * viewMatrix * world;
+    }`;
+
+const FLOOR_FS = `
+    uniform vec3 uColor;
+    varying vec3 vWorld;
+    void main() {
+        vec2 cell = abs(fract(vWorld.xz - 0.5) - 0.5) / fwidth(vWorld.xz);
+        float line = 1.0 - min(min(cell.x, cell.y), 1.0);
+        float fade = 1.0 - smoothstep(3.0, 13.0, length(vWorld.xz));
+        float a = line * fade * 0.22;
+        gl_FragColor = vec4(uColor * a, a);
     }`;
 
 const BLUR_FS = `
@@ -453,19 +501,25 @@ function start() {
 
     // ------------------------------------------------ physics
 
-    const world = new CANNON.World({ gravity: new CANNON.Vec3(0, 0, 0) });
+    const world = new CANNON.World({ gravity: new CANNON.Vec3(0, FALL ? -9.8 : 0, 0) });
     world.broadphase = new CANNON.SAPBroadphase(world);
+    world.allowSleep = FALL;
     const bodyMaterial = new CANNON.Material('body');
     const wallMaterial = new CANNON.Material('wall');
-    world.addContactMaterial(new CANNON.ContactMaterial(bodyMaterial, bodyMaterial, { friction: 0.05, restitution: 0.85 }));
-    world.addContactMaterial(new CANNON.ContactMaterial(bodyMaterial, wallMaterial, { friction: 0.0, restitution: 0.95 }));
+    if (FALL) {
+        world.addContactMaterial(new CANNON.ContactMaterial(bodyMaterial, bodyMaterial, { friction: 0.3, restitution: 0.2 }));
+        world.addContactMaterial(new CANNON.ContactMaterial(bodyMaterial, wallMaterial, { friction: 0.4, restitution: 0.25 }));
+    } else {
+        world.addContactMaterial(new CANNON.ContactMaterial(bodyMaterial, bodyMaterial, { friction: 0.05, restitution: 0.85 }));
+        world.addContactMaterial(new CANNON.ContactMaterial(bodyMaterial, wallMaterial, { friction: 0.0, restitution: 0.95 }));
+    }
 
-    // Six invisible walls: the visible frustum at z = 0, and a shallow depth range
-    const walls = [
-        new CANNON.Vec3(1, 0, 0), new CANNON.Vec3(-1, 0, 0),
-        new CANNON.Vec3(0, 1, 0), new CANNON.Vec3(0, -1, 0),
-        new CANNON.Vec3(0, 0, 1), new CANNON.Vec3(0, 0, -1)
-    ].map((normal) => {
+    // Invisible walls. Drift: the visible frustum at z = 0 and a shallow depth
+    // range. Fall: the floor plus four walls around the arena.
+    const wallNormals = FALL
+        ? [new CANNON.Vec3(0, 1, 0), new CANNON.Vec3(1, 0, 0), new CANNON.Vec3(-1, 0, 0), new CANNON.Vec3(0, 0, 1), new CANNON.Vec3(0, 0, -1)]
+        : [new CANNON.Vec3(1, 0, 0), new CANNON.Vec3(-1, 0, 0), new CANNON.Vec3(0, 1, 0), new CANNON.Vec3(0, -1, 0), new CANNON.Vec3(0, 0, 1), new CANNON.Vec3(0, 0, -1)];
+    const walls = wallNormals.map((normal) => {
         const body = new CANNON.Body({ type: CANNON.Body.STATIC, material: wallMaterial });
         body.addShape(new CANNON.Plane());
         // A plane's normal is +Z in its own frame; turn it to face inwards
@@ -476,6 +530,15 @@ function start() {
 
     let halfW = 1, halfH = 1;
     function placeWalls() {
+        if (FALL) {
+            const [floor, left, right, back, front] = walls;
+            floor.position.set(0, 0, 0);
+            left.position.set(-FALL_ARENA, 0, 0);
+            right.position.set(FALL_ARENA, 0, 0);
+            back.position.set(0, 0, -FALL_ARENA);
+            front.position.set(0, 0, FALL_ARENA);
+            return;
+        }
         halfH = Math.tan(THREE.MathUtils.degToRad(FOV / 2)) * CAMERA_Z;
         halfW = halfH * camera.aspect;
         const [left, right, bottom, top, back, front] = walls;
@@ -487,12 +550,27 @@ function start() {
         front.position.set(0, 0, Z_FRONT);
     }
 
-    // The pointer is a kinematic sphere on the z = 0 plane
+    if (FALL) {
+        const floor = new THREE.Mesh(
+            new THREE.PlaneGeometry(40, 40),
+            new THREE.ShaderMaterial({
+                vertexShader: FLOOR_VS,
+                fragmentShader: FLOOR_FS,
+                uniforms: { uColor: { value: new THREE.Color(0.75, 0.7, 1.0) } },
+                ...premultiplied
+            })
+        );
+        floor.rotation.x = -Math.PI / 2;
+        scene.add(floor);
+    }
+
+    // The pointer is a kinematic sphere: on the z = 0 plane when drifting,
+    // rolling along the floor when the shapes have fallen
     const pointer = new CANNON.Body({ type: CANNON.Body.KINEMATIC, material: bodyMaterial });
-    pointer.addShape(new CANNON.Sphere(0.9));
-    pointer.position.set(0, 0, 100);
+    pointer.addShape(new CANNON.Sphere(FALL ? POINTER_HEIGHT : 0.9));
+    pointer.position.set(0, 100, 100);
     world.addBody(pointer);
-    const pointerTarget = new THREE.Vector3(0, 0, 100);
+    const pointerTarget = new THREE.Vector3(0, 100, 100);
     let pointerActive = false;
 
     // ------------------------------------------------ bodies
@@ -502,7 +580,7 @@ function start() {
     function buildBodies() {
         const portrait = window.innerWidth < window.innerHeight;
         const count = portrait ? 8 : 14;
-        const sizeScale = portrait ? 0.8 : 1;
+        const sizeScale = portrait && !FALL ? 0.8 : 1;
         const placed = [];
 
         for (let i = 0; i < count; i++) {
@@ -528,32 +606,42 @@ function start() {
             const body = new CANNON.Body({
                 mass: scale * scale * scale,
                 material: bodyMaterial,
-                linearDamping: 0.02,
-                angularDamping: 0.02
+                linearDamping: FALL ? 0.01 : 0.02,
+                angularDamping: FALL ? 0.05 : 0.02,
+                allowSleep: FALL,
+                sleepSpeedLimit: 0.12,
+                sleepTimeLimit: 0.5
             });
             body.addShape(new CANNON.ConvexPolyhedron({ vertices: hull.vertices, faces: hull.faces }));
-            body.inertia.scale(INERTIA_SCALE, body.inertia);
-            body.invInertia.set(1 / body.inertia.x, 1 / body.inertia.y, 1 / body.inertia.z);
-            body.updateInertiaWorld(true);
-
-            // Spread the opening arrangement out so nothing starts overlapping
-            let pos;
-            for (let tries = 0; tries < 40; tries++) {
-                pos = new CANNON.Vec3(
-                    (rand() * 2 - 1) * (halfW - 1.2),
-                    (rand() * 2 - 1) * (halfH - 1.2),
-                    Z_BACK + 1 + rand() * (Z_FRONT - Z_BACK - 2)
-                );
-                if (placed.every(p => p.distanceTo(pos) > 2.2)) break;
-            }
-            placed.push(pos);
-            body.position.copy(pos);
             body.quaternion.setFromEuler(rand() * 6.28, rand() * 6.28, rand() * 6.28);
-            const speed = 0.35 + rand() * 0.5;
-            const dir = new CANNON.Vec3(rand() * 2 - 1, rand() * 2 - 1, (rand() * 2 - 1) * 0.3);
-            dir.normalize();
-            body.velocity.copy(dir.scale(speed));
-            body.angularVelocity.set((rand() - 0.5) * 0.4, (rand() - 0.5) * 0.4, (rand() - 0.5) * 0.4);
+
+            if (FALL) {
+                // Stacked high above the floor, so they rain in one after another
+                body.position.set((rand() * 2 - 1) * 2.2, 3.5 + i * 0.85, (rand() * 2 - 1) * 2.2);
+                body.angularVelocity.set((rand() - 0.5) * 3, (rand() - 0.5) * 3, (rand() - 0.5) * 3);
+            } else {
+                body.inertia.scale(INERTIA_SCALE, body.inertia);
+                body.invInertia.set(1 / body.inertia.x, 1 / body.inertia.y, 1 / body.inertia.z);
+                body.updateInertiaWorld(true);
+
+                // Spread the opening arrangement out so nothing starts overlapping
+                let pos;
+                for (let tries = 0; tries < 40; tries++) {
+                    pos = new CANNON.Vec3(
+                        (rand() * 2 - 1) * (halfW - 1.2),
+                        (rand() * 2 - 1) * (halfH - 1.2),
+                        Z_BACK + 1 + rand() * (Z_FRONT - Z_BACK - 2)
+                    );
+                    if (placed.every(p => p.distanceTo(pos) > 2.2)) break;
+                }
+                placed.push(pos);
+                body.position.copy(pos);
+                const speed = 0.35 + rand() * 0.5;
+                const dir = new CANNON.Vec3(rand() * 2 - 1, rand() * 2 - 1, (rand() * 2 - 1) * 0.3);
+                dir.normalize();
+                body.velocity.copy(dir.scale(speed));
+                body.angularVelocity.set((rand() - 0.5) * 0.4, (rand() - 0.5) * 0.4, (rand() - 0.5) * 0.4);
+            }
             world.addBody(body);
 
             bodies.push({ body, group, hue, scale });
@@ -562,12 +650,14 @@ function start() {
 
     // The hard ceiling applies after every physics substep, so a hit never
     // carries a burst of spin into the next one
-    world.addEventListener('postStep', () => {
-        for (const { body } of bodies) {
-            const spin = body.angularVelocity.length();
-            if (spin > HARD_SPIN) body.angularVelocity.scale(HARD_SPIN / spin, body.angularVelocity);
-        }
-    });
+    if (!FALL) {
+        world.addEventListener('postStep', () => {
+            for (const { body } of bodies) {
+                const spin = body.angularVelocity.length();
+                if (spin > HARD_SPIN) body.angularVelocity.scale(HARD_SPIN / spin, body.angularVelocity);
+            }
+        });
+    }
 
     // Zero gravity with a little damping would eventually stop everything, so
     // slow bodies get a nudge and fast ones (flung by the pointer) are reined in
@@ -592,6 +682,64 @@ function start() {
                 w.y += (rand() - 0.5) * 0.03;
             }
         }
+    }
+
+    // ------------------------------------------------ camera
+
+    // Fall scene: the camera orbits the pile, easing to each section's view
+    const view = { ...SECTION_VIEWS.about };
+    let cameraMove = null;
+
+    function viewSection(section, instant) {
+        const next = SECTION_VIEWS[section] || SECTION_VIEWS.about;
+        if (instant || reducedMotion.matches) {
+            Object.assign(view, next);
+            cameraMove = null;
+            return;
+        }
+        // Go the short way around
+        let azimuth = next.azimuth;
+        while (azimuth - view.azimuth > 180) azimuth -= 360;
+        while (azimuth - view.azimuth < -180) azimuth += 360;
+        cameraMove = { from: { ...view }, to: { ...next, azimuth }, start: performance.now() };
+    }
+
+    let currentSection = location.hash.slice(1).split('/')[0] || 'about';
+    viewSection(currentSection, true);
+    window.addEventListener('sectionchange', (e) => {
+        if (e.detail.section === currentSection) return;
+        currentSection = e.detail.section;
+        viewSection(currentSection, false);
+    });
+
+    const easeInOutCubic = (k) => k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+
+    function placeCamera(now) {
+        if (!FALL) {
+            camera.position.set(parallax.x * 0.9, parallax.y * 0.6, CAMERA_Z);
+            camera.lookAt(0, 0, 0);
+            return;
+        }
+        if (cameraMove) {
+            const k = Math.min(1, (now - cameraMove.start) / (CAMERA_MOVE_SECONDS * 1000));
+            const e = easeInOutCubic(k);
+            for (const key of ['azimuth', 'elevation', 'distance', 'lower']) {
+                view[key] = cameraMove.from[key] + (cameraMove.to[key] - cameraMove.from[key]) * e;
+            }
+            if (k === 1) cameraMove = null;
+        }
+        // Narrow screens back the camera off so the pile still fits across
+        const fit = camera.aspect < 0.9 ? Math.min(1.7, 0.9 / camera.aspect) : 1;
+        const azimuth = THREE.MathUtils.degToRad(view.azimuth + parallax.x * 6);
+        const elevation = THREE.MathUtils.degToRad(view.elevation + parallax.y * 4);
+        const d = view.distance * fit;
+        camera.position.set(
+            FALL_TARGET.x + d * Math.cos(elevation) * Math.sin(azimuth),
+            FALL_TARGET.y + d * Math.sin(elevation),
+            FALL_TARGET.z + d * Math.cos(elevation) * Math.cos(azimuth)
+        );
+        camera.lookAt(FALL_TARGET);
+        camera.setViewOffset(width, height, 0, -view.lower * height, width, height);
     }
 
     // ------------------------------------------------ links between nearby bodies
@@ -642,7 +790,7 @@ function start() {
         for (const { body, hue, scale } of bodies) {
             if (n >= MAX_BODIES) break;
             projected.set(body.position.x, body.position.y, body.position.z).project(camera);
-            const distance = CAMERA_Z - body.position.z;
+            const distance = camera.position.distanceTo(body.position);
             glow.uGlow.value.set([projected.x * 0.5 + 0.5, projected.y * 0.5 + 0.5, scale * 2.6 / distance], n * 3);
             const c = hueColors[hue];
             glow.uGlowColor.value.set([c.r, c.g, c.b], n * 3);
@@ -714,6 +862,11 @@ function start() {
     buildBodies();
     window.addEventListener('resize', resize);
 
+    // Without motion the pile never gets to fall, so settle it up front
+    if (FALL && reducedMotion.matches) {
+        for (let i = 0; i < 600; i++) world.step(1 / 60);
+    }
+
     // ------------------------------------------------ input
 
     const light = { x: -0.45, y: 0.89, tx: -0.45, ty: 0.89 };
@@ -730,20 +883,28 @@ function start() {
         parallax.tx = dx / width;
         parallax.ty = dy / height;
 
-        // Where the pointer ray meets the z = 0 plane
+        // Where the pointer ray meets the z = 0 plane (drift) or the plane the
+        // pointer body rolls on (fall)
         unprojected.set(e.clientX / width * 2 - 1, -(e.clientY / height) * 2 + 1, 0.5).unproject(camera);
         unprojected.sub(camera.position).normalize();
-        const t = -camera.position.z / unprojected.z;
+        const t = FALL
+            ? (POINTER_HEIGHT - camera.position.y) / unprojected.y
+            : -camera.position.z / unprojected.z;
         pointerTarget.copy(camera.position).addScaledVector(unprojected, t);
-        if (!pointerActive) pointer.position.set(pointerTarget.x, pointerTarget.y, 0);
+        const onFloor = t > 0 && Math.abs(pointerTarget.x) < FALL_ARENA && Math.abs(pointerTarget.z) < FALL_ARENA;
+        if (FALL && !onFloor) {
+            parkPointer();
+            return;
+        }
+        if (!pointerActive) pointer.position.copy(pointerTarget);
         pointerActive = true;
     }, { passive: true });
 
-    const parkPointer = () => {
+    function parkPointer() {
         pointerActive = false;
-        pointer.position.set(0, 0, 100);
+        pointer.position.set(0, 100, 100);
         pointer.velocity.set(0, 0, 0);
-    };
+    }
     document.documentElement.addEventListener('pointerleave', parkPointer);
     window.addEventListener('blur', parkPointer);
 
@@ -826,27 +987,27 @@ function start() {
         if (!still && dt > 0) {
             if (pointerActive) {
                 const p = pointer.position;
+                const toward = (target, current) => THREE.MathUtils.clamp((target - current) / dt, -POINTER_SPEED, POINTER_SPEED);
                 pointer.velocity.set(
-                    THREE.MathUtils.clamp((pointerTarget.x - p.x) / dt, -POINTER_SPEED, POINTER_SPEED),
-                    THREE.MathUtils.clamp((pointerTarget.y - p.y) / dt, -POINTER_SPEED, POINTER_SPEED),
-                    -p.z / dt
+                    toward(pointerTarget.x, p.x),
+                    FALL ? (POINTER_HEIGHT - p.y) / dt : toward(pointerTarget.y, p.y),
+                    FALL ? toward(pointerTarget.z, p.z) : -p.z / dt
                 );
             }
             world.step(1 / 60, dt, 3);
-            keepDrifting(dt);
+            if (!FALL) keepDrifting(dt);
         }
         for (const { body, group } of bodies) {
             group.position.copy(body.position);
             group.quaternion.copy(body.quaternion);
         }
 
-        // 2. Camera drifts a little with the pointer for depth
+        // 2. Camera: the section's view, shifted a little with the pointer for depth
         if (!still) {
             parallax.x += (parallax.tx - parallax.x) * 0.03;
             parallax.y += (parallax.ty - parallax.y) * 0.03;
         }
-        camera.position.set(parallax.x * 0.9, parallax.y * 0.6, CAMERA_Z);
-        camera.lookAt(0, 0, 0);
+        placeCamera(now);
 
         updateLinks();
         updateGlows();
