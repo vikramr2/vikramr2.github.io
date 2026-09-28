@@ -104,7 +104,7 @@ function paragraphsToHTML(paragraphs) {
 
             // Add the code block HTML
             const codeContent = codeLines.join('\n');
-            result.push(`<pre style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto;"><code>${codeContent}</code></pre>`);
+            result.push(`<pre class="code-block"><code>${codeContent}</code></pre>`);
 
             i++; // Move past the closing ```
             continue;
@@ -266,7 +266,7 @@ function renderJournalList() {
         const slug = card.index || index;
 
         return `
-            <div class="journal-list-item" data-index="${slug}">
+            <div class="journal-list-item" data-index="${slug}" data-glass="frosted">
                 <h3>${card.header}</h3>
                 ${date ? `<div class="journal-date">${date}</div>` : ''}
             </div>
@@ -300,8 +300,8 @@ function renderJournalDetail(slug) {
 
     return `
         <div class="journal-detail">
-            <button class="journal-back-button">Back to Journal List</button>
-            <div class="card">
+            <button class="journal-back-button" data-glass="clear">Back to Journal List</button>
+            <div class="card" data-glass="frosted">
                 <h5 class="card-header">${card.header}</h5>
                 <div class="card-body">
                     ${card.body}
@@ -406,7 +406,7 @@ function renderCard(card, isAboutStyle = false) {
         const imageHTML = buildCardImageHTML(card);
 
         return `
-            <div class="card mb-3 about about-home">
+            <div class="card mb-3 about about-home" data-glass="frosted">
                 ${imageHTML}
                 <div class="card-body">
                     ${card.body}
@@ -415,7 +415,7 @@ function renderCard(card, isAboutStyle = false) {
         `;
     } else {
         return `
-            <div class="card">
+            <div class="card" data-glass="frosted">
                 ${card.header ? `<h5 class="card-header">${card.header}</h5>` : ''}
                 <div class="card-body">
                     ${card.body}
@@ -432,7 +432,7 @@ function renderGridCard(card, index) {
     const imageHTML = buildCardImageHTML(card);
 
     return `
-        <div class="grid-card" data-grid-index="${index}">
+        <div class="grid-card" data-grid-index="${index}" data-glass="frosted">
             <div class="grid-card-summary">
                 <span class="grid-card-emoji">${emoji}</span>
                 <h3 class="grid-card-title">${title}</h3>
@@ -483,6 +483,27 @@ function initGridCards(container) {
     });
 }
 
+// Slide the glass droplet in the nav bar under the active section's link
+function moveNavDroplet(section) {
+    const droplet = document.querySelector('.nav-droplet');
+    const link = document.getElementById(section);
+    if (!droplet || !link) return;
+    droplet.style.width = `${link.offsetWidth}px`;
+    droplet.style.transform = `translateX(${link.offsetLeft}px)`;
+    droplet.classList.add('nav-droplet-ready');
+}
+
+// Mark a section as active in both the text nav and the mobile dot nav
+function setActiveNav(section) {
+    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
+        link.classList.toggle('nav-link-active', link.id === section);
+    });
+    document.querySelectorAll('.nav-dot').forEach(dot => {
+        dot.classList.toggle('active', dot.getAttribute('data-section') === section);
+    });
+    moveNavDroplet(section);
+}
+
 // Load content for a section
 function loadSection(section, skipAnimation = false, updateHash = true) {
     currentSection = section;
@@ -504,23 +525,7 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
         titleElement.innerHTML = getCurrentDefaultTitle();
     }
 
-    // Update active navigation link
-    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
-        link.classList.remove('nav-link-active');
-    });
-    const activeLink = document.getElementById(section);
-    if (activeLink) {
-        activeLink.classList.add('nav-link-active');
-    }
-
-    // Update active dot for mobile navigation
-    document.querySelectorAll('.nav-dot').forEach(dot => {
-        dot.classList.remove('active');
-    });
-    const activeDot = document.querySelector(`.nav-dot[data-section="${section}"]`);
-    if (activeDot) {
-        activeDot.classList.add('active');
-    }
+    setActiveNav(section);
 
     // Handle journal section with list/detail view
     if (section === 'journal') {
@@ -742,14 +747,7 @@ async function initNavigation() {
                         titleElement.innerHTML = getCurrentDefaultTitle();
                     }
 
-                    // Update active navigation link
-                    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
-                        link.classList.remove('nav-link-active');
-                    });
-                    const activeLink = document.getElementById('journal');
-                    if (activeLink) {
-                        activeLink.classList.add('nav-link-active');
-                    }
+                    setActiveNav('journal');
 
                     loadJournalDetail(journalSlug, false);
                 } else {
@@ -766,6 +764,13 @@ async function initNavigation() {
             // No hash, load about section
             loadSection('about', true);
         }
+
+        // Arriving at #about etc. focuses the nav link with that id, which
+        // would show a keyboard focus ring nobody asked for
+        const focused = document.activeElement;
+        if (focused && focused.classList.contains('nav-link-typewriter')) {
+            focused.blur();
+        }
     }
 
     // Listen for hash changes (back/forward navigation)
@@ -775,6 +780,11 @@ async function initNavigation() {
 
     // Load initial section from hash
     loadFromHash();
+
+    // Link widths change once the web fonts arrive and on resize
+    const realignDroplet = () => moveNavDroplet(currentSection);
+    if (document.fonts) document.fonts.ready.then(realignDroplet);
+    window.addEventListener('resize', realignDroplet);
 }
 
 // Load on page ready
