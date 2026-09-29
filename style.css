@@ -238,21 +238,34 @@ html, body {
     height: 150px;
   }
 
-  /* Journal list improvements */
-  .journal-list-item {
+  /* Entry list improvements (research, software, journal) */
+  .entry-list-item {
     padding: 15px;
     margin-bottom: 12px;
   }
 
-  .journal-list-item h3 {
+  .entry-list-item h3 {
     font-size: 18px;
   }
 
-  .journal-list-item .journal-date {
+  .entry-list-item .entry-meta {
     font-size: 14px;
   }
 
-  .journal-back-button {
+  /* Thumbnail above the title, so titles keep the full width. More specific
+     than the desktop rules further down, which would otherwise win. */
+  .entry-list .entry-list-item.has-thumbnail {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .entry-list .entry-list-item .entry-thumbnail {
+    width: 100%;
+    height: 110px;
+  }
+
+  .entry-back-button {
     padding: 12px 20px;
     font-size: 16px;
   }
@@ -729,51 +742,73 @@ a {
   background: #1565C0;
 }
 
-/* Journal list view styles */
-.journal-list {
+/* Entry list view styles (research, software, journal) */
+.entry-list {
   max-width: 1000px;
   width: 100%;
   margin: 0 auto;
 }
 
-.journal-list-item {
+.entry-list-item {
   padding: 20px;
   margin-bottom: 15px;
-  background: rgba(255, 255, 255, 0.02);
+  /* Tinted and lightly blurred so the background shows through without
+     its lines cutting across the text */
+  background: rgba(12, 10, 18, 0.5);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
   border-left: 3px solid transparent;
 }
 
-.journal-list-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+.entry-list-item:hover {
+  background: rgba(40, 34, 56, 0.6);
   border-left-color: #1976D2;
   transform: translateX(5px);
 }
 
-.journal-list-item h3 {
+.entry-list-item h3 {
   margin: 0;
   color: #E0F2F1;
   font-family: monospace;
   font-size: 20px;
 }
 
-.journal-list-item .journal-date {
+.entry-list-item .entry-meta {
   margin-top: 5px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.72);
   font-family: monospace;
   font-size: 14px;
 }
 
-/* Journal detail view styles */
-.journal-detail {
+/* Thumbnail beside the title; figures differ in shape, so each is shown
+   whole on a white frame of the same size */
+.entry-list-item.has-thumbnail {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.entry-thumbnail {
+  flex-shrink: 0;
+  width: 104px;
+  height: 72px;
+  padding: 4px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 4px;
+}
+
+/* Entry detail view styles */
+.entry-detail {
   max-width: 1000px;
   width: 100%;
   margin: 0 auto;
 }
 
-.journal-back-button {
+.entry-back-button {
   display: inline-block;
   padding: 10px 20px;
   margin-bottom: 20px;
@@ -788,13 +823,13 @@ a {
   text-decoration: none;
 }
 
-.journal-back-button:hover {
+.entry-back-button:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: #1976D2;
   transform: translateX(-5px);
 }
 
-.journal-back-button::before {
+.entry-back-button::before {
   content: '← ';
 }
 

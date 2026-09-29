@@ -21,12 +21,11 @@ Deploying means pushing to `main`.
 - `index.html` holds the page shell: the nav links (one element `id` per section), the mobile dot nav, the title `<h1 id="title">`, and the empty `.card-container-home` that all content is rendered into. It also includes an inline script that swaps the title text on hover over nav and footer icons.
 - `navigation.js` does everything else. On load it fetches every `content/<section>.json` into `contentData`, then renders one section at a time into `.card-container-home`. Section ids are `about`, `research`, `projects` (labelled "software"), `experience` (labelled "cv"), and `journal`. They appear in `sectionOrder`, `loadAllContent`, `sectionTitles`/`sectionTitlesMobile`, the `navLinks` map in `initNavigation`, and the `index.html` nav and dots. Adding or renaming a section means updating all of those places.
 - Each section has its own rendering mode:
-  - `about` and `research`: stacked cards with an image on the left (`renderCard(..., true)`). In `about`, a card with `research_short` and `research_long` gets a Short/Long tab widget in place of its **first empty-string paragraph**.
-  - `projects`: stacked cards with a header.
+  - `about`: stacked cards with an image on the left (`renderCard(..., true)`). A card with `research_short` and `research_long` gets a Short/Long tab widget in place of its **first empty-string paragraph**.
+  - `research`, `projects` and `journal` (configured in `LIST_SECTIONS`): a list of translucent tiles; clicking one opens a detail view with a back button. A tile's title is the card's `header`, or else its first paragraph with tags stripped. Its optional line underneath comes from the section's `meta` function: the venue (the first `<em>`) for research, the bold first paragraph (byline and date) for journal, and nothing for projects. Detail views render the full card with `renderCard`, with research using the image-on-the-left layout. Entries are addressed by `#<section>/<index>`, for example `#research/knight`, where `index` is the card's slug field (falling back to its array position).
   - `experience`: a card with `pdfUrl` becomes an iframe PDF viewer. The CV PDF lives in `assets/`, and its filename is dated, so update `pdfUrl` whenever the CV is replaced.
-  - `journal`: a list/detail view. Entries are addressed by `#journal/<index>`, where `index` is the card's slug field (falling back to its array position). The list's date is taken from the first paragraph when it contains `<b>`.
 - `background.js` is an ES module that draws the animated background on a fixed WebGL canvas. It's a three.js scene of wireframe convex polyhedra, simulated as rigid bodies by cannon-es. The pointer acts as a kinematic sphere that pushes them, and nearby bodies are joined by links. There are two scenes. The default, `fall`, drops the shapes onto a grid floor, and each section is viewed from its own camera angle (`SECTION_VIEWS`). `navigation.js` dispatches a `sectionchange` event on `window` (`announceSection`), and the camera eases to that section's view. `?scene=drift` switches to zero gravity, with invisible walls that match the viewport.
-- Routing is hash-based (`#section` or `#journal/<slug>`) and uses `history.replaceState` plus a `hashchange` listener. Arrow keys, swipes, and the side arrows cycle through `sectionOrder`.
+- Routing is hash-based (`#section` or `#section/<slug>`) and uses `history.replaceState` plus a `hashchange` listener. Arrow keys, swipes, and the side arrows cycle through `sectionOrder`.
 
 ## Content JSON (`content/*.json`)
 
@@ -35,9 +34,11 @@ Deploying means pushing to `main`.
 - A nested array becomes a bulleted list.
 - A run of strings delimited by `"```"` entries becomes a `<pre><code>` block.
 - `$...$` and `$$...$$` are rendered with KaTeX.
-- The card-level image fields are `image`, `imageAlt`, `imageWidth`/`imageHeight`, and `imageScale` (a percentage, which takes precedence).
+- The card-level image fields are `image` (a string, or an array for a gallery), `imageAlt`, `imageWidth`/`imageHeight`, and `imageScale` (a percentage, which takes precedence).
+- `index` is a card's URL slug in list sections.
 
 ## Cache busting
 
 - `index.html` loads `navigation.js?v=N`, `background.js?v=N` and `style.css?v=N`. Increment the relevant `N` whenever you change one of these files, since past commits do this on every change.
 - JSON is fetched with `cache: 'no-store'`.
+- Images aren't cache-busted automatically. When you replace an image in `assets/` without renaming it, add or bump a `?v=N` on its path in the content JSON (for example `assets/reccs.jpeg?v=2`); otherwise browsers keep showing the cached copy.

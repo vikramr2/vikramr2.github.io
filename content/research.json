@@ -1,6 +1,7 @@
 {
   "cards": [
     {
+      "index": "knight",
       "image": "assets/neuromorphic_figure.png",
       "imageAlt": "KNIGHT",
       "imageScale": 30,
@@ -16,7 +17,8 @@
       ]
     },
     {
-      "image": "assets/reccs.jpeg",
+      "index": "reccs",
+      "image": "assets/reccs.jpeg?v=2",
       "imageAlt": "RECCS Logo",
       "imageScale": 30,
       "paragraphs": [
@@ -30,6 +32,7 @@
       ]
     },
     {
+      "index": "citation-abm",
       "image": "assets/abm_icon.jpg",
       "imageAlt": "Agent-Based Modeling",
       "imageScale": 30,
@@ -43,6 +46,7 @@
       ]
     },
     {
+      "index": "mach2",
       "image": "assets/mach2_icon.jpg",
       "imageAlt": "Migration History",
       "imageScale": 30,
@@ -59,6 +63,7 @@
       ]
     },
     {
+      "index": "multilingual-communities",
       "image": "assets/multiling.png",
       "imageAlt": "Multilingual Citation Network",
       "imageScale": 30,
@@ -73,7 +78,8 @@
       ]
     },
     {
-      "image": "assets/cm_pp_overview.png",
+      "index": "cm-plus-plus",
+      "image": "assets/cm_pp_overview.png?v=2",
       "imageAlt": "CM++ Pipeline",
       "imageScale": 30,
       "paragraphs": [

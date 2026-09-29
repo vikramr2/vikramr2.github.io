@@ -188,8 +188,6 @@ async function loadAllContent() {
 // Current state
 let currentSection = 'about';
 let currentCardIndex = 0;
-let journalView = 'list'; // 'list' or 'detail'
-let currentJournalIndex = null;
 
 // Default title text for each section
 const sectionTitles = {
@@ -226,38 +224,76 @@ window.getCurrentDefaultTitle = getCurrentDefaultTitle;
 // Also expose currentSection for debugging
 window.getCurrentSection = function() { return currentSection; };
 
-// Journal list view renderer
-function renderJournalList() {
-    const data = contentData['journal'];
+// Sections shown as a list of entries, each opening into a detail view
+// addressed as #<section>/<slug>. The list shows each entry's title plus any
+// meta lines pulled from its content.
+const LIST_SECTIONS = {
+    research: {
+        backLabel: 'Back to Research',
+        // Venues, one per publication: the italic line right after each author
+        // line, e.g. "<em>RECOMB (2025)</em>". Other italic text, like image
+        // captions, doesn't follow an author line and is skipped.
+        meta: card => {
+            const paragraphs = card.paragraphs || [];
+            const venues = [];
+            paragraphs.forEach((p, i) => {
+                const next = paragraphs[i + 1];
+                if (typeof p !== 'string' || !p.includes('Ramavarapu') || typeof next !== 'string') return;
+                const match = next.match(/^\s*<em>(.*?)<\/em>/);
+                if (match) venues.push(match[1].trim());
+            });
+            return venues;
+        }
+    },
+    projects: {
+        backLabel: 'Back to Software',
+        meta: () => []
+    },
+    journal: {
+        backLabel: 'Back to Journal List',
+        // Byline and date: a bold first paragraph
+        meta: card => {
+            const first = card.paragraphs && card.paragraphs[0];
+            return typeof first === 'string' && first.includes('<b>') ? [first.replace(/<\/?b>/g, '')] : [];
+        }
+    }
+};
+
+// An entry's title: its header, or else its first paragraph without tags
+function entryTitle(card) {
+    if (card.header) return card.header;
+    const first = card.paragraphs && card.paragraphs[0];
+    return typeof first === 'string' ? first.replace(/<[^>]+>/g, '') : '';
+}
+
+// List view renderer
+function renderEntryList(section) {
+    const data = contentData[section];
     if (!data || !data.cards) return '';
 
     const listItems = data.cards.map((card, index) => {
-        // Extract the date from the first paragraph if it exists
-        let date = '';
-        if (card.paragraphs && card.paragraphs.length > 0) {
-            const firstPara = card.paragraphs[0];
-            // Check if it's a date (contains <b> tags)
-            if (typeof firstPara === 'string' && firstPara.includes('<b>')) {
-                date = firstPara.replace(/<\/?b>/g, '');
-            }
-        }
-
         const slug = card.index || index;
+        const meta = LIST_SECTIONS[section].meta(card);
+        // The card's picture (the first one of a gallery) as a thumbnail
+        const thumbnail = Array.isArray(card.image) ? card.image[0] : card.image;
 
         return `
-            <div class="journal-list-item" data-index="${slug}">
-                <h3>${card.header}</h3>
-                ${date ? `<div class="journal-date">${date}</div>` : ''}
+            <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}">
+                ${thumbnail ? `<img class="entry-thumbnail" src="${thumbnail}" alt="">` : ''}
+                <div class="entry-text">
+                    <h3>${entryTitle(card)}</h3>
+                    ${meta.map(line => `<div class="entry-meta">${line}</div>`).join('')}
+                </div>
             </div>
         `;
     }).join('');
 
-    return `<div class="journal-list">${listItems}</div>`;
+    return `<div class="entry-list">${listItems}</div>`;
 }
 
-// Find a journal card by its slug (index field), falling back to numeric array index
-function findJournalCardIndex(slug) {
-    const data = contentData['journal'];
+// Find an entry by its slug (index field), falling back to numeric array index
+function findEntryIndex(section, slug) {
+    const data = contentData[section];
     if (!data || !data.cards) return -1;
 
     const bySlug = data.cards.findIndex(card => card.index === slug);
@@ -269,72 +305,62 @@ function findJournalCardIndex(slug) {
     return -1;
 }
 
-// Journal detail view renderer
-function renderJournalDetail(slug) {
-    const data = contentData['journal'];
-    const arrIndex = findJournalCardIndex(slug);
+// Detail view renderer: the entry's full card, research with its image on the left
+function renderEntryDetail(section, slug) {
+    const data = contentData[section];
+    const arrIndex = findEntryIndex(section, slug);
     if (!data || !data.cards || arrIndex === -1) return '';
 
-    const card = data.cards[arrIndex];
-
     return `
-        <div class="journal-detail">
-            <button class="journal-back-button">Back to Journal List</button>
-            <div class="card">
-                <h5 class="card-header">${card.header}</h5>
-                <div class="card-body">
-                    ${card.body}
-                </div>
-            </div>
+        <div class="entry-detail">
+            <button class="entry-back-button">${LIST_SECTIONS[section].backLabel}</button>
+            ${renderCard(data.cards[arrIndex], section === 'research')}
         </div>
     `;
 }
 
-// Load journal list view
-function loadJournalList(updateHash = true) {
-    journalView = 'list';
-    currentJournalIndex = null;
+// Load a section's list view
+function loadEntryList(section, updateHash = true) {
     const container = document.querySelector('.card-container-home');
-    container.innerHTML = renderJournalList();
+    container.innerHTML = renderEntryList(section);
 
     // Update the URL hash
     if (updateHash) {
-        window.history.replaceState(null, null, '#journal');
+        window.history.replaceState(null, null, `#${section}`);
     }
 
     // Add click handlers to list items
-    container.querySelectorAll('.journal-list-item').forEach(item => {
+    container.querySelectorAll('.entry-list-item').forEach(item => {
         item.addEventListener('click', () => {
             const slug = item.getAttribute('data-index');
-            loadJournalDetail(slug);
+            loadEntryDetail(section, slug);
         });
     });
 }
 
-// Load journal detail view
-function loadJournalDetail(slug, updateHash = true) {
-    journalView = 'detail';
-    currentJournalIndex = slug;
+// Load an entry's detail view
+function loadEntryDetail(section, slug, updateHash = true) {
     const container = document.querySelector('.card-container-home');
 
     // Update the URL hash
     if (updateHash) {
-        window.history.replaceState(null, null, `#journal/${slug}`);
+        window.history.replaceState(null, null, `#${section}/${slug}`);
     }
 
     // Fade out
     container.style.opacity = '0';
 
     setTimeout(() => {
-        container.innerHTML = renderJournalDetail(slug);
+        container.innerHTML = renderEntryDetail(section, slug);
+        container.scrollTop = 0;
 
         // Add click handler to back button
-        const backButton = container.querySelector('.journal-back-button');
+        const backButton = container.querySelector('.entry-back-button');
         if (backButton) {
             backButton.addEventListener('click', () => {
                 container.style.opacity = '0';
                 setTimeout(() => {
-                    loadJournalList();
+                    loadEntryList(section);
                     container.style.opacity = '1';
                 }, 150);
             });
@@ -444,16 +470,13 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
 
     announceSection(section);
 
-    // Handle journal section with list/detail view
-    if (section === 'journal') {
-        loadJournalList();
-        return;
+    if (LIST_SECTIONS[section]) {
+        // Research, software and journal start as a list of entries
+        loadEntryList(section, false);
+    } else {
+        // Render all cards stacked vertically
+        container.innerHTML = data.cards.map(card => renderCard(card, section === 'about')).join('');
     }
-
-    const isAboutStyle = (section === 'about' || section === 'research');
-
-    // Render all cards stacked vertically
-    container.innerHTML = data.cards.map(card => renderCard(card, isAboutStyle)).join('');
 
     // Wire up research tab widget if present
     if (section === 'about') {
@@ -471,7 +494,8 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
 
 
 // Section order for arrow key navigation
-const sectionOrder = ['about', 'research', 'projects', 'experience', 'journal'];
+// const sectionOrder = ['about', 'research', 'projects', 'experience', 'journal'];
+const sectionOrder = ['about', 'research', 'experience', 'journal'];
 
 // Navigate to next/previous section
 function navigateSection(direction) {
@@ -643,33 +667,13 @@ async function initNavigation() {
         const hash = window.location.hash.substring(1); // Remove the '#'
 
         if (hash) {
-            // Check if it's a journal detail view (e.g., journal/grain-of-rice-black-hole)
-            if (hash.startsWith('journal/')) {
-                const parts = hash.split('/');
-                const journalSlug = parts[1];
-                const journalArrIndex = findJournalCardIndex(journalSlug);
+            // An entry's detail view, e.g. journal/grain-of-rice-black-hole or research/knight
+            const [section, slug] = hash.split('/');
 
-                if (journalArrIndex !== -1) {
-                    // Load journal section first, then load the detail
-                    currentSection = 'journal';
-                    const titleElement = document.getElementById('title');
-                    if (titleElement) {
-                        titleElement.innerHTML = getCurrentDefaultTitle();
-                    }
-
-                    // Update active navigation link
-                    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
-                        link.classList.remove('nav-link-active');
-                    });
-                    const activeLink = document.getElementById('journal');
-                    if (activeLink) {
-                        activeLink.classList.add('nav-link-active');
-                    }
-
-                    announceSection('journal');
-                    loadJournalDetail(journalSlug, false);
-                } else {
-                    loadSection('journal', true, false);
+            if (slug !== undefined && LIST_SECTIONS[section]) {
+                loadSection(section, true, false);
+                if (findEntryIndex(section, slug) !== -1) {
+                    loadEntryDetail(section, slug, false);
                 }
             } else if (sectionOrder.includes(hash)) {
                 // Load the section from the hash

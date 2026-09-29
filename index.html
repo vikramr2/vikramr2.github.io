@@ -33,12 +33,12 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 		<!-- Define inlined JavaScript -->
-		<script type="text/javascript" src="navigation.js?v=25"></script>
+		<script type="text/javascript" src="navigation.js?v=28"></script>
 		<link
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
             rel="stylesheet"
         />
-		<link rel="stylesheet" href="style.css?v=20">
+		<link rel="stylesheet" href="style.css?v=24">
 		<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 	</head>
 	<body id="main">
@@ -54,7 +54,7 @@
                     <ul class="navlinks">
                         <li><a href="#" id = "about" class = "nav-link-typewriter"><h2>about</h2></a></li>
 						<li><a href="#" id = "research" class = "nav-link-typewriter"><h2>research</h2></a></li>
-                        <li><a href="#" id = "projects" class = "nav-link-typewriter"><h2>software</h2></a></li>
+                        <!-- <li><a href="#" id = "projects" class = "nav-link-typewriter"><h2>software</h2></a></li> -->
 						<li><a href="#" id = "experience" class = "nav-link-typewriter"><h2>cv</h2></a></li>
 						<li><a href="#" id = "journal" class = "nav-link-typewriter"><h2>journal</h2></a></li>
                     </ul>
@@ -62,7 +62,7 @@
                 <div class="dot-navigation">
                     <span class="nav-dot" data-section="about"></span>
                     <span class="nav-dot" data-section="research"></span>
-                    <span class="nav-dot" data-section="projects"></span>
+                    <!-- <span class="nav-dot" data-section="projects"></span> -->
                     <span class="nav-dot" data-section="experience"></span>
                     <span class="nav-dot" data-section="journal"></span>
                 </div>
@@ -89,7 +89,7 @@
 						var instagram = document.getElementById("instagram");
 						var scholar = document.getElementById("scholar");
 						var about = document.getElementById("about");
-						var projects = document.getElementById("projects");
+						// var projects = document.getElementById("projects");
 						var experience = document.getElementById("experience");
 						var journal = document.getElementById("journal");
 						var research = document.getElementById("research");
@@ -116,8 +116,8 @@
 						linkedin.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						about.onmouseover      = function() { reset("Learn about me..."); }
 						about.onmouseout       = function() { reset(getCurrentDefaultTitle()); }
-						projects.onmouseover   = function() { reset("My showcase!"); }
-						projects.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
+						// projects.onmouseover   = function() { reset("My showcase!"); }
+						// projects.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
 						experience.onmouseover = function() { reset("Work experience"); }
 						experience.onmouseout  = function() { reset(getCurrentDefaultTitle()); }
 						journal.onmouseover    = function() {
