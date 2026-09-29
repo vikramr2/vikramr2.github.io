@@ -969,6 +969,41 @@ async function initNavigation() {
 
     // Load initial section from hash
     loadFromHash();
+
+    showNavigationHint();
+}
+
+// On desktop, the title first says how to get around, then switches to the
+// section's title: it fades in with the page (0.75s delay, 1s fade), stays
+// about a second, then crossfades. Phones swipe instead, and corporate mode
+// has no sections to move between.
+const NAVIGATION_HINT = 'Use arrow keys to navigate ←→';
+
+function showNavigationHint() {
+    const phone = window.matchMedia('only screen and (max-device-width: 768px)').matches;
+    const title = document.getElementById('title');
+    if (phone || corporateMode || !title) return;
+
+    title.textContent = NAVIGATION_HINT;
+
+    setTimeout(() => {
+        // Skip if the title changed meanwhile (a hover, or another section)
+        const current = document.getElementById('title');
+        if (!current || current.textContent !== NAVIGATION_HINT) return;
+
+        const showDefault = () => {
+            current.innerHTML = getCurrentDefaultTitle();
+        };
+        if (reducedMotion.matches || !current.animate) {
+            showDefault();
+            return;
+        }
+        current.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' }).finished.then(() => {
+            if (current.textContent !== NAVIGATION_HINT) return;
+            showDefault();
+            current.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 250, fill: 'forwards' });
+        });
+    }, 2750);
 }
 
 // Settings panel: the gear in the footer opens it. Bright mode switches the
