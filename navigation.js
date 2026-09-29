@@ -798,6 +798,54 @@ async function initNavigation() {
     loadFromHash();
 }
 
+// Settings panel: the gear in the footer opens it; bright mode switches the
+// cards back to white and is remembered in localStorage
+function initSettings() {
+    const button = document.getElementById('settings-button');
+    const panel = document.getElementById('settings-panel');
+    const brightSwitch = document.getElementById('bright-mode-switch');
+    if (!button || !panel || !brightSwitch) return;
+
+    const root = document.documentElement;
+    brightSwitch.setAttribute('aria-checked', String(root.classList.contains('bright-mode')));
+
+    function setOpen(open) {
+        panel.hidden = !open;
+        button.setAttribute('aria-expanded', String(open));
+    }
+
+    button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setOpen(panel.hidden);
+    });
+
+    brightSwitch.addEventListener('click', () => {
+        const on = !root.classList.contains('bright-mode');
+        root.classList.toggle('bright-mode', on);
+        brightSwitch.setAttribute('aria-checked', String(on));
+        try {
+            localStorage.setItem('brightMode', on ? 'on' : 'off');
+        } catch (e) {}
+    });
+
+    // Close on a click outside the panel, or on Escape
+    document.addEventListener('click', (e) => {
+        if (!panel.hidden && !panel.contains(e.target) && !button.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !panel.hidden) {
+            setOpen(false);
+            button.focus();
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSettings);
+} else {
+    initSettings();
+}
+
 // Load on page ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initNavigation);
