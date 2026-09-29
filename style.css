@@ -1142,35 +1142,153 @@ html.bright-mode .entry-thumbnail {
   outline: 1px solid #e3e3e6;
 }
 
-/* CV download card at the bottom of About: phones only, where it replaces
-   the CV page (whose dot is hidden, and which swiping skips) */
-.cv-download-card {
+/* ------------------------------------------------------------------------
+   Corporate mode (html.corporate-mode, toggled in the settings panel): one
+   page with About in a left sidebar, research on the right, and the CV
+   underneath. The journal, the pets card and the section nav are hidden.
+   ------------------------------------------------------------------------ */
+html.corporate-mode .main_list,
+html.corporate-mode .dot-navigation,
+html.corporate-mode .nav-arrow {
+  display: none !important;
+}
+
+html.corporate-mode .card-container-home {
+  height: calc(100vh - 180px);
+  overflow: hidden;
+}
+
+/* The bottom fade would dim the CV bar */
+html.corporate-mode .card-container-home::after {
   display: none;
 }
 
-.cv-download-card .card-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  text-align: center;
+.corporate-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 28px;
+  width: min(1680px, calc(100vw - 48px));
+  height: 100%;
+  padding-bottom: 12px;
 }
 
-.cv-download-card .cv-download-title {
-  margin: 0;
-  color: inherit;
+/* The sidebar and the right column each scroll on their own */
+.corporate-sidebar,
+.corporate-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+/* Right column: News, Research and CV, each under its own heading */
+.corporate-section + .corporate-section {
+  margin-top: 18px;
+}
+
+.corporate-heading {
+  margin: 10px 0 12px;
+  color: #E0F2F1;
   font-family: monospace;
   font-size: 18px;
+  font-weight: bold;
+}
+
+.corporate-research {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.corporate-sidebar .card,
+.corporate-main .card {
+  width: 100%;
+  max-width: none;
+}
+
+.corporate-main .card {
+  margin-top: 0;
+}
+
+/* Sidebar cards: the intro card stacks its photo above the text */
+.corporate-sidebar .card.about {
+  flex-direction: column;
+  align-items: center;
+}
+
+.corporate-sidebar .card.about .card-body {
+  width: 100%;
+}
+
+/* CV card: the PDF viewer on laptops; phones show only its download button */
+.corporate-cv .pdf-iframe-container {
+  height: 70vh;
 }
 
 @media only screen and (max-device-width: 768px) {
-  .card-container-home .cv-download-card {
-    display: flex;
+  /* Phones: everything in one scrolling column */
+  html.corporate-mode .card-container-home {
+    height: auto;
+    overflow-y: auto;
   }
 
-  .nav-dot[data-section="experience"] {
-    display: none;
+  .corporate-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
   }
+
+  .corporate-sidebar,
+  .corporate-main {
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
+/* Mode transitions (see setCorporateMode). The page itself isn't captured, so
+   the background keeps animating and unchanged parts stay put; only named
+   cards animate: moving to their new spots, or fading out or in. */
+:root {
+  view-transition-name: none;
+}
+
+.main_list {
+  view-transition-name: site-nav;
+}
+
+.nav-arrow-left {
+  view-transition-name: nav-arrow-left;
+}
+
+.nav-arrow-right {
+  view-transition-name: nav-arrow-right;
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Show each card at its real size while its box moves and resizes, rather
+   than stretching its snapshot */
+::view-transition-image-pair(*) {
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+  height: 100%;
+  object-fit: none;
+  object-position: top left;
+}
+
+/* Cards shouldn't also run their own fade-in while being animated */
+.card-container-home.instant-cards .card {
+  animation: none;
 }
 
 /* ------------------------------------------------------------------------

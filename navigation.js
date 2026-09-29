@@ -112,14 +112,14 @@ function paragraphsToHTML(paragraphs) {
 }
 
 // Function to render PDF viewer using iframe (simpler and more reliable)
-function renderPDFViewer(pdfUrl) {
+function renderPDFViewer(pdfUrl, downloadLabel = 'Download PDF') {
     return `
         <div class="pdf-viewer-container">
             <div class="pdf-iframe-container">
                 <iframe src="${pdfUrl}" class="pdf-iframe" type="application/pdf"></iframe>
             </div>
             <div class="pdf-download">
-                <a href="${pdfUrl}" download class="btn btn-primary">Download PDF</a>
+                <a href="${pdfUrl}" download class="btn btn-primary">${downloadLabel}</a>
             </div>
         </div>
     `;
@@ -166,6 +166,8 @@ async function loadSectionContent(section) {
                     imageScale: card.imageScale,
                     header: card.header,
                     pdfUrl: card.pdfUrl,
+                    hideInCorporate: card.hideInCorporate || false,
+                    corporateSection: card.corporateSection || null,
                     interests: card.interests || [],
                     body: body,
                     paragraphs: card.paragraphs // Preserve original paragraphs for metadata extraction
@@ -191,6 +193,13 @@ async function loadAllContent() {
 
 // Current state
 let currentSection = 'about';
+
+// Corporate mode: About, research and the CV on one page, without the journal
+// or the pets card. Set on <html> by the early script in index.html.
+let corporateMode = document.documentElement.classList.contains('corporate-mode');
+// Skip the cards' fade-in when a view transition is already animating them
+let instantCards = false;
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let currentCardIndex = 0;
 
 // Default title text for each section
@@ -331,7 +340,7 @@ function renderEntryList(section) {
         const thumbnail = Array.isArray(card.image) ? card.image[0] : card.image;
 
         return `
-            <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}"
+            <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}" data-vt="entry-${section}-${slug}"
                 data-interests='${JSON.stringify(card.interests).replace(/'/g, '&#39;')}'>
                 ${thumbnail ? `<img class="entry-thumbnail" src="${thumbnail}" alt="">` : ''}
                 <div class="entry-text">
@@ -410,9 +419,8 @@ function renderStackedDetailCard(section, card) {
     `;
 }
 
-// Load a section's list view
-function loadEntryList(section, updateHash = true) {
-    const container = document.querySelector('.card-container-home');
+// Load a section's list view into container (by default the main column)
+function loadEntryList(section, updateHash = true, container = document.querySelector('.card-container-home')) {
     container.innerHTML = renderEntryList(section);
 
     // Update the URL hash
@@ -424,7 +432,7 @@ function loadEntryList(section, updateHash = true) {
     container.querySelectorAll('.entry-list-item').forEach(item => {
         item.addEventListener('click', () => {
             const slug = item.getAttribute('data-index');
-            loadEntryDetail(section, slug);
+            loadEntryDetail(section, slug, true, container);
         });
     });
 
@@ -440,9 +448,8 @@ function loadEntryList(section, updateHash = true) {
     // applyInterestFilter(section, container);
 }
 
-// Load an entry's detail view
-function loadEntryDetail(section, slug, updateHash = true) {
-    const container = document.querySelector('.card-container-home');
+// Load an entry's detail view into container (by default the main column)
+function loadEntryDetail(section, slug, updateHash = true, container = document.querySelector('.card-container-home')) {
 
     // Update the URL hash
     if (updateHash) {
@@ -455,6 +462,7 @@ function loadEntryDetail(section, slug, updateHash = true) {
     setTimeout(() => {
         container.innerHTML = renderEntryDetail(section, slug);
         container.scrollTop = 0;
+        revealInCorporateColumn(container);
 
         // Add click handler to back button
         const backButton = container.querySelector('.entry-back-button');
@@ -462,7 +470,8 @@ function loadEntryDetail(section, slug, updateHash = true) {
             backButton.addEventListener('click', () => {
                 container.style.opacity = '0';
                 setTimeout(() => {
-                    loadEntryList(section);
+                    loadEntryList(section, true, container);
+                    revealInCorporateColumn(container);
                     container.style.opacity = '1';
                 }, 150);
             });
@@ -507,7 +516,7 @@ function renderCard(card, isAboutStyle = false) {
         }
 
         return `
-            <div class="card mb-3 about about-home">
+            <div class="card mb-3 about about-home"${card.vt ? ` data-vt="${card.vt}"` : ''}>
                 ${imageHTML}
                 <div class="card-body">
                     ${card.body}
@@ -516,7 +525,7 @@ function renderCard(card, isAboutStyle = false) {
         `;
     } else {
         return `
-            <div class="card">
+            <div class="card"${card.vt ? ` data-vt="${card.vt}"` : ''}>
                 ${card.header ? `<h5 class="card-header">${card.header}</h5>` : ''}
                 <div class="card-body">
                     ${card.body}
@@ -526,19 +535,110 @@ function renderCard(card, isAboutStyle = false) {
     }
 }
 
-// A card with a download button for the CV, added to the bottom of About.
-// Only shown on phones (style.css), where it replaces the CV page.
-function renderCvDownloadCard() {
+// Corporate mode's single page. The left sidebar holds About's cards, minus
+// any marked hideInCorporate (the pets card) or corporateSection. The right
+// column scrolls through sections, each under its own heading: cards marked
+// corporateSection (News), the research list, and the CV. On phones the PDF
+// viewer shows only its download button (style.css).
+function renderCorporateLayout(container) {
+    const about = contentData.about ? contentData.about.cards : [];
     const cv = contentData.experience && contentData.experience.cards.find(card => card.pdfUrl);
-    if (!cv) return '';
-    return `
-        <div class="card cv-download-card">
-            <div class="card-body">
-                <h5 class="cv-download-title">${cv.header || 'CV'}</h5>
-                <a href="${cv.pdfUrl}" download class="btn btn-primary">Download CV</a>
+
+    const sidebar = about
+        .map((card, i) => (card.hideInCorporate || card.corporateSection) ? '' : renderCard({ ...card, vt: `about-card-${i}` }, true))
+        .join('');
+
+    // The heading replaces the card's own bold title line, e.g. "<b>News</b>"
+    const cardSections = about
+        .map((card, i) => {
+            if (!card.corporateSection || card.hideInCorporate) return '';
+            let paragraphs = card.paragraphs || [];
+            if (typeof paragraphs[0] === 'string' && paragraphs[0].replace(/<[^>]+>/g, '').trim() === card.corporateSection) {
+                paragraphs = paragraphs.slice(1);
+            }
+            const body = paragraphsToHTML(paragraphs);
+            return corporateSection(card.corporateSection, renderCard({ ...card, body, vt: `about-card-${i}` }, false));
+        })
+        .join('');
+
+    container.innerHTML = `
+        <div class="corporate-layout">
+            <aside class="corporate-sidebar" aria-label="About">${sidebar}</aside>
+            <div class="corporate-main">
+                ${cardSections}
+                ${corporateSection('Research', '<div class="corporate-research"></div>')}
+                ${cv ? corporateSection('CV', `
+                    <div class="card corporate-cv" data-vt="cv">
+                        <div class="card-body">${renderPDFViewer(cv.pdfUrl, 'Download CV')}</div>
+                    </div>`) : ''}
             </div>
         </div>
     `;
+    container.scrollTop = 0;
+    loadEntryList('research', false, container.querySelector('.corporate-research'));
+}
+
+// A titled section of corporate mode's right column
+function corporateSection(title, content) {
+    const id = `corporate-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-heading`;
+    return `
+        <section class="corporate-section" aria-labelledby="${id}">
+            <h3 class="corporate-heading" id="${id}">${title}</h3>
+            ${content}
+        </section>
+    `;
+}
+
+// When a list or paper is shown inside corporate mode's right column, scroll
+// the column so its section starts at the top
+function revealInCorporateColumn(container) {
+    const column = container.closest('.corporate-main');
+    const section = container.closest('.corporate-section');
+    if (!column || !section) return;
+    column.scrollTop += section.getBoundingClientRect().top - column.getBoundingClientRect().top;
+}
+
+// View transitions: give each visible [data-vt] element its name, so cards in
+// both layouts glide between them, cards only in the old one fade out, and
+// cards only in the new one fade in. Elements scrolled out of sight stay
+// unnamed, so they don't fly in from outside their panel.
+function nameTransitionElements() {
+    document.querySelectorAll('[data-vt]').forEach(el => {
+        const clip = el.parentElement.closest('.corporate-sidebar, .corporate-main, .card-container-home');
+        const r = el.getBoundingClientRect();
+        const c = clip ? clip.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
+        const visible = r.height > 0 && r.bottom > c.top && r.top < c.bottom;
+        el.style.viewTransitionName = visible ? el.dataset.vt : 'none';
+    });
+}
+
+function clearTransitionNames() {
+    document.querySelectorAll('[data-vt]').forEach(el => { el.style.viewTransitionName = ''; });
+}
+
+// Switch corporate mode on or off, animating between the layouts where the
+// browser supports view transitions (instantly otherwise)
+function setCorporateMode(on) {
+    if (on === corporateMode) return;
+
+    const update = () => {
+        corporateMode = on;
+        document.documentElement.classList.toggle('corporate-mode', on);
+        instantCards = true;
+        loadSection('about', true, true);
+        instantCards = false;
+    };
+
+    if (!document.startViewTransition || reducedMotion.matches) {
+        update();
+        return;
+    }
+    nameTransitionElements();
+    const transition = document.startViewTransition(() => {
+        update();
+        nameTransitionElements();
+    });
+    transition.finished.finally(clearTransitionNames);
 }
 
 // Lets the background (background.js) react, e.g. by moving its camera
@@ -548,10 +648,14 @@ function announceSection(section) {
 
 // Load content for a section
 function loadSection(section, skipAnimation = false, updateHash = true) {
-    // On phones the CV lives at the bottom of About
-    if (section === 'experience' && phoneLayout.matches) {
+    // The CV page is gone; the CV is only shown in corporate mode
+    if (section === 'experience') {
         section = 'about';
         updateHash = true;
+    }
+    // Corporate mode is a single page built from About
+    if (corporateMode) {
+        section = 'about';
     }
 
     currentSection = section;
@@ -593,13 +697,19 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
 
     announceSection(section);
 
-    if (LIST_SECTIONS[section]) {
+    container.classList.toggle('instant-cards', instantCards);
+
+    if (corporateMode) {
+        renderCorporateLayout(container);
+    } else if (LIST_SECTIONS[section]) {
         // Research, software and journal start as a list of entries
         loadEntryList(section, false);
     } else {
-        // Render all cards stacked vertically
-        container.innerHTML = data.cards.map(card => renderCard(card, section === 'about')).join('')
-            + (section === 'about' ? renderCvDownloadCard() : '');
+        // Render all cards stacked vertically. About's cards are named so they
+        // can glide to their corporate-mode spots (see setCorporateMode).
+        container.innerHTML = data.cards
+            .map((card, i) => renderCard(section === 'about' ? { ...card, vt: `about-card-${i}` } : card, section === 'about'))
+            .join('');
     }
 
     // Wire up research tab widget if present
@@ -619,20 +729,14 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
 
 // Section order for arrow key navigation
 // const sectionOrder = ['about', 'research', 'projects', 'experience', 'journal'];
-const sectionOrder = ['about', 'research', 'experience', 'journal'];
+// const sectionOrder = ['about', 'research', 'experience', 'journal'];
+const sectionOrder = ['about', 'research', 'journal'];
 
-// Phones: the same test as the phone-only blocks in style.css
-const phoneLayout = window.matchMedia('only screen and (max-device-width: 768px)');
-
-// On phones the CV page is folded into About (see renderCvDownloadCard), so
-// swiping and the arrows skip it
-function navigableSections() {
-    return phoneLayout.matches ? sectionOrder.filter(s => s !== 'experience') : sectionOrder;
-}
-
-// Navigate to next/previous section
+// Navigate to next/previous section. Corporate mode is a single page, so
+// there is nowhere to go.
 function navigateSection(direction) {
-    const order = navigableSections();
+    if (corporateMode) return;
+    const order = sectionOrder;
     const currentIndex = order.indexOf(currentSection);
     let newIndex = currentIndex + direction;
 
@@ -717,8 +821,9 @@ async function initNavigation() {
 
     // Add arrow key navigation
     document.addEventListener('keydown', (e) => {
-        // Ignore if user is typing in an input field
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        // Ignore if user is typing in an input field, and in corporate mode,
+        // where the arrow keys scroll the panels instead
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || corporateMode) {
             return;
         }
 
@@ -800,6 +905,15 @@ async function initNavigation() {
     function loadFromHash() {
         const hash = window.location.hash.substring(1); // Remove the '#'
 
+        // Corporate mode is one page; only an open paper (#research/<slug>) is kept
+        if (corporateMode) {
+            const [section, slug] = hash.split('/');
+            const paper = section === 'research' && slug !== undefined && findEntryIndex('research', slug) !== -1;
+            loadSection('about', true, !paper);
+            if (paper) loadEntryDetail('research', slug, false, document.querySelector('.corporate-research'));
+            return;
+        }
+
         if (hash) {
             // An entry's detail view, e.g. journal/grain-of-rice-black-hole or research/knight
             const [section, slug] = hash.split('/');
@@ -831,26 +945,51 @@ async function initNavigation() {
     loadFromHash();
 }
 
-// Settings panel: the gear in the footer opens it; bright mode switches the
-// cards back to white and is remembered in localStorage
+// Settings panel: the gear in the footer opens it. Bright mode switches the
+// cards back to white; corporate mode switches to the one-page layout.
 function initSettings() {
     const button = document.getElementById('settings-button');
     const panel = document.getElementById('settings-panel');
-    const brightSwitch = document.getElementById('bright-mode-switch');
-    if (!button || !panel || !brightSwitch) return;
+    if (!button || !panel) return;
 
     const root = document.documentElement;
-    brightSwitch.setAttribute('aria-checked', String(root.classList.contains('bright-mode')));
 
-    // Keep ?theme=bright in the URL while bright mode is on, so a reload or a
-    // shared link opens in the same mode. Dark is the default, so no parameter.
-    function syncThemeParam(on) {
-        const url = new URL(location.href);
-        if (on) url.searchParams.set('theme', 'bright');
-        else url.searchParams.delete('theme');
-        if (url.href !== location.href) history.replaceState(history.state, '', url);
+    // A switch for a mode that is kept in the URL (param=value while on, so a
+    // reload or a shared link opens in the same mode) and in localStorage
+    function modeSwitch(switchId, param, value, storageKey, isOn, apply) {
+        const el = document.getElementById(switchId);
+        if (!el) return;
+
+        function syncParam(on) {
+            const url = new URL(location.href);
+            if (on) url.searchParams.set(param, value);
+            else url.searchParams.delete(param);
+            if (url.href !== location.href) history.replaceState(history.state, '', url);
+        }
+
+        el.setAttribute('aria-checked', String(isOn()));
+        if (isOn()) syncParam(true);
+
+        el.addEventListener('click', () => {
+            const on = !isOn();
+            apply(on);
+            el.setAttribute('aria-checked', String(on));
+            syncParam(on);
+            try {
+                localStorage.setItem(storageKey, on ? 'on' : 'off');
+            } catch (e) {}
+        });
     }
-    if (root.classList.contains('bright-mode')) syncThemeParam(true);
+
+    // Bright mode: white cards (?theme=bright)
+    modeSwitch('bright-mode-switch', 'theme', 'bright', 'brightMode',
+        () => root.classList.contains('bright-mode'),
+        on => root.classList.toggle('bright-mode', on));
+
+    // Corporate mode: one-page layout (?layout=corporate)
+    modeSwitch('corporate-mode-switch', 'layout', 'corporate', 'corporateMode',
+        () => corporateMode,
+        setCorporateMode);
 
     function setOpen(open) {
         panel.hidden = !open;
@@ -860,16 +999,6 @@ function initSettings() {
     button.addEventListener('click', (e) => {
         e.stopPropagation();
         setOpen(panel.hidden);
-    });
-
-    brightSwitch.addEventListener('click', () => {
-        const on = !root.classList.contains('bright-mode');
-        root.classList.toggle('bright-mode', on);
-        brightSwitch.setAttribute('aria-checked', String(on));
-        syncThemeParam(on);
-        try {
-            localStorage.setItem('brightMode', on ? 'on' : 'off');
-        } catch (e) {}
     });
 
     // Close on a click outside the panel, or on Escape
