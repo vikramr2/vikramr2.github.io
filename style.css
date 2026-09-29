@@ -1202,6 +1202,13 @@ html.corporate-mode .card-container-home::after {
   transition: opacity 0.3s ease-in-out;
 }
 
+/* The research list and open papers are capped at 1000px on the regular
+   page; here they fill the column like the News and CV cards */
+.corporate-research .entry-list,
+.corporate-research .entry-detail {
+  max-width: none;
+}
+
 .corporate-sidebar .card,
 .corporate-main .card {
   width: 100%;
