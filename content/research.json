@@ -1,12 +1,9 @@
 {
   "cards": [
     {
-      "header": "KNIGHT: Agentic Systems for Neuromorphic Computing",
-      "shortTitle": "KNIGHT",
-      "emoji": "🧠",
       "image": "assets/neuromorphic_figure.png",
       "imageAlt": "KNIGHT",
-      "imageScale": 60,
+      "imageScale": 30,
       "paragraphs": [
         "<b>KNIGHT: Agentic Systems for Neuromorphic Computing</b>",
         "",
@@ -19,12 +16,9 @@
       ]
     },
     {
-      "header": "RECCS+/++: Large Scale Community-Aware Network Generation",
-      "shortTitle": "RECCS+/++",
-      "emoji": "🕸️",
-      "image": "assets/reccs.png",
+      "image": "assets/reccs.jpeg",
       "imageAlt": "RECCS Logo",
-      "imageScale": 60,
+      "imageScale": 30,
       "paragraphs": [
         "<b>RECCS+/++: Large Scale Community-Aware Network Generation</b>",
         "",
@@ -36,9 +30,6 @@
       ]
     },
     {
-      "header": "An Agent-based Model of Citation Behavior",
-      "shortTitle": "Citation Behavior ABM",
-      "emoji": "📈",
       "image": "assets/abm_icon.jpg",
       "imageAlt": "Agent-Based Modeling",
       "imageScale": 30,
@@ -52,9 +43,6 @@
       ]
     },
     {
-      "header": "Characterizing the Solution Space of Migration Histories of Metastatic Cancers with MACH2",
-      "shortTitle": "MACH2",
-      "emoji": "🧬",
       "image": "assets/mach2_icon.jpg",
       "imageAlt": "Migration History",
       "imageScale": 30,
@@ -71,9 +59,6 @@
       ]
     },
     {
-      "header": "Exploration of Multi-Lingual Community Structure in Scholarly Articles",
-      "shortTitle": "Multi-Lingual Communities",
-      "emoji": "🌐",
       "image": "assets/multiling.png",
       "imageAlt": "Multilingual Citation Network",
       "imageScale": 30,
@@ -88,12 +73,9 @@
       ]
     },
     {
-      "header": "CM++ - A Pipeline for Well-Connected Community Detection",
-      "shortTitle": "CM++",
-      "emoji": "🔎",
       "image": "assets/cm_pp_overview.png",
       "imageAlt": "CM++ Pipeline",
-      "imageScale": 40,
+      "imageScale": 30,
       "paragraphs": [
         "<b>CM++ - A Pipeline for Well-Connected Community Detection</b>",
         "",

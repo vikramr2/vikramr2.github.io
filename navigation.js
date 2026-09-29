@@ -1,25 +1,6 @@
 // Content data loaded from JSON files
 let contentData = {};
 
-// Cache-busting token so edited image assets show up without a hard refresh
-const ASSET_CACHE_BUST = Date.now();
-
-// Append a cache-busting query param to an asset URL (skips absolute/external URLs)
-function bustAssetCache(src) {
-    if (!src || /^(https?:)?\/\//.test(src) || src.startsWith('data:')) {
-        return src;
-    }
-    const separator = src.includes('?') ? '&' : '?';
-    return `${src}${separator}v=${ASSET_CACHE_BUST}`;
-}
-
-// Cache-bust any <img src="..."> occurrences inside a raw HTML string
-function bustInlineImageSrcs(html) {
-    return html.replace(/(<img\s+[^>]*src=["'])([^"']+)(["'])/gi, (match, prefix, src, suffix) => {
-        return `${prefix}${bustAssetCache(src)}${suffix}`;
-    });
-}
-
 // Function to process LaTeX equations in text
 function processLatex(text) {
     // Process display math ($$...$$) first to avoid conflicts with inline math
@@ -104,7 +85,7 @@ function paragraphsToHTML(paragraphs) {
 
             // Add the code block HTML
             const codeContent = codeLines.join('\n');
-            result.push(`<pre class="code-block"><code>${codeContent}</code></pre>`);
+            result.push(`<pre style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto;"><code>${codeContent}</code></pre>`);
 
             i++; // Move past the closing ```
             continue;
@@ -117,7 +98,7 @@ function paragraphsToHTML(paragraphs) {
         }
         // If paragraph contains HTML tags already (like <b>, <a>, <ul>, <img>, etc.), use as is
         else if (p.includes('<') && p.includes('>')) {
-            result.push(bustInlineImageSrcs(processLatex(p)));
+            result.push(processLatex(p));
         }
         // Otherwise, wrap in <p> tag
         else {
@@ -184,8 +165,6 @@ async function loadSectionContent(section) {
                     imageHeight: card.imageHeight,
                     imageScale: card.imageScale,
                     header: card.header,
-                    shortTitle: card.shortTitle,
-                    emoji: card.emoji,
                     body: body,
                     paragraphs: card.paragraphs // Preserve original paragraphs for metadata extraction
                 };
@@ -266,7 +245,7 @@ function renderJournalList() {
         const slug = card.index || index;
 
         return `
-            <div class="journal-list-item" data-index="${slug}" data-glass="frosted">
+            <div class="journal-list-item" data-index="${slug}">
                 <h3>${card.header}</h3>
                 ${date ? `<div class="journal-date">${date}</div>` : ''}
             </div>
@@ -300,8 +279,8 @@ function renderJournalDetail(slug) {
 
     return `
         <div class="journal-detail">
-            <button class="journal-back-button" data-glass="clear">Back to Journal List</button>
-            <div class="card" data-glass="frosted">
+            <button class="journal-back-button">Back to Journal List</button>
+            <div class="card">
                 <h5 class="card-header">${card.header}</h5>
                 <div class="card-body">
                     ${card.body}
@@ -366,13 +345,29 @@ function loadJournalDetail(slug, updateHash = true) {
     }, 150);
 }
 
-// Build the image HTML for a card (single image or gallery of images)
-function buildCardImageHTML(card) {
-    let imageHTML = '';
+// Render a single card
+function renderCard(card, isAboutStyle = false) {
+    if (isAboutStyle) {
+        // Only render image if card.image is not empty
+        let imageHTML = '';
 
-    // Check if image is an array (multiple images)
-    if (Array.isArray(card.image) && card.image.length > 0) {
-        const images = card.image.map((img, index) => {
+        // Check if image is an array (multiple images)
+        if (Array.isArray(card.image) && card.image.length > 0) {
+            const images = card.image.map((img, index) => {
+                let styleAttr = '';
+                if (card.imageScale) {
+                    const scalePercent = card.imageScale;
+                    styleAttr = `style="width: ${scalePercent}% !important; height: auto !important; max-width: ${scalePercent}%;"`;
+                } else if (card.imageWidth || card.imageHeight) {
+                    styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
+                }
+                const alt = Array.isArray(card.imageAlt) ? (card.imageAlt[index] || '') : (card.imageAlt || '');
+                return `<img src="${img}" class="card-img-gallery" alt="${alt}" ${styleAttr}>`;
+            }).join('\n                ');
+
+            imageHTML = `<div class="card-img-gallery-container">\n                ${images}\n            </div>`;
+        } else if (card.image && typeof card.image === 'string' && card.image.trim() !== '') {
+            // Single image
             let styleAttr = '';
             if (card.imageScale) {
                 const scalePercent = card.imageScale;
@@ -380,33 +375,11 @@ function buildCardImageHTML(card) {
             } else if (card.imageWidth || card.imageHeight) {
                 styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
             }
-            const alt = Array.isArray(card.imageAlt) ? (card.imageAlt[index] || '') : (card.imageAlt || '');
-            return `<img src="${bustAssetCache(img)}" class="card-img-gallery" alt="${alt}" ${styleAttr}>`;
-        }).join('\n                ');
-
-        imageHTML = `<div class="card-img-gallery-container">\n                ${images}\n            </div>`;
-    } else if (card.image && typeof card.image === 'string' && card.image.trim() !== '') {
-        // Single image
-        let styleAttr = '';
-        if (card.imageScale) {
-            const scalePercent = card.imageScale;
-            styleAttr = `style="width: ${scalePercent}% !important; height: auto !important; max-width: ${scalePercent}%;"`;
-        } else if (card.imageWidth || card.imageHeight) {
-            styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
+            imageHTML = `<img src="${card.image}" class="card-img-top" alt="${card.imageAlt || ''}" ${styleAttr}>`;
         }
-        imageHTML = `<img src="${bustAssetCache(card.image)}" class="card-img-top" alt="${card.imageAlt || ''}" ${styleAttr}>`;
-    }
-
-    return imageHTML;
-}
-
-// Render a single card
-function renderCard(card, isAboutStyle = false) {
-    if (isAboutStyle) {
-        const imageHTML = buildCardImageHTML(card);
 
         return `
-            <div class="card mb-3 about about-home" data-glass="frosted">
+            <div class="card mb-3 about about-home">
                 ${imageHTML}
                 <div class="card-body">
                     ${card.body}
@@ -415,7 +388,7 @@ function renderCard(card, isAboutStyle = false) {
         `;
     } else {
         return `
-            <div class="card" data-glass="frosted">
+            <div class="card">
                 ${card.header ? `<h5 class="card-header">${card.header}</h5>` : ''}
                 <div class="card-body">
                     ${card.body}
@@ -425,85 +398,8 @@ function renderCard(card, isAboutStyle = false) {
     }
 }
 
-// Render a grid of expandable cards (used for research and projects)
-function renderGridCard(card, index) {
-    const emoji = card.emoji || '';
-    const title = card.header || '';
-    const imageHTML = buildCardImageHTML(card);
-
-    return `
-        <div class="grid-card" data-grid-index="${index}" data-glass="frosted">
-            <div class="grid-card-summary">
-                <span class="grid-card-emoji">${emoji}</span>
-                <h3 class="grid-card-title">${title}</h3>
-            </div>
-            <div class="grid-card-detail">
-                <button class="grid-card-close" aria-label="Close">&times;</button>
-                ${imageHTML ? `<div class="grid-card-image">${imageHTML}</div>` : ''}
-                <div class="card-body">
-                    ${card.body}
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function renderGrid(data) {
-    const items = data.cards.map((card, index) => renderGridCard(card, index)).join('');
-    return `<div class="card-grid">${items}</div>`;
-}
-
-// Wire up click-to-expand behavior for grid cards
-function initGridCards(container) {
-    const grid = container.querySelector('.card-grid');
-
-    function collapseAll() {
-        container.querySelectorAll('.grid-card.expanded').forEach(other => {
-            other.classList.remove('expanded');
-        });
-        if (grid) grid.classList.remove('has-expanded');
-    }
-
-    container.querySelectorAll('.grid-card').forEach(gridCard => {
-        const summary = gridCard.querySelector('.grid-card-summary');
-        summary.addEventListener('click', () => {
-            const wasExpanded = gridCard.classList.contains('expanded');
-            collapseAll();
-            if (!wasExpanded) {
-                gridCard.classList.add('expanded');
-                if (grid) grid.classList.add('has-expanded');
-            }
-        });
-
-        const closeBtn = gridCard.querySelector('.grid-card-close');
-        closeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            collapseAll();
-        });
-    });
-}
-
-// Slide the glass droplet in the nav bar under the active section's link
-function moveNavDroplet(section) {
-    const droplet = document.querySelector('.nav-droplet');
-    const link = document.getElementById(section);
-    if (!droplet || !link) return;
-    droplet.style.width = `${link.offsetWidth}px`;
-    droplet.style.transform = `translateX(${link.offsetLeft}px)`;
-    droplet.classList.add('nav-droplet-ready');
-}
-
-// Mark a section as active in both the text nav and the mobile dot nav
-function setActiveNav(section) {
-    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
-        link.classList.toggle('nav-link-active', link.id === section);
-    });
-    document.querySelectorAll('.nav-dot').forEach(dot => {
-        dot.classList.toggle('active', dot.getAttribute('data-section') === section);
-    });
-    moveNavDroplet(section);
-
-    // Lets the background (glass.js) react, e.g. by moving its camera
+// Lets the background (background.js) react, e.g. by moving its camera
+function announceSection(section) {
     window.dispatchEvent(new CustomEvent('sectionchange', { detail: { section } }));
 }
 
@@ -528,7 +424,25 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
         titleElement.innerHTML = getCurrentDefaultTitle();
     }
 
-    setActiveNav(section);
+    // Update active navigation link
+    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
+        link.classList.remove('nav-link-active');
+    });
+    const activeLink = document.getElementById(section);
+    if (activeLink) {
+        activeLink.classList.add('nav-link-active');
+    }
+
+    // Update active dot for mobile navigation
+    document.querySelectorAll('.nav-dot').forEach(dot => {
+        dot.classList.remove('active');
+    });
+    const activeDot = document.querySelector(`.nav-dot[data-section="${section}"]`);
+    if (activeDot) {
+        activeDot.classList.add('active');
+    }
+
+    announceSection(section);
 
     // Handle journal section with list/detail view
     if (section === 'journal') {
@@ -536,17 +450,10 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
         return;
     }
 
-    const isGridStyle = (section === 'research' || section === 'projects');
-    const isAboutStyle = (section === 'about');
+    const isAboutStyle = (section === 'about' || section === 'research');
 
-    if (isGridStyle) {
-        // Render cards as an expandable grid
-        container.innerHTML = renderGrid(data);
-        initGridCards(container);
-    } else {
-        // Render all cards stacked vertically
-        container.innerHTML = data.cards.map(card => renderCard(card, isAboutStyle)).join('');
-    }
+    // Render all cards stacked vertically
+    container.innerHTML = data.cards.map(card => renderCard(card, isAboutStyle)).join('');
 
     // Wire up research tab widget if present
     if (section === 'about') {
@@ -750,8 +657,16 @@ async function initNavigation() {
                         titleElement.innerHTML = getCurrentDefaultTitle();
                     }
 
-                    setActiveNav('journal');
+                    // Update active navigation link
+                    document.querySelectorAll('.nav-link-typewriter').forEach(link => {
+                        link.classList.remove('nav-link-active');
+                    });
+                    const activeLink = document.getElementById('journal');
+                    if (activeLink) {
+                        activeLink.classList.add('nav-link-active');
+                    }
 
+                    announceSection('journal');
                     loadJournalDetail(journalSlug, false);
                 } else {
                     loadSection('journal', true, false);
@@ -767,13 +682,6 @@ async function initNavigation() {
             // No hash, load about section
             loadSection('about', true);
         }
-
-        // Arriving at #about etc. focuses the nav link with that id, which
-        // would show a keyboard focus ring nobody asked for
-        const focused = document.activeElement;
-        if (focused && focused.classList.contains('nav-link-typewriter')) {
-            focused.blur();
-        }
     }
 
     // Listen for hash changes (back/forward navigation)
@@ -783,11 +691,6 @@ async function initNavigation() {
 
     // Load initial section from hash
     loadFromHash();
-
-    // Link widths change once the web fonts arrive and on resize
-    const realignDroplet = () => moveNavDroplet(currentSection);
-    if (document.fonts) document.fonts.ready.then(realignDroplet);
-    window.addEventListener('resize', realignDroplet);
 }
 
 // Load on page ready

@@ -16,15 +16,7 @@
 		<meta http-equiv="Expires" content="0" />
 
 		<title>Hi! I'm Vikram</title>
-		<meta name="theme-color" content="#000000">
-		<!-- PDF.js Library -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-		<!-- KaTeX for LaTeX rendering -->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-		<!-- Define inlined JavaScript -->
-		<script type="text/javascript" src="navigation.js?v=24"></script>
-		<!-- WebGL liquid glass: three.js + cannon-es physics background and glass panes -->
+		<!-- Background: three.js + cannon-es physics -->
 		<script type="importmap">
 			{
 				"imports": {
@@ -34,12 +26,19 @@
 				}
 			}
 		</script>
-		<script type="module" src="glass.js?v=6"></script>
+		<script type="module" src="background.js?v=2"></script>
+		<!-- PDF.js Library -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+		<!-- KaTeX for LaTeX rendering -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+		<!-- Define inlined JavaScript -->
+		<script type="text/javascript" src="navigation.js?v=25"></script>
 		<link
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
             rel="stylesheet"
         />
-		<link rel="stylesheet" href="style.css?v=18">
+		<link rel="stylesheet" href="style.css?v=20">
 		<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 	</head>
 	<body id="main">
@@ -51,8 +50,7 @@
                         <text x="50" y="70" font-size="72" font-family="serif" text-anchor="middle" fill="none" stroke="#fff" stroke-width="1.5" class="telugu-char">&#x0C35;&#x0C3F;</text>
                     </svg>
                 </div>
-                <div id="mainListDiv" class="main_list" data-glass="clear">
-                    <span class="nav-droplet" data-glass="drop" aria-hidden="true"></span>
+                <div id="mainListDiv" class="main_list">
                     <ul class="navlinks">
                         <li><a href="#" id = "about" class = "nav-link-typewriter"><h2>about</h2></a></li>
 						<li><a href="#" id = "research" class = "nav-link-typewriter"><h2>research</h2></a></li>
@@ -61,7 +59,7 @@
 						<li><a href="#" id = "journal" class = "nav-link-typewriter"><h2>journal</h2></a></li>
                     </ul>
                 </div>
-                <div class="dot-navigation" data-glass="clear">
+                <div class="dot-navigation">
                     <span class="nav-dot" data-section="about"></span>
                     <span class="nav-dot" data-section="research"></span>
                     <span class="nav-dot" data-section="projects"></span>
@@ -73,11 +71,11 @@
 		<div class="typewriter">
 			<h1 class="title" id="title">Vikram R.</h1>
 		</div>
-		<div class="nav-arrow nav-arrow-left" id="nav-arrow-left" data-glass="clear">&#10094;</div>
-		<div class="nav-arrow nav-arrow-right" id="nav-arrow-right" data-glass="clear">&#10095;</div>
+		<div class="nav-arrow nav-arrow-left" id="nav-arrow-left">&#10094;</div>
+		<div class="nav-arrow nav-arrow-right" id="nav-arrow-right">&#10095;</div>
 		<div class="card-container-home"></div>
 		<div class="footer">
-			<div class="dock" data-glass="clear">
+			<div class="dock">
 				<a class="icon" id="git" href="https://github.com/vikramr2"><img src="assets/github.png" height="30" width="30"></a>
 				<a class="icon" id="linkedin" href="https://www.linkedin.com/in/vikram-ramavarapu-972433195/"><img src="assets/linkedin.png" height="30" width="30"></a>
 				<a class="icon" id="instagram" href="https://www.instagram.com/vikktoryos"><img src="assets/instagram.png" height="30" width="30"></a>
