@@ -342,7 +342,10 @@ function renderEntryList(section) {
         `;
     }).join('');
 
-    return `${renderInterestFilter(section)}<div class="entry-list">${listItems}</div>`;
+    // The interest filter bar is hidden for now: with only a few papers it isn't
+    // needed yet. To bring it back, swap in the commented-out line below.
+    // return `${renderInterestFilter(section)}<div class="entry-list">${listItems}</div>`;
+    return `<div class="entry-list">${listItems}</div>`;
 }
 
 // Find an entry by its slug (index field), falling back to numeric array index
@@ -424,15 +427,16 @@ function loadEntryList(section, updateHash = true) {
         });
     });
 
-    // Filter by interest; clicking the active interest again clears it
-    container.querySelectorAll('.interest-filter-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const interest = button.dataset.interest || null;
-            activeInterest[section] = activeInterest[section] === interest ? null : interest;
-            applyInterestFilter(section, container);
-        });
-    });
-    applyInterestFilter(section, container);
+    // Filter by interest; clicking the active interest again clears it.
+    // Hidden for now along with the filter bar (see renderEntryList).
+    // container.querySelectorAll('.interest-filter-button').forEach(button => {
+    //     button.addEventListener('click', () => {
+    //         const interest = button.dataset.interest || null;
+    //         activeInterest[section] = activeInterest[section] === interest ? null : interest;
+    //         applyInterestFilter(section, container);
+    //     });
+    // });
+    // applyInterestFilter(section, container);
 }
 
 // Load an entry's detail view
