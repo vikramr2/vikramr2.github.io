@@ -161,10 +161,14 @@ async function loadSectionContent(section) {
                 const body = buildCardBody(card, card.paragraphs);
 
                 // Corporate mode's version of the card, where corporateParagraphs
-                // replaces paragraphs by position, e.g. { "0": "<b>Hey Guys!</b>" }
+                // replaces paragraphs by position, e.g. { "0": "<b>Hey Guys!</b>" },
+                // and null removes one
                 let corporate = null;
                 if (card.corporateParagraphs && card.paragraphs) {
-                    const paragraphs = card.paragraphs.map((p, i) => card.corporateParagraphs[i] ?? p);
+                    const overrides = card.corporateParagraphs;
+                    const paragraphs = card.paragraphs
+                        .map((p, i) => (String(i) in overrides ? overrides[i] : p))
+                        .filter(p => p !== null);
                     corporate = { paragraphs, body: buildCardBody(card, paragraphs) };
                 }
 

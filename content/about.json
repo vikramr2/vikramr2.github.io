@@ -1,7 +1,7 @@
 {
   "cards": [
     {
-      "image": "assets/me.jpeg",
+      "image": "assets/me.jpeg?v=2",
       "imageAlt": "Vikram Ramavarapu",
       "corporateParagraphs": { "0": "<b>Hey Guys!</b>" },
       "paragraphs": [
@@ -16,12 +16,15 @@
     {
       "image": "",
       "imageAlt": "",
+      "corporateParagraphs": { "5": null, "6": null },
       "paragraphs": [
         "<b>Hobbies and Miscellaneous</b>",
         "I enjoy longboarding. I love animals: I ride and take care of horses and have three cats<em class=\"hide-in-corporate\"> (scroll to see them!)</em>. I'm passionate about languages (though I have varying proficiency in them): I speak English, Telugu, Japanese (~N4 level), and I learned Spanish in high school and college.",
         "",
         "<b>Please reach out!</b>",
-        "<a href=\"mailto:vikramr2@illinois.edu\">vikramr2 at illinois dot edu</a>"
+        "<a href=\"mailto:vikramr2@illinois.edu\">vikramr2 at illinois dot edu</a>",
+        "",
+        "<a href=https://www.youtube.com/watch?v=32HkC9LNPh4><b><u>Check out my YouTube channel to learn how to get into the Ivy League (unpatched method y'all) !!!</u></b></a>"
       ]
     },
     {
