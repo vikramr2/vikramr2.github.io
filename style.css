@@ -213,14 +213,9 @@ html, body {
     padding: 10px;
   }
 
-  .icon img {
-    width: 40px !important;
-    height: 40px !important;
-  }
-
-  #scholar img {
-    width: 45px !important;
-    height: 45px !important;
+  .icon .icon-svg {
+    width: 72px;
+    height: 72px;
   }
 
   /* Card container improvements */
@@ -434,7 +429,22 @@ h2 {
 }
 
 .icon {
+  display: inline-flex;
+  align-items: center;
   padding: 5px;
+  color: #fff;
+}
+
+/* Footer icons are inline SVGs filled with currentColor, so they stay
+   sharp at any size and follow the link color */
+.icon-svg {
+  display: block;
+  width: 60px;
+  height: 60px;
+}
+
+.icon:hover {
+  color: #E0F2F1;
 }
 
 .navlinks ul {
@@ -1051,4 +1061,50 @@ a {
 .info-hover:hover .info-hover-card {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+/* ------------------------------------------------------------------------
+   Experiment: every card styled like the research/journal list tiles
+   (dark translucent tint, light blur, light text). Delete this whole
+   block to go back to white cards.
+   ------------------------------------------------------------------------ */
+.card-container-home .card {
+  background: rgba(12, 10, 18, 0.5);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  border-radius: 5px;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.card-container-home .card .card-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #E0F2F1;
+  font-family: monospace;
+  font-size: 20px;
+}
+
+.card-container-home .card b,
+.card-container-home .card strong {
+  color: #fff;
+}
+
+.card-container-home .card a:not(.btn) {
+  color: #9CC4FF;
+}
+
+/* Code blocks get a light background inline in paragraphsToHTML */
+.card-container-home .card pre {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  color: #E0F2F1;
+}
+
+/* Research detail title and tag chips, which were styled for white cards */
+.card-container-home .entry-detail-card .entry-detail-title {
+  color: #E0F2F1;
+}
+
+.card-container-home .card .interest-chip {
+  background: color-mix(in srgb, var(--chip-color) 22%, transparent);
+  color: #F3F1F8;
 }
