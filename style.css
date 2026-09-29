@@ -793,8 +793,8 @@ a {
 
 .entry-thumbnail {
   flex-shrink: 0;
-  width: 104px;
-  height: 72px;
+  width: 208px;
+  height: 144px;
   padding: 4px;
   object-fit: contain;
   background: #fff;
