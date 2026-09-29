@@ -6,6 +6,12 @@
    page with About in a left sidebar, research on the right, and the CV
    underneath. The journal, the pets card and the section nav are hidden.
    ------------------------------------------------------------------------ */
+/* Content that only makes sense on the regular site, e.g. "(scroll to see
+   them!)" pointing at the pets card, which corporate mode hides */
+html.corporate-mode .hide-in-corporate {
+  display: none;
+}
+
 html.corporate-mode .main_list,
 html.corporate-mode .dot-navigation,
 html.corporate-mode .nav-arrow {

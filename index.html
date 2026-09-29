@@ -3,10 +3,10 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-		<meta name="description" content="Hey guys! My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign.">
+		<meta name="description" content="Whatsuppp, I'm Vikram Ramavarapu. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign.">
 		<meta name="keywords" content="personal, webpage, research, computer, science, bioinformatics">
 
-		<meta property="og:title" content="Hi! I'm Vikram">
+		<meta property="og:title" content="Vikram R. ~వి.~">
 		<meta property="og:site_name" content="Vikram Ramavarapu's Personal Webpage">
 		<meta property="og:url" content="https://vikramramavarapu.org">
 		<meta property="og:description" content="Hey guys! My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign.">
@@ -15,7 +15,8 @@
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
 
-		<title>Hi! I'm Vikram</title>
+		<!-- Tab title: data-standard for the regular site, data-corporate in corporate mode -->
+		<title data-standard="[ ~ విkram ~ ]" data-corporate="Vikram Ramavarapu">[ ~ విkram ~ ]</title>
 		<!-- Apply bright mode and corporate mode before anything is drawn, to avoid a flash.
 		     ?theme=bright|dark and ?layout=corporate|standard in the URL win; otherwise the saved choices are used. -->
 		<script>
@@ -34,7 +35,10 @@
 				if (layout !== 'corporate' && layout !== 'standard') {
 					try { corporate = localStorage.getItem('corporateMode') === 'on'; } catch (e) {}
 				}
-				if (corporate) document.documentElement.classList.add('corporate-mode');
+				if (corporate) {
+					document.documentElement.classList.add('corporate-mode');
+					document.title = document.querySelector('title').dataset.corporate;
+				}
 			})();
 		</script>
 		<!-- Background: three.js + cannon-es physics -->
@@ -47,11 +51,11 @@
 					"cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.min.js",
 
 					"./js/state.js": "./js/state.js?v=1",
-					"./js/content.js": "./js/content.js?v=1",
+					"./js/content.js": "./js/content.js?v=2",
 					"./js/render.js": "./js/render.js?v=1",
 					"./js/title.js": "./js/title.js?v=2",
 					"./js/router.js": "./js/router.js?v=2",
-					"./js/corporate.js": "./js/corporate.js?v=1",
+					"./js/corporate.js": "./js/corporate.js?v=3",
 					"./js/settings.js": "./js/settings.js?v=1"
 				}
 			}
@@ -75,7 +79,7 @@
 		<link rel="stylesheet" href="css/cards.css?v=1">
 		<link rel="stylesheet" href="css/content.css?v=1">
 		<link rel="stylesheet" href="css/themes.css?v=1">
-		<link rel="stylesheet" href="css/corporate.css?v=1">
+		<link rel="stylesheet" href="css/corporate.css?v=2">
 		<link rel="stylesheet" href="css/settings.css?v=1">
 		<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 	</head>

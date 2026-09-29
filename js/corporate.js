@@ -17,14 +17,14 @@ export function renderCorporateLayout(container) {
     const cv = state.contentData.experience && state.contentData.experience.cards.find(card => card.pdfUrl);
 
     const sidebar = about
-        .map((card, i) => (card.hideInCorporate || card.corporateSection) ? '' : renderCard({ ...card, vt: `about-card-${i}` }, true))
+        .map((card, i) => (card.hideInCorporate || card.corporateSection) ? '' : renderCard({ ...card, body: card.corporate ? card.corporate.body : card.body, vt: `about-card-${i}` }, true))
         .join('');
 
     // The heading replaces the card's own bold title line, e.g. "<b>News</b>"
     const cardSections = about
         .map((card, i) => {
             if (!card.corporateSection || card.hideInCorporate) return '';
-            let paragraphs = card.paragraphs || [];
+            let paragraphs = (card.corporate ? card.corporate.paragraphs : card.paragraphs) || [];
             if (typeof paragraphs[0] === 'string' && paragraphs[0].replace(/<[^>]+>/g, '').trim() === card.corporateSection) {
                 paragraphs = paragraphs.slice(1);
             }
@@ -101,6 +101,14 @@ function clearTransitionNames() {
     document.querySelectorAll('[data-vt]').forEach(el => { el.style.viewTransitionName = ''; });
 }
 
+// The browser tab's title for the current mode, from the data-standard and
+// data-corporate attributes on <title> in index.html
+function updateTabTitle() {
+    const title = document.querySelector('title');
+    if (!title) return;
+    document.title = state.corporateMode ? title.dataset.corporate : title.dataset.standard;
+}
+
 // Switch corporate mode on or off, animating between the layouts where the
 // browser supports view transitions (instantly otherwise)
 export function setCorporateMode(on) {
@@ -109,6 +117,7 @@ export function setCorporateMode(on) {
     const update = () => {
         state.corporateMode = on;
         document.documentElement.classList.toggle('corporate-mode', on);
+        updateTabTitle();
         state.instantCards = true;
         loadSection('about', true, true);
         state.instantCards = false;

@@ -127,6 +127,26 @@ export function renderPDFViewer(pdfUrl, downloadLabel = 'Download PDF') {
     `;
 }
 
+// A card's body HTML: the PDF viewer for a card with a PDF, or else its
+// paragraphs, with the research-interests tab widget in place of the first
+// empty paragraph when the card has research_short/research_long
+function buildCardBody(card, paragraphs) {
+    if (card.pdfUrl) {
+        return renderPDFViewer(card.pdfUrl);
+    }
+    if (!paragraphs) {
+        return '';
+    }
+    if (card.research_short && card.research_long) {
+        const tabWidget = buildResearchTabWidget(card.research_short, card.research_long);
+        const withWidget = paragraphs.map(p => (p === '' ? null : p));
+        const firstEmpty = withWidget.indexOf(null);
+        if (firstEmpty !== -1) withWidget[firstEmpty] = tabWidget;
+        return paragraphsToHTML(withWidget.filter(p => p !== null));
+    }
+    return paragraphsToHTML(paragraphs);
+}
+
 // Function to load JSON content for a section
 async function loadSectionContent(section) {
     try {
@@ -138,25 +158,14 @@ async function loadSectionContent(section) {
         // Transform the JSON data into the format expected by the existing code
         return {
             cards: data.cards.map(card => {
-                let body = '';
+                const body = buildCardBody(card, card.paragraphs);
 
-                // If there's a PDF URL, render PDF viewer
-                if (card.pdfUrl) {
-                    body = renderPDFViewer(card.pdfUrl);
-                }
-                // If there are paragraphs, convert them to HTML
-                else if (card.paragraphs) {
-                    // Inject research tab widget if this card has research_short/research_long
-                    if (card.research_short && card.research_long) {
-                        const tabWidget = buildResearchTabWidget(card.research_short, card.research_long);
-                        // Replace the first empty string after "Research Interests" with the widget
-                        const paragraphs = card.paragraphs.map(p => (p === '' ? null : p));
-                        const firstEmpty = paragraphs.indexOf(null);
-                        if (firstEmpty !== -1) paragraphs[firstEmpty] = tabWidget;
-                        body = paragraphsToHTML(paragraphs.filter(p => p !== null));
-                    } else {
-                        body = paragraphsToHTML(card.paragraphs);
-                    }
+                // Corporate mode's version of the card, where corporateParagraphs
+                // replaces paragraphs by position, e.g. { "0": "<b>Hey Guys!</b>" }
+                let corporate = null;
+                if (card.corporateParagraphs && card.paragraphs) {
+                    const paragraphs = card.paragraphs.map((p, i) => card.corporateParagraphs[i] ?? p);
+                    corporate = { paragraphs, body: buildCardBody(card, paragraphs) };
                 }
 
                 return {
@@ -172,6 +181,7 @@ async function loadSectionContent(section) {
                     corporateSection: card.corporateSection || null,
                     interests: card.interests || [],
                     body: body,
+                    corporate: corporate,
                     paragraphs: card.paragraphs // Preserve original paragraphs for metadata extraction
                 };
             }),

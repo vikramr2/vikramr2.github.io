@@ -46,6 +46,7 @@ Deploying means pushing to `main`.
   - The right column (`.corporate-main`) scrolls through titled sections: cards marked `corporateSection` (News, with the card's own bold title line dropped), the research list (`.corporate-research`), and a CV card with the PDF viewer (on phones, only its download button). `loadEntryList` and `loadEntryDetail` take the container to render into.
   - Clicking a paper opens it full-page, replacing the whole layout; its back button reads "Back to Home" and re-renders the layout at the saved scroll positions (`saveCorporateScroll`/`restoreCorporateScroll`).
   - The journal, section nav, dots and arrows are hidden, and arrow keys scroll instead of navigating.
+  - The browser tab title switches too: `<title>` in `index.html` holds both versions in `data-standard` and `data-corporate`, applied by the early inline script on load and by `updateTabTitle` (`corporate.js`) when switching.
   - Switching uses the View Transitions API (`setCorporateMode`): elements with a `data-vt` attribute get a `view-transition-name` while visible, so matching cards glide between layouts and the rest fade out or in. The page root isn't captured (`:root { view-transition-name: none }`), so the WebGL background keeps animating.
 - Routing is hash-based (`#section` or `#section/<slug>`) and uses `history.replaceState` plus a `hashchange` listener. Arrow keys, swipes, and the side arrows cycle through `sectionOrder`.
 
@@ -59,7 +60,7 @@ Deploying means pushing to `main`.
 - The card-level image fields are `image` (a string, or an array for a gallery), `imageAlt`, `imageWidth`/`imageHeight`, and `imageScale` (a percentage, which takes precedence).
 - `index` is a card's URL slug in list sections.
 - `interests` on a card is a list of tag names. A section's JSON can define them in a top-level `interests` table (name to `emoji` and `color`, as in `research.json`). Tags then show as colored chips on the list tiles and detail cards, and a filter bar above the list lets visitors show one interest at a time (`renderInterestChips`, `renderInterestFilter`, `applyInterestFilter` in `render.js`). The filter bar is currently switched off: its rendering in `renderEntryList` and its click handling in `loadEntryList` are commented out, to be restored once there are enough papers to need it. A tag missing from the table still shows, in gray, with no emoji.
-- In `about.json`, `hideInCorporate: true` hides a card in corporate mode, and `corporateSection: "<Title>"` moves it into corporate mode's right column under that heading.
+- In `about.json`, `hideInCorporate: true` hides a card in corporate mode, and `corporateSection: "<Title>"` moves it into corporate mode's right column under that heading. `corporateParagraphs` replaces paragraphs by position in corporate mode only, e.g. `{ "0": "<b>Hey Guys!</b>" }` (built as `card.corporate` in `loadSectionContent`). For a fragment inside a paragraph, wrap it in `class="hide-in-corporate"` instead (hidden by `css/corporate.css`), as with the pets card's "(scroll to see them!)" note.
 
 ## Cache busting
 
