@@ -2,7 +2,7 @@
 // routing, and navigating by nav links, dots, arrow keys, the side arrows and
 // swipes. The background (background.js) follows along via 'sectionchange'.
 
-import { state } from './state.js';
+import { state, reducedMotion } from './state.js';
 import { initResearchTabs } from './content.js';
 import { LIST_SECTIONS, renderCard, renderEntryList, renderEntryDetail, findEntryIndex } from './render.js';
 import { getCurrentDefaultTitle, showNavigationHint } from './title.js';
@@ -85,11 +85,31 @@ export function loadSection(section, skipAnimation = false, updateHash = true) {
 
     // Only trigger fade-in animation if not initial load (CSS handles initial load)
     if (!skipAnimation) {
-        container.style.opacity = '0';
-        setTimeout(() => {
-            container.style.opacity = '1';
-        }, 50);
+        fadeInContent(container);
     }
+}
+
+// Fading the content column. This uses the Web Animations API because the
+// column's CSS entrance animation (fill-mode forwards) pins its opacity, so
+// opacity styles and transitions have no effect on it; script animations
+// take precedence over CSS ones.
+function fadeInContent(container) {
+    if (reducedMotion.matches || !container.animate) return;
+    container.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'ease-out' });
+}
+
+// Fade the column out, run update() to swap its content, then fade it back in
+function fadeSwapContent(container, update) {
+    if (reducedMotion.matches || !container.animate) {
+        update();
+        return;
+    }
+    const fadeOut = container.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: 'ease-in', fill: 'forwards' });
+    fadeOut.finished.then(() => {
+        update();
+        fadeOut.cancel();
+        fadeInContent(container);
+    });
 }
 
 // Section order for arrow key navigation
@@ -147,18 +167,17 @@ export function loadEntryList(section, updateHash = true, container = document.q
     // applyInterestFilter(section, container);
 }
 
-// Load an entry's detail view into container (by default the main column)
-export function loadEntryDetail(section, slug, updateHash = true, container = document.querySelector('.card-container-home')) {
+// Load an entry's detail view into container (by default the main column).
+// With animate, the old content fades out and the entry fades in; startup
+// and hash routing pass false, since the page's entrance animation covers it.
+export function loadEntryDetail(section, slug, updateHash = true, container = document.querySelector('.card-container-home'), animate = true) {
 
     // Update the URL hash
     if (updateHash) {
         window.history.replaceState(null, null, `#${section}/${slug}`);
     }
 
-    // Fade out
-    container.style.opacity = '0';
-
-    setTimeout(() => {
+    const showEntry = () => {
         container.innerHTML = renderEntryDetail(section, slug);
         container.scrollTop = 0;
 
@@ -166,8 +185,7 @@ export function loadEntryDetail(section, slug, updateHash = true, container = do
         const backButton = container.querySelector('.entry-back-button');
         if (backButton) {
             backButton.addEventListener('click', () => {
-                container.style.opacity = '0';
-                setTimeout(() => {
+                fadeSwapContent(container, () => {
                     if (state.corporateMode) {
                         // Back to the corporate layout, scrolled to where it was
                         state.instantCards = true;
@@ -177,14 +195,16 @@ export function loadEntryDetail(section, slug, updateHash = true, container = do
                     } else {
                         loadEntryList(section, true, container);
                     }
-                    container.style.opacity = '1';
-                }, 150);
+                });
             });
         }
+    };
 
-        // Fade in
-        container.style.opacity = '1';
-    }, 150);
+    if (animate) {
+        fadeSwapContent(container, showEntry);
+    } else {
+        showEntry();
+    }
 }
 
 // Function to replay initial animations
@@ -349,7 +369,7 @@ export function initNavigation() {
             const [section, slug] = hash.split('/');
             const paper = section === 'research' && slug !== undefined && findEntryIndex('research', slug) !== -1;
             loadSection('about', true, !paper);
-            if (paper) loadEntryDetail('research', slug, false);
+            if (paper) loadEntryDetail('research', slug, false, undefined, false);
             return;
         }
 
@@ -360,7 +380,7 @@ export function initNavigation() {
             if (slug !== undefined && LIST_SECTIONS[section]) {
                 loadSection(section, true, false);
                 if (findEntryIndex(section, slug) !== -1) {
-                    loadEntryDetail(section, slug, false);
+                    loadEntryDetail(section, slug, false, undefined, false);
                 }
             } else if (sectionOrder.includes(hash)) {
                 // Load the section from the hash
