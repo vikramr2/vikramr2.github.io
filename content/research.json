@@ -3,7 +3,6 @@
     "Neuromorphic Computing": { "emoji": "🧠", "color": "#A78BFA" },
     "LLM Agents": { "emoji": "🤖", "color": "#60A5FA" },
     "Computational Social Science": { "emoji": "👥", "color": "#FBBF24" },
-    "Network Science": { "emoji": "🕸️", "color": "#2DD4BF" },
     "Text-Attributed Graphs": { "emoji": "📝", "color": "#FB923C" },
     "Scalable Graph Algorithms": { "emoji": "⚡", "color": "#F472B6" },
     "Computational Biology": { "emoji": "🧬", "color": "#4ADE80" }
@@ -14,7 +13,7 @@
       "image": "assets/neuromorphic_figure.png",
       "imageAlt": "KNIGHT",
       "imageScale": 30,
-      "interests": ["Neuromorphic Computing", "LLM Agents", "Text-Attributed Graphs", "Network Science"],
+      "interests": ["Neuromorphic Computing", "LLM Agents", "Text-Attributed Graphs"],
       "paragraphs": [
         "<b>KNIGHT: Agentic Systems for Neuromorphic Computing</b>",
         "",
@@ -31,7 +30,7 @@
       "image": "assets/reccs.jpeg?v=2",
       "imageAlt": "RECCS Logo",
       "imageScale": 30,
-      "interests": ["Scalable Graph Algorithms", "Network Science"],
+      "interests": ["Scalable Graph Algorithms"],
       "paragraphs": [
         "<b>RECCS+/++: Large Scale Community-Aware Network Generation</b>",
         "",
@@ -46,7 +45,7 @@
       "index": "citation-abm",
       "image": "assets/abm_icon.jpg",
       "imageAlt": "Agent-Based Modeling",
-      "interests": ["Computational Social Science", "Network Science", "Scalable Graph Algorithms"],
+      "interests": ["Computational Social Science", "Scalable Graph Algorithms"],
       "imageScale": 30,
       "paragraphs": [
         "<b>An Agent-based Model of Citation Behavior</b>",
@@ -79,7 +78,7 @@
       "index": "multilingual-communities",
       "image": "assets/multiling.png",
       "imageAlt": "Multilingual Citation Network",
-      "interests": ["Text-Attributed Graphs", "Computational Social Science", "Network Science"],
+      "interests": ["Text-Attributed Graphs", "Computational Social Science"],
       "imageScale": 30,
       "paragraphs": [
         "<b>Exploration of Multi-Lingual Community Structure in Scholarly Articles</b>",
@@ -95,7 +94,7 @@
       "index": "cm-plus-plus",
       "image": "assets/cm_pp_overview.png?v=2",
       "imageAlt": "CM++ Pipeline",
-      "interests": ["Scalable Graph Algorithms", "Network Science"],
+      "interests": ["Scalable Graph Algorithms"],
       "imageScale": 30,
       "paragraphs": [
         "<b>CM++ - A Pipeline for Well-Connected Community Detection</b>",
