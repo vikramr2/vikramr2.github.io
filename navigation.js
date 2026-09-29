@@ -165,6 +165,7 @@ async function loadSectionContent(section) {
                     imageHeight: card.imageHeight,
                     imageScale: card.imageScale,
                     header: card.header,
+                    pdfUrl: card.pdfUrl,
                     interests: card.interests || [],
                     body: body,
                     paragraphs: card.paragraphs // Preserve original paragraphs for metadata extraction
@@ -525,6 +526,21 @@ function renderCard(card, isAboutStyle = false) {
     }
 }
 
+// A card with a download button for the CV, added to the bottom of About.
+// Only shown on phones (style.css), where it replaces the CV page.
+function renderCvDownloadCard() {
+    const cv = contentData.experience && contentData.experience.cards.find(card => card.pdfUrl);
+    if (!cv) return '';
+    return `
+        <div class="card cv-download-card">
+            <div class="card-body">
+                <h5 class="cv-download-title">${cv.header || 'CV'}</h5>
+                <a href="${cv.pdfUrl}" download class="btn btn-primary">Download CV</a>
+            </div>
+        </div>
+    `;
+}
+
 // Lets the background (background.js) react, e.g. by moving its camera
 function announceSection(section) {
     window.dispatchEvent(new CustomEvent('sectionchange', { detail: { section } }));
@@ -532,6 +548,12 @@ function announceSection(section) {
 
 // Load content for a section
 function loadSection(section, skipAnimation = false, updateHash = true) {
+    // On phones the CV lives at the bottom of About
+    if (section === 'experience' && phoneLayout.matches) {
+        section = 'about';
+        updateHash = true;
+    }
+
     currentSection = section;
     currentCardIndex = 0;
 
@@ -576,7 +598,8 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
         loadEntryList(section, false);
     } else {
         // Render all cards stacked vertically
-        container.innerHTML = data.cards.map(card => renderCard(card, section === 'about')).join('');
+        container.innerHTML = data.cards.map(card => renderCard(card, section === 'about')).join('')
+            + (section === 'about' ? renderCvDownloadCard() : '');
     }
 
     // Wire up research tab widget if present
@@ -598,16 +621,26 @@ function loadSection(section, skipAnimation = false, updateHash = true) {
 // const sectionOrder = ['about', 'research', 'projects', 'experience', 'journal'];
 const sectionOrder = ['about', 'research', 'experience', 'journal'];
 
+// Phones: the same test as the phone-only blocks in style.css
+const phoneLayout = window.matchMedia('only screen and (max-device-width: 768px)');
+
+// On phones the CV page is folded into About (see renderCvDownloadCard), so
+// swiping and the arrows skip it
+function navigableSections() {
+    return phoneLayout.matches ? sectionOrder.filter(s => s !== 'experience') : sectionOrder;
+}
+
 // Navigate to next/previous section
 function navigateSection(direction) {
-    const currentIndex = sectionOrder.indexOf(currentSection);
+    const order = navigableSections();
+    const currentIndex = order.indexOf(currentSection);
     let newIndex = currentIndex + direction;
 
     // Wrap around
-    if (newIndex < 0) newIndex = sectionOrder.length - 1;
-    if (newIndex >= sectionOrder.length) newIndex = 0;
+    if (newIndex < 0) newIndex = order.length - 1;
+    if (newIndex >= order.length) newIndex = 0;
 
-    loadSection(sectionOrder[newIndex]);
+    loadSection(order[newIndex]);
 }
 
 // Function to replay initial animations
