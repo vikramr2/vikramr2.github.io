@@ -1155,7 +1155,9 @@ html.corporate-mode .nav-arrow {
 
 /* While the layout is shown; an open paper scrolls like the regular site */
 html.corporate-mode .card-container-home:has(> .corporate-layout) {
-  height: calc(100vh - 180px);
+  /* Ends a little above the footer icons. The title above takes about 10vh,
+     so the height scales with the window rather than using a fixed offset. */
+  height: calc(90vh - 104px);
   overflow: hidden;
 }
 
