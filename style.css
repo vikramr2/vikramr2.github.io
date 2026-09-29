@@ -263,6 +263,11 @@ html, body {
     font-size: 12px;
   }
 
+  /* Smaller detail title; more specific than the desktop rule further down */
+  .card.entry-detail-card .entry-detail-title {
+    font-size: 19px;
+  }
+
   /* Thumbnail above the title, so titles keep the full width. More specific
      than the desktop rules further down, which would otherwise win. */
   .entry-list .entry-list-item.has-thumbnail {
@@ -830,6 +835,39 @@ a {
 .card .interest-chip {
   background: color-mix(in srgb, var(--chip-color) 20%, white);
   color: #2b2b2b;
+}
+
+/* Research detail card: centered title and tags, a large image, then the
+   body. Sets its own color and weight over the global h2 rule, which is
+   white for the nav. */
+.entry-detail-card .entry-detail-title {
+  margin: 6px 0 12px;
+  text-align: center;
+  color: #1a1a1a;
+  font-family: monospace;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.35;
+}
+
+.entry-detail-card .entry-interests {
+  justify-content: center;
+  margin: 0 0 22px;
+}
+
+.entry-detail-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 0 24px;
+}
+
+.entry-detail-images img {
+  max-width: 100%;
+  max-height: 460px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 /* Filter bar above the list, aligned with it */

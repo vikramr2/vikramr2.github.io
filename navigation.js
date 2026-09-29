@@ -366,12 +366,42 @@ function renderEntryDetail(section, slug) {
     if (!data || !data.cards || arrIndex === -1) return '';
 
     const card = data.cards[arrIndex];
-    const withChips = { ...card, body: renderInterestChips(section, card) + card.body };
+    const cardHTML = section === 'research'
+        ? renderStackedDetailCard(section, card)
+        : renderCard({ ...card, body: renderInterestChips(section, card) + card.body });
 
     return `
         <div class="entry-detail">
             <button class="entry-back-button">${LIST_SECTIONS[section].backLabel}</button>
-            ${renderCard(withChips, section === 'research')}
+            ${cardHTML}
+        </div>
+    `;
+}
+
+// Research detail: centered title with its tags under it, a large image,
+// then the body
+function renderStackedDetailCard(section, card) {
+    // Without a header, the first paragraph is the title, which is shown at
+    // the top instead; drop it and any blank lines that follow it
+    let paragraphs = card.paragraphs || [];
+    if (!card.header) paragraphs = paragraphs.slice(1);
+    while (paragraphs.length && paragraphs[0] === '') paragraphs = paragraphs.slice(1);
+
+    const images = (Array.isArray(card.image) ? card.image : [card.image]).filter(Boolean);
+    const alts = Array.isArray(card.imageAlt) ? card.imageAlt : [card.imageAlt];
+    const imageHTML = images.length === 0 ? '' : `
+        <div class="entry-detail-images">
+            ${images.map((src, i) => `<img src="${src}" alt="${alts[i] || alts[0] || ''}">`).join('')}
+        </div>`;
+
+    return `
+        <div class="card entry-detail-card">
+            <div class="card-body">
+                <h2 class="entry-detail-title">${entryTitle(card)}</h2>
+                ${renderInterestChips(section, card)}
+                ${imageHTML}
+                ${paragraphsToHTML(paragraphs)}
+            </div>
         </div>
     `;
 }
