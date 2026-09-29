@@ -36,6 +36,7 @@ Deploying means pushing to `main`.
 - `$...$` and `$$...$$` are rendered with KaTeX.
 - The card-level image fields are `image` (a string, or an array for a gallery), `imageAlt`, `imageWidth`/`imageHeight`, and `imageScale` (a percentage, which takes precedence).
 - `index` is a card's URL slug in list sections.
+- `interests` on a card is a list of tag names. A section's JSON can define them in a top-level `interests` table (name to `emoji` and `color`, as in `research.json`). Tags then show as colored chips on the list tiles and detail cards, and a filter bar above the list lets visitors show one interest at a time (`renderInterestChips`, `renderInterestFilter`, `applyInterestFilter`). A tag missing from the table still shows, in gray, with no emoji.
 
 ## Cache busting
 

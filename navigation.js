@@ -165,10 +165,13 @@ async function loadSectionContent(section) {
                     imageHeight: card.imageHeight,
                     imageScale: card.imageScale,
                     header: card.header,
+                    interests: card.interests || [],
                     body: body,
                     paragraphs: card.paragraphs // Preserve original paragraphs for metadata extraction
                 };
-            })
+            }),
+            // Emoji and color for each interest tag, e.g. { "Network Science": { "emoji": "🕸️", "color": "#2DD4BF" } }
+            interests: data.interests || {}
         };
     } catch (error) {
         console.error(`Error loading content for ${section}:`, error);
@@ -266,6 +269,55 @@ function entryTitle(card) {
     return typeof first === 'string' ? first.replace(/<[^>]+>/g, '') : '';
 }
 
+// Interest tags: a colored chip per tag, styled from the section's interests table
+function renderInterestChips(section, card) {
+    if (!card.interests || card.interests.length === 0) return '';
+    const table = contentData[section].interests || {};
+    const chips = card.interests.map(name => {
+        const style = table[name] || {};
+        return `<span class="interest-chip" style="--chip-color: ${style.color || '#9e9e9e'}">${style.emoji ? `${style.emoji} ` : ''}${name}</span>`;
+    }).join('');
+    return `<div class="entry-interests">${chips}</div>`;
+}
+
+// The interest a section's list is filtered to (none means show everything)
+const activeInterest = {};
+
+// Filter bar above a list: "All" plus every interest that at least one entry uses
+function renderInterestFilter(section) {
+    const data = contentData[section];
+    const table = data.interests || {};
+    const names = Object.keys(table).filter(name => data.cards.some(card => card.interests.includes(name)));
+    if (names.length === 0) return '';
+
+    const active = activeInterest[section] || null;
+    const button = (name, label, color) => `
+        <button class="interest-filter-button" data-interest="${name || ''}" aria-pressed="${active === name}"
+            ${color ? `style="--chip-color: ${color}"` : ''}>${label}</button>`;
+
+    return `
+        <div class="interest-filter" role="group" aria-label="Filter by interest">
+            ${button(null, 'All', '')}
+            ${names.map(name => {
+                const count = data.cards.filter(card => card.interests.includes(name)).length;
+                return button(name, `${table[name].emoji ? `${table[name].emoji} ` : ''}${name} <span class="interest-count">${count}</span>`, table[name].color);
+            }).join('')}
+        </div>
+    `;
+}
+
+// Show only the entries tagged with the active interest
+function applyInterestFilter(section, container) {
+    const active = activeInterest[section] || null;
+    container.querySelectorAll('.interest-filter-button').forEach(button => {
+        button.setAttribute('aria-pressed', String((button.dataset.interest || null) === active));
+    });
+    container.querySelectorAll('.entry-list-item').forEach(item => {
+        const interests = JSON.parse(item.dataset.interests || '[]');
+        item.hidden = active !== null && !interests.includes(active);
+    });
+}
+
 // List view renderer
 function renderEntryList(section) {
     const data = contentData[section];
@@ -278,17 +330,19 @@ function renderEntryList(section) {
         const thumbnail = Array.isArray(card.image) ? card.image[0] : card.image;
 
         return `
-            <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}">
+            <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}"
+                data-interests='${JSON.stringify(card.interests).replace(/'/g, '&#39;')}'>
                 ${thumbnail ? `<img class="entry-thumbnail" src="${thumbnail}" alt="">` : ''}
                 <div class="entry-text">
                     <h3>${entryTitle(card)}</h3>
                     ${meta.map(line => `<div class="entry-meta">${line}</div>`).join('')}
+                    ${renderInterestChips(section, card)}
                 </div>
             </div>
         `;
     }).join('');
 
-    return `<div class="entry-list">${listItems}</div>`;
+    return `${renderInterestFilter(section)}<div class="entry-list">${listItems}</div>`;
 }
 
 // Find an entry by its slug (index field), falling back to numeric array index
@@ -311,10 +365,13 @@ function renderEntryDetail(section, slug) {
     const arrIndex = findEntryIndex(section, slug);
     if (!data || !data.cards || arrIndex === -1) return '';
 
+    const card = data.cards[arrIndex];
+    const withChips = { ...card, body: renderInterestChips(section, card) + card.body };
+
     return `
         <div class="entry-detail">
             <button class="entry-back-button">${LIST_SECTIONS[section].backLabel}</button>
-            ${renderCard(data.cards[arrIndex], section === 'research')}
+            ${renderCard(withChips, section === 'research')}
         </div>
     `;
 }
@@ -336,6 +393,16 @@ function loadEntryList(section, updateHash = true) {
             loadEntryDetail(section, slug);
         });
     });
+
+    // Filter by interest; clicking the active interest again clears it
+    container.querySelectorAll('.interest-filter-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const interest = button.dataset.interest || null;
+            activeInterest[section] = activeInterest[section] === interest ? null : interest;
+            applyInterestFilter(section, container);
+        });
+    });
+    applyInterestFilter(section, container);
 }
 
 // Load an entry's detail view
