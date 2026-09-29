@@ -9,7 +9,7 @@ const sectionTitles = {
     'research': 'My Research',
     'projects': 'My showcase!',
     'experience': 'Work experience',
-    'journal': 'Random thoughts n stuff'
+    'journal': '#ViksJournal'
 };
 
 // Mobile-specific shorter titles
@@ -18,7 +18,7 @@ const sectionTitlesMobile = {
     'research': 'My Research',
     'projects': 'My showcase!',
     'experience': 'Work experience',
-    'journal': 'Random thoughts'
+    'journal': '#ViksJournal'
 };
 
 // Check if mobile device
