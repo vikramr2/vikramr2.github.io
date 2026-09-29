@@ -1153,7 +1153,8 @@ html.corporate-mode .nav-arrow {
   display: none !important;
 }
 
-html.corporate-mode .card-container-home {
+/* While the layout is shown; an open paper scrolls like the regular site */
+html.corporate-mode .card-container-home:has(> .corporate-layout) {
   height: calc(100vh - 180px);
   overflow: hidden;
 }
@@ -1236,7 +1237,7 @@ html.corporate-mode .card-container-home::after {
 
 @media only screen and (max-device-width: 768px) {
   /* Phones: everything in one scrolling column */
-  html.corporate-mode .card-container-home {
+  html.corporate-mode .card-container-home:has(> .corporate-layout) {
     height: auto;
     overflow-y: auto;
   }

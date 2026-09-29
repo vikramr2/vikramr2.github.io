@@ -385,7 +385,7 @@ function renderEntryDetail(section, slug) {
 
     return `
         <div class="entry-detail">
-            <button class="entry-back-button">${LIST_SECTIONS[section].backLabel}</button>
+            <button class="entry-back-button">${corporateMode ? 'Back to Home' : LIST_SECTIONS[section].backLabel}</button>
             ${cardHTML}
         </div>
     `;
@@ -428,11 +428,17 @@ function loadEntryList(section, updateHash = true, container = document.querySel
         window.history.replaceState(null, null, `#${section}`);
     }
 
-    // Add click handlers to list items
+    // Add click handlers to list items. In corporate mode the paper opens
+    // full-page, replacing the whole layout, as it does on the regular site.
     container.querySelectorAll('.entry-list-item').forEach(item => {
         item.addEventListener('click', () => {
             const slug = item.getAttribute('data-index');
-            loadEntryDetail(section, slug, true, container);
+            if (corporateMode) {
+                saveCorporateScroll();
+                loadEntryDetail(section, slug, true);
+            } else {
+                loadEntryDetail(section, slug, true, container);
+            }
         });
     });
 
@@ -462,7 +468,6 @@ function loadEntryDetail(section, slug, updateHash = true, container = document.
     setTimeout(() => {
         container.innerHTML = renderEntryDetail(section, slug);
         container.scrollTop = 0;
-        revealInCorporateColumn(container);
 
         // Add click handler to back button
         const backButton = container.querySelector('.entry-back-button');
@@ -470,8 +475,15 @@ function loadEntryDetail(section, slug, updateHash = true, container = document.
             backButton.addEventListener('click', () => {
                 container.style.opacity = '0';
                 setTimeout(() => {
-                    loadEntryList(section, true, container);
-                    revealInCorporateColumn(container);
+                    if (corporateMode) {
+                        // Back to the corporate layout, scrolled to where it was
+                        instantCards = true;
+                        loadSection('about', true, true);
+                        instantCards = false;
+                        restoreCorporateScroll();
+                    } else {
+                        loadEntryList(section, true, container);
+                    }
                     container.style.opacity = '1';
                 }, 150);
             });
@@ -589,13 +601,26 @@ function corporateSection(title, content) {
     `;
 }
 
-// When a list or paper is shown inside corporate mode's right column, scroll
-// the column so its section starts at the top
-function revealInCorporateColumn(container) {
-    const column = container.closest('.corporate-main');
-    const section = container.closest('.corporate-section');
-    if (!column || !section) return;
-    column.scrollTop += section.getBoundingClientRect().top - column.getBoundingClientRect().top;
+// Where corporate mode's page, sidebar and right column were scrolled to when
+// a paper was opened, so "Back to Home" returns to the same spot
+let corporateScroll = null;
+
+function saveCorporateScroll() {
+    const top = selector => { const el = document.querySelector(selector); return el ? el.scrollTop : 0; };
+    corporateScroll = {
+        page: top('.card-container-home'),
+        sidebar: top('.corporate-sidebar'),
+        main: top('.corporate-main')
+    };
+}
+
+function restoreCorporateScroll() {
+    if (!corporateScroll) return;
+    const set = (selector, value) => { const el = document.querySelector(selector); if (el) el.scrollTop = value; };
+    set('.card-container-home', corporateScroll.page);
+    set('.corporate-sidebar', corporateScroll.sidebar);
+    set('.corporate-main', corporateScroll.main);
+    corporateScroll = null;
 }
 
 // View transitions: give each visible [data-vt] element its name, so cards in
@@ -905,12 +930,13 @@ async function initNavigation() {
     function loadFromHash() {
         const hash = window.location.hash.substring(1); // Remove the '#'
 
-        // Corporate mode is one page; only an open paper (#research/<slug>) is kept
+        // Corporate mode is one page; only an open paper (#research/<slug>),
+        // shown full-page, is kept
         if (corporateMode) {
             const [section, slug] = hash.split('/');
             const paper = section === 'research' && slug !== undefined && findEntryIndex('research', slug) !== -1;
             loadSection('about', true, !paper);
-            if (paper) loadEntryDetail('research', slug, false, document.querySelector('.corporate-research'));
+            if (paper) loadEntryDetail('research', slug, false);
             return;
         }
 
