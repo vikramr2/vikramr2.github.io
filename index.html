@@ -16,11 +16,17 @@
 		<meta http-equiv="Expires" content="0" />
 
 		<title>Hi! I'm Vikram</title>
-		<!-- Apply the saved bright mode before anything is drawn, to avoid a flash of dark cards -->
+		<!-- Apply bright mode before anything is drawn, to avoid a flash of dark cards.
+		     ?theme=bright or ?theme=dark in the URL wins; otherwise the saved choice is used. -->
 		<script>
-			try {
-				if (localStorage.getItem('brightMode') === 'on') document.documentElement.classList.add('bright-mode');
-			} catch (e) {}
+			(function () {
+				var theme = new URLSearchParams(location.search).get('theme');
+				var bright = theme === 'bright';
+				if (theme !== 'bright' && theme !== 'dark') {
+					try { bright = localStorage.getItem('brightMode') === 'on'; } catch (e) {}
+				}
+				if (bright) document.documentElement.classList.add('bright-mode');
+			})();
 		</script>
 		<!-- Background: three.js + cannon-es physics -->
 		<script type="importmap">
@@ -39,7 +45,7 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 		<!-- Define inlined JavaScript -->
-		<script type="text/javascript" src="navigation.js?v=33"></script>
+		<script type="text/javascript" src="navigation.js?v=34"></script>
 		<link
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
             rel="stylesheet"

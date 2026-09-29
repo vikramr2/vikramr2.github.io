@@ -809,6 +809,16 @@ function initSettings() {
     const root = document.documentElement;
     brightSwitch.setAttribute('aria-checked', String(root.classList.contains('bright-mode')));
 
+    // Keep ?theme=bright in the URL while bright mode is on, so a reload or a
+    // shared link opens in the same mode. Dark is the default, so no parameter.
+    function syncThemeParam(on) {
+        const url = new URL(location.href);
+        if (on) url.searchParams.set('theme', 'bright');
+        else url.searchParams.delete('theme');
+        if (url.href !== location.href) history.replaceState(history.state, '', url);
+    }
+    if (root.classList.contains('bright-mode')) syncThemeParam(true);
+
     function setOpen(open) {
         panel.hidden = !open;
         button.setAttribute('aria-expanded', String(open));
@@ -823,6 +833,7 @@ function initSettings() {
         const on = !root.classList.contains('bright-mode');
         root.classList.toggle('bright-mode', on);
         brightSwitch.setAttribute('aria-checked', String(on));
+        syncThemeParam(on);
         try {
             localStorage.setItem('brightMode', on ? 'on' : 'off');
         } catch (e) {}
