@@ -38,28 +38,45 @@
 			})();
 		</script>
 		<!-- Background: three.js + cannon-es physics -->
+		<!-- Import map: CDN libraries, and cache-busting versions for the site's modules in js/ (bump ?v=N on a module you change) -->
 		<script type="importmap">
 			{
 				"imports": {
 					"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
 					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
-					"cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.min.js"
+					"cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.min.js",
+
+					"./js/state.js": "./js/state.js?v=1",
+					"./js/content.js": "./js/content.js?v=1",
+					"./js/render.js": "./js/render.js?v=1",
+					"./js/title.js": "./js/title.js?v=1",
+					"./js/router.js": "./js/router.js?v=1",
+					"./js/corporate.js": "./js/corporate.js?v=1",
+					"./js/settings.js": "./js/settings.js?v=1"
 				}
 			}
 		</script>
-		<script type="module" src="background.js?v=2"></script>
+		<!-- The site's code (js/main.js imports the rest) and the animated background -->
+		<script type="module" src="js/main.js?v=1"></script>
+		<script type="module" src="js/background.js?v=1"></script>
 		<!-- PDF.js Library -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 		<!-- KaTeX for LaTeX rendering -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 		<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 		<!-- Define inlined JavaScript -->
-		<script type="text/javascript" src="navigation.js?v=41"></script>
 		<link
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css"
             rel="stylesheet"
         />
-		<link rel="stylesheet" href="style.css?v=44">
+		<!-- Site styles, in cascade order (later files win ties); bump ?v=N on a file you change -->
+		<link rel="stylesheet" href="css/mobile.css?v=1">
+		<link rel="stylesheet" href="css/layout.css?v=1">
+		<link rel="stylesheet" href="css/cards.css?v=1">
+		<link rel="stylesheet" href="css/content.css?v=1">
+		<link rel="stylesheet" href="css/themes.css?v=1">
+		<link rel="stylesheet" href="css/corporate.css?v=1">
+		<link rel="stylesheet" href="css/settings.css?v=1">
 		<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 	</head>
 	<body id="main">

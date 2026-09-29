@@ -1,0 +1,181 @@
+/* Cards and the scrolling content column: card images, the PDF viewer, and
+   the base look of cards before the dark/bright themes (themes.css). */
+
+.card {
+  margin: auto;
+  width: 70%;
+  padding-top: 10px;
+}
+
+.card-img-top {
+  width: 200px;
+  height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
+
+.card-img-gallery-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-img-gallery {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+/* PDF Viewer Styles */
+.pdf-viewer-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.pdf-iframe-container {
+  width: 100%;
+  height: 600px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 5px;
+}
+
+.pdf-download {
+  padding: 10px;
+}
+
+.card-container {
+  height: 100%;
+  padding-top: 5px;
+}
+
+.exit {
+  position: fixed;
+  padding-top: 1%;
+  font-size: 40px;
+  text-align: right;
+  right: 0;
+}
+
+.card {
+  margin-top: 10px;
+  max-height: 100%;
+  margin-bottom: 10px;
+  animation-name: fadeIn;
+  animation-duration: 1s; /* Duration of the animation */
+  animation-fill-mode: forwards; /* Ensures the element remains in the final state */
+}
+
+
+.card.mb-3.about {
+  display: flex;
+  flex-direction: row; /* Aligns children (img and text) in a row */
+  align-items: flex-start; /* Aligns items at the start of the cross axis */
+  padding: 10px;
+}
+
+
+.exitlink {
+  z-index: 9999;
+}
+
+
+.card-text.lower {
+  margin-top: 20px
+}
+
+.card-container-home {
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+  animation-delay: 0.75s;
+  padding-top: 0px;
+  margin-top: -20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 0;
+  transition: opacity 0.3s ease-in-out;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 20px;
+  padding-bottom: 0px;
+  position: relative;
+}
+
+.card-container-home::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to top, #0f0f0f 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+
+.about-home {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.card-text a {
+  color: #82B1FF;
+  text-decoration: none;
+}
+
+.card-text a:hover {
+  text-decoration: underline;
+}
+
+
+/* Card styling for non-about sections */
+.card-container-home .card {
+  max-width: 1000px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.card-container-home .about-home {
+  max-width: 1000px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Custom scrollbar styling for the container */
+.card-container-home::-webkit-scrollbar {
+  width: 8px;
+}
+
+.card-container-home::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.card-container-home::-webkit-scrollbar-thumb {
+  background: #1976D2;
+  border-radius: 4px;
+}
+
+.card-container-home::-webkit-scrollbar-thumb:hover {
+  background: #1565C0;
+}

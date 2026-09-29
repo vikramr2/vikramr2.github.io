@@ -1,0 +1,310 @@
+/* Phone overrides (max-device-width: 768px) for the page, nav, title, cards
+   and footer. Loaded first on purpose: where a later file sets the same
+   property with an equally specific selector, the later rule wins, so some
+   phone rules elsewhere use more specific selectors. Feature-specific phone
+   rules live in their feature's file (cards.css, corporate.css, settings.css). */
+
+@media only screen and (max-device-width: 768px) {
+  body {
+    margin:0;
+    padding:0;
+    top: -20;
+    z-index: -100;
+    background-color: black;
+  }
+
+  .card-container {
+    height: 100%;
+  }
+
+  /* Fix logo and navigation positioning to prevent overlap */
+  .nav {
+    position: relative;
+    z-index: 100;
+    min-height: auto;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 0 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+    margin-bottom: 0;
+  }
+
+  .telugu-logo {
+    width: 80px;
+    height: 80px;
+    animation: logoMobileFadeOut 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards !important;
+  }
+
+  /* Mobile-specific logo animation - animate then fade out */
+  @keyframes logoMobileFadeOut {
+    0% {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 1;
+      z-index: 1000;
+    }
+    50% {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 1;
+      z-index: 1000;
+    }
+    80% {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 1;
+      z-index: 1000;
+    }
+    100% {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      opacity: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+  }
+
+  /* Hide text navigation on mobile and show dot navigation instead */
+  .main_list {
+    display: none;
+  }
+
+  .dot-navigation {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0 5px 0;
+    width: 100%;
+    position: relative;
+    z-index: 200;
+    margin-bottom: 10px !important;
+  }
+
+  .nav-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .nav-dot.active {
+    background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.3);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  }
+
+  /* Navigation improvements */
+  h2 {
+    font-size: 16px;
+  }
+
+  /* Title and header improvements - better spacing without logo */
+  .typewriter {
+    padding-top: 0px !important;
+    margin-top: 0px !important;
+  }
+
+  .typewriter h1 {
+    font-size: 40px;
+    padding: 0 15px;
+    text-align: center;
+    line-height: 1.2;
+    height: auto !important;
+    margin: 0 !important;
+  }
+
+  /* Card improvements for better readability */
+  .card {
+    width: 90%;
+    margin: 10px auto;
+    padding: 15px;
+    font-size: 16px;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
+  .card-header {
+    font-size: 20px;
+    padding: 12px 15px;
+  }
+
+  .card-text {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  /* Stack images above text on mobile */
+  .card.mb-3.about {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .card.mb-3.about .card-body {
+    width: 100%;
+  }
+
+  /* Image improvements - make images responsive and fit within cards */
+  .card-img-top {
+    width: 150px;
+    height: 150px;
+    margin: 10px auto;
+  }
+
+  .card-img-gallery {
+    width: 150px;
+    height: 150px;
+  }
+
+  .card-img-gallery-container {
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* Make all images in cards responsive */
+  .card img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .card-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+  }
+
+  /* Icon/Footer improvements - make more touchable */
+  .footer {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    background: linear-gradient(to top, #1c1c20 0%, transparent 100%);
+  }
+
+  .dock {
+    padding: 10px;
+  }
+
+  .icon {
+    padding: 10px;
+  }
+
+  /* Sized so all five footer icons fit across a phone screen */
+  .icon .icon-svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Card container improvements */
+  .card-container-home {
+    max-height: calc(100vh - 210px);
+    padding: 0 10px 180px 10px;
+    gap: 15px;
+    margin-top: 10px !important;
+    padding-top: 10px !important;
+    padding-bottom: 180px !important;
+  }
+
+  /* Adjust the gradient overlay for mobile */
+  .card-container-home::after {
+    height: 150px;
+  }
+
+  /* Entry list improvements (research, software, journal) */
+  .entry-list-item {
+    padding: 15px;
+    margin-bottom: 12px;
+  }
+
+  .entry-list-item h3 {
+    font-size: 18px;
+  }
+
+  .entry-list-item .entry-meta {
+    font-size: 14px;
+  }
+
+  /* Smaller filter chips, so they wrap into a few compact lines. More
+     specific than the desktop rules further down, which would otherwise win. */
+  .card-container-home .interest-filter {
+    gap: 6px;
+  }
+
+  .card-container-home .interest-filter-button {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  /* Smaller detail title; more specific than the desktop rule further down */
+  .card.entry-detail-card .entry-detail-title {
+    font-size: 19px;
+  }
+
+  /* Thumbnail above the title, so titles keep the full width. More specific
+     than the desktop rules further down, which would otherwise win. */
+  .entry-list .entry-list-item.has-thumbnail {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .entry-list .entry-list-item .entry-thumbnail {
+    width: 100%;
+    height: 110px;
+  }
+
+  .entry-back-button {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+
+  /* PDF viewer improvements - hide iframe on mobile, show download only */
+  .pdf-iframe-container {
+    display: none !important;
+  }
+
+  .pdf-viewer-container {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .pdf-download {
+    padding: 0;
+  }
+
+  .pdf-download .btn {
+    font-size: 18px;
+    padding: 15px 30px;
+  }
+
+  /* Improve link touch targets */
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  canvas { display: none; }
+}

@@ -1,0 +1,293 @@
+/* Page structure: body, title, nav links and dots, logo, footer icons and
+   side arrows, plus the site's keyframe animations. */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+
+
+#main  {
+	position: relative;
+	margin: 0;
+	height: 100%;
+	width:  100%;
+	overflow:hidden;
+}
+
+/* Ensure Vanta canvas stays in background and doesn't block interactions */
+#main canvas {
+	pointer-events: none !important;
+	z-index: -3 !important;
+}
+
+/* Ensure specific elements are above the Vanta background */
+.typewriter, .card-container-home {
+	position: relative;
+	z-index: 1;
+}
+
+.nav {
+	position: relative;
+	z-index: 100;
+}
+
+.footer, .nav-arrow {
+	z-index: 100;
+}
+
+#main2  {
+	position: relative;
+	margin: 0; 
+	height: 100%;
+	width:  100%;
+}
+
+canvas {
+  margin: 0;
+	position: fixed;
+	z-index: -3;
+}
+
+#canv {
+	display: none;
+}
+
+
+.title {
+	/*width: 29ch;*/
+  opacity: 0;
+  animation-name: fadeIn;
+  animation-duration: 1s; /* Duration of the animation */
+  animation-delay: 0.75s; /* Start after logo animation completes */
+  animation-fill-mode: forwards; /* Ensures the element remains in the final state */
+  overflow: hidden;
+  white-space: nowrap;
+  margin-top: -50px;
+}
+
+.title-visible {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+/* DEMO-SPECIFIC STYLES */
+.typewriter {
+  padding-top: 80px;
+}
+
+.typewriter h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  font-family: monospace;
+  font-size: 44px;
+  flex-direction: column;
+  color: #E0F2F1;
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-family: monospace;
+  /* opacity: 0.8; */
+  font-weight: normal;
+  transition: opacity 0.3s ease, font-weight 0.3s ease;
+}
+
+.nav-link-active h2 {
+  opacity: 1;
+  font-weight: bold;
+}
+
+/* Define the keyframes for fade-in */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+}
+
+.dock {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px;
+  color: #fff;
+}
+
+/* Footer icons are inline SVGs filled with currentColor, so they stay
+   sharp at any size and follow the link color */
+.icon-svg {
+  display: block;
+  width: 60px;
+  height: 60px;
+}
+
+.icon:hover {
+  color: #E0F2F1;
+}
+
+.navlinks ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navlinks li {
+  display: inline;
+  float: left;
+  padding-left: 15px;
+}
+
+.container {
+  display: flex;
+  padding-top: 1%;
+  padding-left: 2%;
+}
+
+.logo-text {
+  font-size: 36px;
+}
+
+.telugu-logo {
+  width: 120px;
+  height: 120px;
+  cursor: pointer;
+  animation: moveToCorner 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.telugu-char {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+  animation: drawOnStartup 2s ease-in-out forwards;
+}
+
+.telugu-logo:hover .telugu-char {
+  animation: draw 2s ease-in-out;
+}
+
+@keyframes drawOnStartup {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes moveToCorner {
+  0% {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    z-index: 1000;
+  }
+  100% {
+    position: fixed;
+    top: 1%;
+    left: 2%;
+    transform: translate(0, 0) scale(1);
+    z-index: 1000;
+  }
+}
+
+.main_list {
+  position:absolute;
+  right: 10px;
+}
+
+/* Dot navigation - hidden on desktop */
+.dot-navigation {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* Navigation arrows */
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 48px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+  z-index: 100;
+  padding: 20px;
+  font-family: monospace;
+  animation: arrowIntro 2s ease-in-out forwards, arrowPulse 1.5s ease-in-out infinite;
+  animation-delay: 1s, 3s;
+}
+
+.nav-arrow:hover {
+  color: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.2);
+  animation: none;
+}
+
+.nav-arrow-left {
+  left: 20px;
+}
+
+.nav-arrow-right {
+  right: 20px;
+}
+
+@keyframes arrowIntro {
+  0% {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  100% {
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+@keyframes arrowPulse {
+  0%, 100% {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+@media only screen and (max-device-width: 768px) {
+  .nav-arrow {
+    display: none;
+  }
+}
