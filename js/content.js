@@ -127,9 +127,12 @@ export function renderPDFViewer(pdfUrl, downloadLabel = 'Download PDF') {
     `;
 }
 
+// Where the research-interests tab widget goes in a card's paragraphs
+const RESEARCH_TABS_MARKER = '[[research-tabs]]';
+
 // A card's body HTML: the PDF viewer for a card with a PDF, or else its
-// paragraphs, with the research-interests tab widget in place of the first
-// empty paragraph when the card has research_short/research_long
+// paragraphs, with the research-interests tab widget in place of the
+// "[[research-tabs]]" line when the card has research_short/research_long
 function buildCardBody(card, paragraphs) {
     if (card.pdfUrl) {
         return renderPDFViewer(card.pdfUrl);
@@ -139,10 +142,7 @@ function buildCardBody(card, paragraphs) {
     }
     if (card.research_short && card.research_long) {
         const tabWidget = buildResearchTabWidget(card.research_short, card.research_long);
-        const withWidget = paragraphs.map(p => (p === '' ? null : p));
-        const firstEmpty = withWidget.indexOf(null);
-        if (firstEmpty !== -1) withWidget[firstEmpty] = tabWidget;
-        return paragraphsToHTML(withWidget.filter(p => p !== null));
+        return paragraphsToHTML(paragraphs.map(p => (p === RESEARCH_TABS_MARKER ? tabWidget : p)));
     }
     return paragraphsToHTML(paragraphs);
 }

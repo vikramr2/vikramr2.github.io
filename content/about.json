@@ -3,12 +3,15 @@
     {
       "image": "assets/me.jpeg?v=2",
       "imageAlt": "Vikram Ramavarapu",
-      "corporateParagraphs": { "0": "<b>Hey Guys!</b>" },
+      "corporateParagraphs": { "0": "<b>Hey Guys!</b>", "3": null, "4": null },
       "paragraphs": [
         "<b>wsg twinjamin ~</b>",
         "My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign.",
+        "",
+        "<i class=\"hide-in-bright\"><b>A small note</b>: you can toggle <b>bright mode</b> by clicking the <b>gear icon</b> in the bottom. If you're a recruiter, collaborator or what have you, you can also toggle '<b>corporate mode</b>' using the same menu.</i>",
+        "",
         "<b>Research Interests</b>:",
-        ""
+        "[[research-tabs]]"
       ],
       "research_short": "I'm interested in \"computation to help us understand us\".",
       "research_long": "The general theme I like to tie my diverse interests together with is the idea of \"computation to help us understand us\". There's a really common doctrine in behavioral science that says that our human behaviors have multiple levels of abstraction, from social to psychological to neurological (<a href=https://www.issep.org/features/the-social-neuroscience-of-authenticity#:~:text=The%20doctrine%20of%20multilevel%20analysis%20proposes%20that%20human%20thought%20and%20behavior%20can%20be%20understood%20at%20different%20levels%20of%20organization%2C%20ranging%20from%20the%20neuroscientific%20(a%20%E2%80%9Cmicroscopic%E2%80%9D%20level%20of%20analysis)%20to%20the%20social%20psychological%20(a%20%E2%80%9Cmacroscopic%E2%80%9D%20level%20of%20analysis).>link</a>). Under the mentorship of my PhD advisors (<a href=https://ischool.illinois.edu/people/bertram-ludascher>Prof. Bertram Ludäscher</a> at UIUC and <a href=https://mcml.ai/research/groups/diesner/>Prof. Jana Diesner</a> at TUM), I am working on computational models to understand the diffusion of textual information in social networks. I'm also interested in using large language models (LLMs) as a tool to help us understand human cognition and creativity. Under the mentorship of <a href=https://www.ornl.gov/staff-profile/ramakrishnan-ramki-kannan>Prof. Ramki Kannan</a> and <a href=https://www.ornl.gov/staff-profile/ashish-gautam>Ashish Gautam</a> at ORNL, I am also working on a newfound interest of mine: neuromorphic computing, which is the design of computing systems inspired by the human brain. It's a particularly interesting way of using models of inference to understand our own neurological processes."

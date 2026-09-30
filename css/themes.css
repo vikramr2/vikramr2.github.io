@@ -79,3 +79,11 @@ html.bright-mode .entry-list-item .interest-chip {
 html.bright-mode .entry-thumbnail {
   outline: 1px solid #e3e3e6;
 }
+
+/* Content that's pointless once bright mode is on, like the note explaining
+   how to turn it on. The blank spacer line after it goes too, so it doesn't
+   leave a double gap. */
+html.bright-mode .hide-in-bright,
+html.bright-mode .hide-in-bright + .card-text:empty {
+  display: none;
+}
