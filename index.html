@@ -17,25 +17,31 @@
 
 		<!-- Tab title: data-standard for the regular site, data-corporate in corporate mode -->
 		<title data-standard="[ ~ విkram ~ ]" data-corporate="Vikram Ramavarapu">[ ~ విkram ~ ]</title>
-		<!-- Apply bright mode and corporate mode before anything is drawn, to avoid a flash.
-		     ?theme=bright|dark and ?layout=corporate|standard in the URL win; otherwise the saved choices are used. -->
+		<!-- Apply bright mode and corporate mode (both on by default) before anything is drawn, to avoid a flash.
+		     ?theme=bright|dark and ?layout=corporate|standard in the URL win, then the visitor's saved choices. -->
 		<script>
 			(function () {
 				var params = new URLSearchParams(location.search);
-				var theme = params.get('theme');
-				var bright = theme === 'bright';
-				if (theme !== 'bright' && theme !== 'dark') {
-					try { bright = localStorage.getItem('brightMode') === 'on'; } catch (e) {}
-				}
-				if (bright) document.documentElement.classList.add('bright-mode');
 
-				// ?layout=corporate or ?layout=standard wins; otherwise the saved choice
-				var layout = params.get('layout');
-				var corporate = layout === 'corporate';
-				if (layout !== 'corporate' && layout !== 'standard') {
-					try { corporate = localStorage.getItem('corporateMode') === 'on'; } catch (e) {}
+				// A mode's setting: the URL parameter wins, then the visitor's saved
+				// choice, then the default. Both modes are on by default (keep in
+				// sync with the modeSwitch calls in js/settings.js).
+				function mode(param, onValue, offValue, storageKey, defaultOn) {
+					var value = params.get(param);
+					if (value === onValue) return true;
+					if (value === offValue) return false;
+					try {
+						var saved = localStorage.getItem(storageKey);
+						if (saved === 'on') return true;
+						if (saved === 'off') return false;
+					} catch (e) {}
+					return defaultOn;
 				}
-				if (corporate) {
+
+				if (mode('theme', 'bright', 'dark', 'brightMode', true)) {
+					document.documentElement.classList.add('bright-mode');
+				}
+				if (mode('layout', 'corporate', 'standard', 'corporateMode', true)) {
 					document.documentElement.classList.add('corporate-mode');
 					document.title = document.querySelector('title').dataset.corporate;
 				}
@@ -56,7 +62,7 @@
 					"./js/title.js": "./js/title.js?v=2",
 					"./js/router.js": "./js/router.js?v=2",
 					"./js/corporate.js": "./js/corporate.js?v=3",
-					"./js/settings.js": "./js/settings.js?v=1"
+					"./js/settings.js": "./js/settings.js?v=4"
 				}
 			}
 		</script>
@@ -80,7 +86,7 @@
 		<link rel="stylesheet" href="css/content.css?v=1">
 		<link rel="stylesheet" href="css/themes.css?v=2">
 		<link rel="stylesheet" href="css/corporate.css?v=2">
-		<link rel="stylesheet" href="css/settings.css?v=1">
+		<link rel="stylesheet" href="css/settings.css?v=6">
 		<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 	</head>
 	<body id="main">

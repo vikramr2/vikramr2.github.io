@@ -3,12 +3,10 @@
     {
       "image": "assets/me.jpeg?v=2",
       "imageAlt": "Vikram Ramavarapu",
-      "corporateParagraphs": { "0": "<b>Hey Guys!</b>", "3": null, "4": null },
+      "corporateParagraphs": { "0": "<b>Hey Guys!</b>"},
       "paragraphs": [
         "<b>wsg twinjamin ~</b>",
         "My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign.",
-        "",
-        "<i class=\"hide-in-bright\"><b>A small note</b>: you can toggle <b>bright mode</b> by clicking the <b>gear icon</b> in the bottom. If you're a recruiter, collaborator or what have you, you can also toggle '<b>corporate mode</b>' using the same menu.</i>",
         "",
         "<b>Research Interests</b>:",
         "[[research-tabs]]"
