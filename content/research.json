@@ -9,6 +9,24 @@
   },
   "cards": [
     {
+      "index": "mach2",
+      "image": "assets/mach2_icon.jpg",
+      "imageAlt": "Migration History",
+      "imageScale": 30,
+      "interests": ["Computational Biology"],
+      "paragraphs": [
+        "<b>Characterizing the Solution Space of Migration Histories of Metastatic Cancers with MACH2</b>",
+        "",
+        "<a href=https://www.linkedin.com/in/roddur96/>Mrinmoy S Roddur</a>, <b>Vikram Ramavarapu</b>, <a href=https://sites.google.com/view/ccgresearchgroup/meet-the-team/abi-bunkum>Abigail Bunkum</a>, <a href=https://scholar.google.com/citations?user=WCYxoRoAAAAJ&hl=en>Ariana Huebner</a>, <a href=https://www.linkedin.com/in/roman-mineyev/>Roman Mineyev</a>, <a href=https://scholar.google.com/citations?user=9sMhHS8AAAAJ&hl=en>Nicholas McGranahan</a>, <a href=https://simozacca.github.io/>Simone Zaccaria</a>, <a href=https://www.el-kebir.net/>Mohammed El-Kebir</a>",
+        "<em>(Accepted) Nature Methods (2026)</em>, <em>RECOMB (2025)</em>",
+        "[<a href=https://link.springer.com/chapter/10.1007/978-3-031-90252-9_34>Paper</a>]",
+        "",
+        "Metastatic cancer is the leading cause of cancer-related deaths. Understanding the migration history of metastatic cancers is crucial for developing effective treatment strategies. We present MACH2, an algorithm that infers the migration history of metastatic cancers given a clonal tree and bulk sequencing data from multiple tumor sites. MACH2 infers anatomic labels for internal nodes in the clonal tree and returns a solution space of migration histories. Clonal trees can be collapsed into migration graphs, which represent the migration events between different anatomical sites. Because of the potentially vast solution space of possible migration histories, we developed a visualization tool (MACH2-Viz) to explore and filter through the solution space given known prior knowledge.",
+        "<a href=\"https://elkebir-group.github.io/mach2-viz/#/\" class=\"btn btn-primary\">Open MACH2-Viz</a>",
+        "<a href=\"https://github.com/elkebir-group/MACH2/\" class=\"btn btn-primary\">View Source Code!</a>"
+      ]
+    },
+    {
       "index": "knight",
       "image": "assets/neuromorphic_figure.png",
       "imageAlt": "KNIGHT",
@@ -54,24 +72,6 @@
         "<em>Applied Network Science (ANS) (2026)</em> [<a href=https://link.springer.com/article/10.1007/s41109-025-00766-z>Paper</a>]",
         "",
         "We introduce an agent-based model (ABM) to simulate citation behavior in scholarly articles. Our model incorporates various factors influencing citation decisions, including preferential attachment, recency, paper quality, and relevance (which is proxied by the neighborhood of the paper). By simulating the citation process, we aim to understand the dynamics of citation networks and the emergence of influential papers within academic communities. The ABM allows us to explore how different strategies and behaviors impact the overall structure of citation networks."
-      ]
-    },
-    {
-      "index": "mach2",
-      "image": "assets/mach2_icon.jpg",
-      "imageAlt": "Migration History",
-      "imageScale": 30,
-      "interests": ["Computational Biology"],
-      "paragraphs": [
-        "<b>Characterizing the Solution Space of Migration Histories of Metastatic Cancers with MACH2</b>",
-        "",
-        "<a href=https://www.linkedin.com/in/roddur96/>Mrinmoy S Roddur</a>, <b>Vikram Ramavarapu</b>, <a href=https://sites.google.com/view/ccgresearchgroup/meet-the-team/abi-bunkum>Abigail Bunkum</a>, <a href=https://scholar.google.com/citations?user=WCYxoRoAAAAJ&hl=en>Ariana Huebner</a>, <a href=https://www.linkedin.com/in/roman-mineyev/>Roman Mineyev</a>, <a href=https://scholar.google.com/citations?user=9sMhHS8AAAAJ&hl=en>Nicholas McGranahan</a>, <a href=https://simozacca.github.io/>Simone Zaccaria</a>, <a href=https://www.el-kebir.net/>Mohammed El-Kebir</a>",
-        "<em>RECOMB (2025)</em>",
-        "[<a href=https://link.springer.com/chapter/10.1007/978-3-031-90252-9_34>Paper</a>]",
-        "",
-        "Metastatic cancer is the leading cause of cancer-related deaths. Understanding the migration history of metastatic cancers is crucial for developing effective treatment strategies. We present MACH2, an algorithm that infers the migration history of metastatic cancers given a clonal tree and bulk sequencing data from multiple tumor sites. MACH2 infers anatomic labels for internal nodes in the clonal tree and returns a solution space of migration histories. Clonal trees can be collapsed into migration graphs, which represent the migration events between different anatomical sites. Because of the potentially vast solution space of possible migration histories, we developed a visualization tool (MACH2-Viz) to explore and filter through the solution space given known prior knowledge.",
-        "<a href=\"https://elkebir-group.github.io/mach2-viz/#/\" class=\"btn btn-primary\">Open MACH2-Viz</a>",
-        "<a href=\"https://github.com/elkebir-group/MACH2/\" class=\"btn btn-primary\">View Source Code!</a>"
       ]
     },
     {
