@@ -44,6 +44,32 @@
       ]
     },
     {
+      "index": "coding-agents",
+      "image": "assets/coding_agents.jpeg",
+      "imageAlt": "Coding Agents",
+      "imageScale": 30,
+      "interests": ["LLM Agents"],
+      "paragraphs": [
+        "<b>Skip the Compressor: Coding Agents Fix More Issues When They Pick Whole Files</b>",
+        "",
+        "<a href=\"https://xiaocong-yang.github.io/\">Xiaocong Yang</a>, <a href=\"https://www.linkedin.com/in/rishitchatterjee/\">Rishit Chatterjee</a>, <a href=\"https://www.linkedin.com/in/hudupi2/\">Himanshu Udupi</a>, <b>Vikram Ramavarapu</b>, <a href=\"https://czhai.cs.illinois.edu/\">ChengXiang Zhai</a>",
+        "<em>Under Review</em> [<a href=\"https://arxiv.org/abs/2610.21073\">Preprint</a>]",
+        "",
+        "Repositories are far larger than a coding agent's context window, so something has to decide which code goes into the prompt. The usual answers are prompt compressors and retrievers.",
+        "But to fix an issue, the model needs two things at once: the files that must change, and their code exactly as written, because a patch has to quote the lines it edits.",
+        [
+          "Retrievers rank code by how much it resembles the issue, so they often miss the file to edit.",
+          "Compressors keep that file but change its text, so the patch no longer applies."
+        ],
+        "Our simple selector, CQ2-CARE, spends the same token budget on choosing a few whole files and showing them verbatim. On 300 recent SWE-rebench issues graded by their tests:",
+        [
+          "✅ it resolves 43.7% (GPT-5.6) and 46.7% (Claude Opus 5)",
+          "📈 that's 6.3 points more than the best compressor, and 9.3 and 12.7 points more than the best retriever",
+          "🤝 it even outperforms two methods trained for issue resolution (SweRank, SWE-Pruner)"
+        ]
+      ]
+    },
+    {
       "index": "reccs",
       "image": "assets/reccs.jpeg?v=2",
       "imageAlt": "RECCS Logo",

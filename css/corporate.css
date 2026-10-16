@@ -83,6 +83,16 @@ html.corporate-mode .card-container-home::after {
   max-width: none;
 }
 
+/* Cards in the scrolling columns take their full content height. The base
+   .card rule caps cards at max-height: 100%, which here would cut a long card
+   (the intro with its Long tab open) at the column's height and let the rest
+   spill out over the cards below it. */
+.corporate-sidebar .card,
+.corporate-main .card {
+  max-height: none;
+  flex-shrink: 0;
+}
+
 .corporate-main .card {
   margin-top: 0;
 }
