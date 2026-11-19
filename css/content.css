@@ -107,7 +107,8 @@
   margin: 0 0 24px;
 }
 
-.entry-detail-images img {
+.entry-detail-images img,
+.entry-detail-images video {
   max-width: 100%;
   max-height: 460px;
   object-fit: contain;

@@ -142,10 +142,21 @@ h2 {
   display: block;
   width: 60px;
   height: 60px;
+  /* A black outline around the glyph. paint-order draws the stroke first
+     and the fill over it, so only the outer half of the stroke shows. */
+  stroke: #000;
+  stroke-width: 20px;
+  stroke-linejoin: round;
+  overflow: visible;
+  paint-order: stroke fill;
 }
 
 .icon:hover {
   color: #E0F2F1;
+}
+
+.icon:hover .icon-svg {
+  stroke: #000;
 }
 
 .navlinks ul {

@@ -184,12 +184,14 @@
   }
 
   /* Make all images in cards responsive */
-  .card img {
+  .card img,
+  .card video {
     max-width: 100%;
     height: auto;
   }
 
-  .card-body img {
+  .card-body img,
+  .card-body video {
     max-width: 100%;
     height: auto;
     display: block;

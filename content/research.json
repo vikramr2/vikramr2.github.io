@@ -1,6 +1,6 @@
 {
   "interests": {
-    "Neuromorphic Computing": { "emoji": "🧠", "color": "#A78BFA" },
+    "Computational Neuroscience": { "emoji": "🧠", "color": "#A78BFA" },
     "LLM Agents": { "emoji": "🤖", "color": "#60A5FA" },
     "Computational Social Science": { "emoji": "👥", "color": "#FBBF24" },
     "Text-Attributed Graphs": { "emoji": "📝", "color": "#FB923C" },
@@ -18,8 +18,8 @@
         "<b>Characterizing the Solution Space of Migration Histories of Metastatic Cancers with MACH2</b>",
         "",
         "<a href=https://www.linkedin.com/in/roddur96/>Mrinmoy S Roddur</a>, <b>Vikram Ramavarapu</b>, <a href=https://sites.google.com/view/ccgresearchgroup/meet-the-team/abi-bunkum>Abigail Bunkum</a>, <a href=https://scholar.google.com/citations?user=WCYxoRoAAAAJ&hl=en>Ariana Huebner</a>, <a href=https://www.linkedin.com/in/roman-mineyev/>Roman Mineyev</a>, <a href=https://scholar.google.com/citations?user=9sMhHS8AAAAJ&hl=en>Nicholas McGranahan</a>, <a href=https://simozacca.github.io/>Simone Zaccaria</a>, <a href=https://www.el-kebir.net/>Mohammed El-Kebir</a>",
-        "<em>(Accepted) Nature Methods (2026)</em>, <em>RECOMB (2025)</em>",
-        "[<a href=https://link.springer.com/chapter/10.1007/978-3-031-90252-9_34>Paper</a>]",
+        "<em>Nature Methods (2026)</em>",
+        "[<a href=https://www.nature.com/articles/s41592-026-03321-5>Paper</a>]",
         "",
         "Metastatic cancer is the leading cause of cancer-related deaths. Understanding the migration history of metastatic cancers is crucial for developing effective treatment strategies. We present MACH2, an algorithm that infers the migration history of metastatic cancers given a clonal tree and bulk sequencing data from multiple tumor sites. MACH2 infers anatomic labels for internal nodes in the clonal tree and returns a solution space of migration histories. Clonal trees can be collapsed into migration graphs, which represent the migration events between different anatomical sites. Because of the potentially vast solution space of possible migration histories, we developed a visualization tool (MACH2-Viz) to explore and filter through the solution space given known prior knowledge.",
         "<a href=\"https://elkebir-group.github.io/mach2-viz/#/\" class=\"btn btn-primary\">Open MACH2-Viz</a>",
@@ -27,11 +27,37 @@
       ]
     },
     {
+      "index": "CoRe",
+      "image": "assets/CoRe.mp4",
+      "imageAlt": "CoRe",
+      "imageScale": 30,
+      "interests": ["Computational Neuroscience", "Scalable Graph Algorithms"],
+      "paragraphs": [
+        "<b>Recurrent Modular Structure in Spiking Neural Network Reinforcement Learning</b>",
+        "",
+        "<b>Vikram Ramavarapu</b>, <a href=\"https://www.linkedin.com/in/hudupi2/\">Himanshu Udupi</a>, <a href=https://www.ornl.gov/staff-profile/ashish-gautam>Ashish Gautam</a>",
+        "<em>Under Review</em> [<a href=\"https://arxiv.org/abs/2611.14262\">Preprint</a>]",
+        "",
+        "<a href=\"https://vikramramavarapu.org/CoRe/#race-lunarlander-nlif-cols_partial_race_e\" class=\"btn btn-primary\">🧠 Viz</a>",
+        "<a href=\"https://github.com/vikramr2/CoRe\" class=\"btn btn-primary\">💻 Code</a>",
+        "",
+        "Generally when we talk about structures in our brain we think of modular cortical columns with recurrently firing neurons that take smaller subfunctions of a cognitive task. The issue is that while Spiking Neural Networks (SNN) are supposedly intent on replicating biology through synapses thar potentiate and depress upon learning, and neurons that, well... spike, SNNs are largely arranged in feed-forward layers and are trained using backpropagation through time (BPTT) with surrogate gradients. Even layer-like hierarchies such as V1–V4 are made of recurrent modules whose synapses learn locally, something feed-forward layers can't replicate.",
+        "As such, we make the following contributions:",
+        [
+          "A suite of <em><b>Community Recurrent (CoRe) SNNs</b></em>. Spiking activity becomes a walk between communities, and the agent takes whichever action the walk reaches.",
+          "<em><b>Map-STDP</b></em>: a local, three-factor learning rule that encourages communities to form during learning and makes the network’s spike activity more compressible, lowering description length during learning.",
+          "A comparison of <em><b>modularity regimes</b></em>: dynamic (learned with Map-STDP), partial (stochastic block model initialization), and full (sealed communities).",
+          "<em><b>Drop-in actors</b></em>: swapping CoRe into a TD-STDP actor-critic in place of the feed-forward actor improves final return on CartPole (+25 to +45) and LunarLander (+36 to +41), and matches it on Acrobot."
+        ],
+        "Some classic ideas came back here: Hinton and van Camp’s case that good networks have short description lengths, and Kohonen’s self-organizing maps. We see CoRe as a starting point: a modular base that other architectures can plug into. I’m excited to see where this direction goes!"
+      ]
+    },
+    {
       "index": "knight",
       "image": "assets/neuromorphic_figure.png",
       "imageAlt": "KNIGHT",
       "imageScale": 30,
-      "interests": ["Neuromorphic Computing", "LLM Agents", "Text-Attributed Graphs"],
+      "interests": ["Computational Neuroscience", "LLM Agents", "Text-Attributed Graphs"],
       "paragraphs": [
         "<b>KNIGHT: Agentic Systems for Neuromorphic Computing</b>",
         "",

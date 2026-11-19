@@ -1,7 +1,7 @@
 // HTML for cards, entry lists (research, software, journal), detail views and
 // interest tags. Pure rendering: the loaders in router.js put it on the page.
 
-import { state } from './state.js';
+import { state, reducedMotion } from './state.js';
 import { paragraphsToHTML } from './content.js';
 
 // Sections shown as a list of entries, each opening into a detail view
@@ -95,6 +95,25 @@ export function applyInterestFilter(section, container) {
     });
 }
 
+// Media: a card's `image` can also be a video (.mp4, .webm, .mov, .m4v). Videos
+// play like animated images: muted, looping and inline, which is what lets
+// browsers autoplay them. With reduced motion on they don't autoplay, and get
+// controls instead.
+const VIDEO_FILE = /\.(mp4|webm|mov|m4v)$/i;
+
+export function isVideo(src) {
+    return typeof src === 'string' && VIDEO_FILE.test(src.split(/[?#]/)[0]);
+}
+
+// An <img> or <video> for src; attrs is the rest of the tag (class, style...)
+export function mediaTag(src, alt = '', attrs = '') {
+    if (!isVideo(src)) {
+        return `<img src="${src}" alt="${alt}" ${attrs}>`;
+    }
+    const playback = reducedMotion.matches ? 'controls' : 'autoplay loop';
+    return `<video src="${src}" ${playback} muted playsinline preload="metadata"${alt ? ` aria-label="${alt}"` : ''} ${attrs}></video>`;
+}
+
 // List view renderer
 export function renderEntryList(section) {
     const data = state.contentData[section];
@@ -109,7 +128,7 @@ export function renderEntryList(section) {
         return `
             <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}" data-vt="entry-${section}-${slug}"
                 data-interests='${JSON.stringify(card.interests).replace(/'/g, '&#39;')}'>
-                ${thumbnail ? `<img class="entry-thumbnail" src="${thumbnail}" alt="">` : ''}
+                ${thumbnail ? mediaTag(thumbnail, '', 'class="entry-thumbnail"') : ''}
                 <div class="entry-text">
                     <h3>${entryTitle(card)}</h3>
                     ${meta.map(line => `<div class="entry-meta">${line}</div>`).join('')}
@@ -171,7 +190,7 @@ function renderStackedDetailCard(section, card) {
     const alts = Array.isArray(card.imageAlt) ? card.imageAlt : [card.imageAlt];
     const imageHTML = images.length === 0 ? '' : `
         <div class="entry-detail-images">
-            ${images.map((src, i) => `<img src="${src}" alt="${alts[i] || alts[0] || ''}">`).join('')}
+            ${images.map((src, i) => mediaTag(src, alts[i] || alts[0] || '')).join('')}
         </div>`;
 
     return `
@@ -203,7 +222,7 @@ export function renderCard(card, isAboutStyle = false) {
                     styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
                 }
                 const alt = Array.isArray(card.imageAlt) ? (card.imageAlt[index] || '') : (card.imageAlt || '');
-                return `<img src="${img}" class="card-img-gallery" alt="${alt}" ${styleAttr}>`;
+                return mediaTag(img, alt, `class="card-img-gallery" ${styleAttr}`);
             }).join('\n                ');
 
             imageHTML = `<div class="card-img-gallery-container">\n                ${images}\n            </div>`;
@@ -216,7 +235,7 @@ export function renderCard(card, isAboutStyle = false) {
             } else if (card.imageWidth || card.imageHeight) {
                 styleAttr = `${card.imageWidth ? `width="${card.imageWidth}"` : ''} ${card.imageHeight ? `height="${card.imageHeight}"` : ''}`;
             }
-            imageHTML = `<img src="${card.image}" class="card-img-top" alt="${card.imageAlt || ''}" ${styleAttr}>`;
+            imageHTML = mediaTag(card.image, card.imageAlt || '', `class="card-img-top" ${styleAttr}`);
         }
 
         return `
