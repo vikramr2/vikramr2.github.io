@@ -4,12 +4,7 @@ export const state = {
     // Content from content/<section>.json, by section id
     contentData: {},
     // The section currently shown
-    currentSection: 'about',
-    // Corporate mode: About, research and the CV on one page, without the
-    // journal or the pets card. Set on <html> by the early script in index.html.
-    corporateMode: document.documentElement.classList.contains('corporate-mode'),
-    // Skip the cards' fade-in when a view transition is already animating them
-    instantCards: false
+    currentSection: 'about'
 };
 
 export const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

@@ -34,14 +34,13 @@ export function getCurrentDefaultTitle() {
 
 // On desktop, the title first says how to get around, then switches to the
 // section's title: it fades in with the page (0.75s delay, 1s fade), stays
-// about a second, then crossfades. Phones swipe instead, and corporate mode
-// has no sections to move between.
+// about a second, then crossfades. Phones swipe instead.
 const NAVIGATION_HINT = 'Use arrow keys to navigate ←→';
 
 export function showNavigationHint() {
     const phone = phoneLayout.matches;
     const title = document.getElementById('title');
-    if (phone || state.corporateMode || !title) return;
+    if (phone || !title) return;
 
     title.textContent = NAVIGATION_HINT;
 

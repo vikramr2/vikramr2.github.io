@@ -3,12 +3,12 @@
     {
       "image": "assets/me.jpeg?v=2",
       "imageAlt": "Vikram Ramavarapu",
-      "corporateParagraphs": {
-        "1": "My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign, advised by <a href=https://ischool.illinois.edu/people/bertram-ludascher>Prof. Bertram Ludäscher</a> at UIUC and <a href=https://mcml.ai/research/groups/diesner/>Prof. Jana Diesner</a> at TUM."
-      },
       "paragraphs": [
         "<b>Hey Guys!</b>",
-        "My name's Vikram.",
+        "<p class=\"card-text\">My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign, advised by <a href=https://ischool.illinois.edu/people/bertram-ludascher>Prof. Bertram Ludäscher</a> at University of Illinois at Urbana-Champaign (UIUC) and <a href=https://mcml.ai/research/groups/diesner/>Prof. Jana Diesner</a> at Technical University of Munich (TUM).</p>",
+        "",
+        "<b>Contact:</b>",
+        "<a href=\"mailto:vikramr2@illinois.edu\">vikramr2 at illinois dot edu</a>",
         "",
         "<b>Research Interests</b>:",
         "[[research-tabs]]"
@@ -24,13 +24,9 @@
     {
       "image": "",
       "imageAlt": "",
-      "corporateParagraphs": { "5": null, "6": null },
       "paragraphs": [
         "<b>Hobbies and Miscellaneous</b>",
-        "I enjoy longboarding. I love animals: I ride and take care of horses and have three cats<em class=\"hide-in-corporate\"> (scroll to see them!)</em>. I'm passionate about languages (though I have varying proficiency in them): I speak English, Telugu, Japanese (~N4 level), and I learned Spanish in high school and college.",
-        "",
-        "<b>Please reach out!</b>",
-        "<a href=\"mailto:vikramr2@illinois.edu\">vikramr2 at illinois dot edu</a>",
+        "I enjoy longboarding. I love animals: I ride and take care of horses and have three cats <em>(scroll to see them!)</em>. I'm passionate about languages (though I have varying proficiency in them): I speak English, Telugu, Japanese (~N4 level), and I learned Spanish in high school and college.",
         "",
         "<a href=https://www.youtube.com/watch?v=32HkC9LNPh4><b><u>Check out my YouTube channel to learn how to get into the Ivy League (unpatched method y'all) !!!</u></b></a>"
       ]
@@ -38,7 +34,6 @@
     {
       "image": "",
       "imageAlt": "",
-      "corporateSection": "News",
       "paragraphs": [
         "<b>News</b>",
         [
@@ -55,7 +50,6 @@
       ]
     },
     {
-      "hideInCorporate": true,
       "image": [
         "assets/chai_kali.jpeg",
         "assets/lokhi.jpeg",

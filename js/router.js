@@ -6,7 +6,6 @@ import { state, reducedMotion } from './state.js';
 import { initResearchTabs } from './content.js';
 import { LIST_SECTIONS, renderCard, renderEntryList, renderEntryDetail, findEntryIndex } from './render.js';
 import { getCurrentDefaultTitle, showNavigationHint } from './title.js';
-import { renderCorporateLayout, saveCorporateScroll, restoreCorporateScroll } from './corporate.js';
 
 // Lets the background (background.js) react, e.g. by moving its camera
 function announceSection(section) {
@@ -15,16 +14,6 @@ function announceSection(section) {
 
 // Load content for a section
 export function loadSection(section, skipAnimation = false, updateHash = true) {
-    // The CV page is gone; the CV is only shown in corporate mode
-    if (section === 'experience') {
-        section = 'about';
-        updateHash = true;
-    }
-    // Corporate mode is a single page built from About
-    if (state.corporateMode) {
-        section = 'about';
-    }
-
     state.currentSection = section;
 
     const container = document.querySelector('.card-container-home');
@@ -63,19 +52,12 @@ export function loadSection(section, skipAnimation = false, updateHash = true) {
 
     announceSection(section);
 
-    container.classList.toggle('instant-cards', state.instantCards);
-
-    if (state.corporateMode) {
-        renderCorporateLayout(container);
-    } else if (LIST_SECTIONS[section]) {
+    if (LIST_SECTIONS[section]) {
         // Research, software and journal start as a list of entries
         loadEntryList(section, false);
     } else {
-        // Render all cards stacked vertically. About's cards are named so they
-        // can glide to their corporate-mode spots (see setCorporateMode).
-        container.innerHTML = data.cards
-            .map((card, i) => renderCard(section === 'about' ? { ...card, vt: `about-card-${i}` } : card, section === 'about'))
-            .join('');
+        // Render all cards stacked vertically
+        container.innerHTML = data.cards.map(card => renderCard(card, section === 'about')).join('');
     }
 
     // Wire up research tab widget if present
@@ -114,13 +96,10 @@ function fadeSwapContent(container, update) {
 
 // Section order for arrow key navigation
 // const sectionOrder = ['about', 'research', 'projects', 'experience', 'journal'];
-// const sectionOrder = ['about', 'research', 'experience', 'journal'];
-const sectionOrder = ['about', 'research', 'journal'];
+const sectionOrder = ['about', 'research', 'experience', 'journal'];
 
-// Navigate to next/previous section. Corporate mode is a single page, so
-// there is nowhere to go.
+// Navigate to next/previous section
 function navigateSection(direction) {
-    if (state.corporateMode) return;
     const order = sectionOrder;
     const currentIndex = order.indexOf(state.currentSection);
     let newIndex = currentIndex + direction;
@@ -141,17 +120,11 @@ export function loadEntryList(section, updateHash = true, container = document.q
         window.history.replaceState(null, null, `#${section}`);
     }
 
-    // Add click handlers to list items. In corporate mode the paper opens
-    // full-page, replacing the whole layout, as it does on the regular site.
+    // Add click handlers to list items
     container.querySelectorAll('.entry-list-item').forEach(item => {
         item.addEventListener('click', () => {
             const slug = item.getAttribute('data-index');
-            if (state.corporateMode) {
-                saveCorporateScroll();
-                loadEntryDetail(section, slug, true);
-            } else {
-                loadEntryDetail(section, slug, true, container);
-            }
+            loadEntryDetail(section, slug, true, container);
         });
     });
 
@@ -185,17 +158,7 @@ export function loadEntryDetail(section, slug, updateHash = true, container = do
         const backButton = container.querySelector('.entry-back-button');
         if (backButton) {
             backButton.addEventListener('click', () => {
-                fadeSwapContent(container, () => {
-                    if (state.corporateMode) {
-                        // Back to the corporate layout, scrolled to where it was
-                        state.instantCards = true;
-                        loadSection('about', true, true);
-                        state.instantCards = false;
-                        restoreCorporateScroll();
-                    } else {
-                        loadEntryList(section, true, container);
-                    }
-                });
+                fadeSwapContent(container, () => loadEntryList(section, true, container));
             });
         }
     };
@@ -279,9 +242,8 @@ export function initNavigation() {
 
     // Add arrow key navigation
     document.addEventListener('keydown', (e) => {
-        // Ignore if user is typing in an input field, and in corporate mode,
-        // where the arrow keys scroll the panels instead
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || state.corporateMode) {
+        // Ignore if user is typing in an input field
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
             return;
         }
 
@@ -362,16 +324,6 @@ export function initNavigation() {
     // Function to load section from hash
     function loadFromHash() {
         const hash = window.location.hash.substring(1); // Remove the '#'
-
-        // Corporate mode is one page; only an open paper (#research/<slug>),
-        // shown full-page, is kept
-        if (state.corporateMode) {
-            const [section, slug] = hash.split('/');
-            const paper = section === 'research' && slug !== undefined && findEntryIndex('research', slug) !== -1;
-            loadSection('about', true, !paper);
-            if (paper) loadEntryDetail('research', slug, false, undefined, false);
-            return;
-        }
 
         if (hash) {
             // An entry's detail view, e.g. journal/grain-of-rice-black-hole or research/knight

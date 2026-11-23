@@ -1,10 +1,7 @@
 // The settings panel behind the gear in the footer, and its mode switches.
 
-import { state } from './state.js';
-import { setCorporateMode } from './corporate.js';
-
 // Settings panel: the gear in the footer opens it. Bright mode switches the
-// cards back to white; corporate mode switches to the one-page layout.
+// cards to white.
 export function initSettings() {
     const button = document.getElementById('settings-button');
     const panel = document.getElementById('settings-panel');
@@ -45,11 +42,6 @@ export function initSettings() {
     modeSwitch('bright-mode-switch', 'theme', 'bright', 'dark', true, 'brightMode',
         () => root.classList.contains('bright-mode'),
         on => root.classList.toggle('bright-mode', on));
-
-    // Corporate mode: one-page layout. On by default; ?layout=standard turns it off.
-    modeSwitch('corporate-mode-switch', 'layout', 'corporate', 'standard', true, 'corporateMode',
-        () => state.corporateMode,
-        setCorporateMode);
 
     function setOpen(open) {
         panel.hidden = !open;

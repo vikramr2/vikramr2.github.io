@@ -2,7 +2,7 @@
    and footer. Loaded first on purpose: where a later file sets the same
    property with an equally specific selector, the later rule wins, so some
    phone rules elsewhere use more specific selectors. Feature-specific phone
-   rules live in their feature's file (cards.css, corporate.css, settings.css). */
+   rules live in their feature's file (cards.css, settings.css). */
 
 @media only screen and (max-device-width: 768px) {
   body {

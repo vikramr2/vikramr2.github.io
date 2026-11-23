@@ -15,17 +15,16 @@
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
 
-		<!-- Tab title: data-standard for the regular site, data-corporate in corporate mode -->
-		<title data-standard="[ ~ విkram ~ ]" data-corporate="Vikram Ramavarapu">[ ~ విkram ~ ]</title>
-		<!-- Apply bright mode and corporate mode (both on by default) before anything is drawn, to avoid a flash.
-		     ?theme=bright|dark and ?layout=corporate|standard in the URL win, then the visitor's saved choices. -->
+		<title>[ ~ విkram ~ ]</title>
+		<!-- Apply bright mode (on by default) before anything is drawn, to avoid a flash.
+		     ?theme=bright|dark in the URL wins, then the visitor's saved choice. -->
 		<script>
 			(function () {
 				var params = new URLSearchParams(location.search);
 
 				// A mode's setting: the URL parameter wins, then the visitor's saved
-				// choice, then the default. Both modes are on by default (keep in
-				// sync with the modeSwitch calls in js/settings.js).
+				// choice, then the default. Bright mode is on by default (keep in
+				// sync with the modeSwitch call in js/settings.js).
 				function mode(param, onValue, offValue, storageKey, defaultOn) {
 					var value = params.get(param);
 					if (value === onValue) return true;
@@ -41,13 +40,8 @@
 				if (mode('theme', 'bright', 'dark', 'brightMode', true)) {
 					document.documentElement.classList.add('bright-mode');
 				}
-				if (mode('layout', 'corporate', 'standard', 'corporateMode', true)) {
-					document.documentElement.classList.add('corporate-mode');
-					document.title = document.querySelector('title').dataset.corporate;
-				}
 			})();
 		</script>
-		<!-- Background: three.js + cannon-es physics -->
 		<!-- Import map: CDN libraries, and cache-busting versions for the site's modules in js/ (bump ?v=N on a module you change) -->
 		<script type="importmap">
 			{
@@ -56,13 +50,12 @@
 					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
 					"cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.min.js",
 
-					"./js/state.js": "./js/state.js?v=1",
-					"./js/content.js": "./js/content.js?v=6",
-					"./js/render.js": "./js/render.js?v=2",
-					"./js/title.js": "./js/title.js?v=2",
-					"./js/router.js": "./js/router.js?v=2",
-					"./js/corporate.js": "./js/corporate.js?v=3",
-					"./js/settings.js": "./js/settings.js?v=4"
+					"./js/state.js": "./js/state.js?v=2",
+					"./js/content.js": "./js/content.js?v=7",
+					"./js/render.js": "./js/render.js?v=3",
+					"./js/title.js": "./js/title.js?v=3",
+					"./js/router.js": "./js/router.js?v=3",
+					"./js/settings.js": "./js/settings.js?v=5"
 				}
 			}
 		</script>
@@ -80,13 +73,12 @@
             rel="stylesheet"
         />
 		<!-- Site styles, in cascade order (later files win ties); bump ?v=N on a file you change -->
-		<link rel="stylesheet" href="css/mobile.css?v=4">
+		<link rel="stylesheet" href="css/mobile.css?v=5">
 		<link rel="stylesheet" href="css/layout.css?v=6">
 		<link rel="stylesheet" href="css/cards.css?v=1">
 		<link rel="stylesheet" href="css/content.css?v=2">
-		<link rel="stylesheet" href="css/themes.css?v=2">
-		<link rel="stylesheet" href="css/corporate.css?v=3">
-		<link rel="stylesheet" href="css/settings.css?v=8">
+		<link rel="stylesheet" href="css/themes.css?v=3">
+		<link rel="stylesheet" href="css/settings.css?v=9">
 		<link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 	</head>
 	<body id="main">
@@ -103,7 +95,7 @@
                         <li><a href="#" id = "about" class = "nav-link-typewriter"><h2>about</h2></a></li>
 						<li><a href="#" id = "research" class = "nav-link-typewriter"><h2>research</h2></a></li>
                         <!-- <li><a href="#" id = "projects" class = "nav-link-typewriter"><h2>software</h2></a></li> -->
-						<!-- <li><a href="#" id = "experience" class = "nav-link-typewriter"><h2>cv</h2></a></li> -->
+						<li><a href="#" id = "experience" class = "nav-link-typewriter"><h2>cv</h2></a></li>
 						<li><a href="#" id = "journal" class = "nav-link-typewriter"><h2>journal</h2></a></li>
                     </ul>
                 </div>
@@ -111,7 +103,7 @@
                     <span class="nav-dot" data-section="about"></span>
                     <span class="nav-dot" data-section="research"></span>
                     <!-- <span class="nav-dot" data-section="projects"></span> -->
-                    <!-- <span class="nav-dot" data-section="experience"></span> -->
+                    <span class="nav-dot" data-section="experience"></span>
                     <span class="nav-dot" data-section="journal"></span>
                 </div>
             </div>
@@ -127,10 +119,6 @@
 			<div class="settings-row">
 				<span id="bright-mode-label">Bright mode</span>
 				<button class="settings-switch" id="bright-mode-switch" type="button" role="switch" aria-checked="false" aria-labelledby="bright-mode-label"></button>
-			</div>
-			<div class="settings-row">
-				<span id="corporate-mode-label">Corporate mode</span>
-				<button class="settings-switch" id="corporate-mode-switch" type="button" role="switch" aria-checked="false" aria-labelledby="corporate-mode-label"></button>
 			</div>
 		</div>
 		<div class="footer">
@@ -151,7 +139,7 @@
 						var scholar = document.getElementById("scholar");
 						var about = document.getElementById("about");
 						// var projects = document.getElementById("projects");
-						// var experience = document.getElementById("experience");
+						var experience = document.getElementById("experience");
 						var journal = document.getElementById("journal");
 						var research = document.getElementById("research");
 						var navArrowLeft = document.getElementById("nav-arrow-left");
@@ -179,8 +167,8 @@
 						about.onmouseout       = function() { reset(getCurrentDefaultTitle()); }
 						// projects.onmouseover   = function() { reset("My showcase!"); }
 						// projects.onmouseout    = function() { reset(getCurrentDefaultTitle()); }
-						// experience.onmouseover = function() { reset("Work experience"); }
-						// experience.onmouseout  = function() { reset(getCurrentDefaultTitle()); }
+						experience.onmouseover = function() { reset("Work experience"); }
+						experience.onmouseout  = function() { reset(getCurrentDefaultTitle()); }
 						journal.onmouseover    = function() { reset("#ViksJournal"); }
 						journal.onmouseout     = function() { reset(getCurrentDefaultTitle()); }
 						research.onmouseover   = function() { reset("My Research"); }

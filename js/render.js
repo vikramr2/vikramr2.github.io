@@ -126,7 +126,7 @@ export function renderEntryList(section) {
         const thumbnail = Array.isArray(card.image) ? card.image[0] : card.image;
 
         return `
-            <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}" data-vt="entry-${section}-${slug}"
+            <div class="entry-list-item${thumbnail ? ' has-thumbnail' : ''}" data-index="${slug}"
                 data-interests='${JSON.stringify(card.interests).replace(/'/g, '&#39;')}'>
                 ${thumbnail ? mediaTag(thumbnail, '', 'class="entry-thumbnail"') : ''}
                 <div class="entry-text">
@@ -171,7 +171,7 @@ export function renderEntryDetail(section, slug) {
 
     return `
         <div class="entry-detail">
-            <button class="entry-back-button">${state.corporateMode ? 'Back to Home' : LIST_SECTIONS[section].backLabel}</button>
+            <button class="entry-back-button">${LIST_SECTIONS[section].backLabel}</button>
             ${cardHTML}
         </div>
     `;
@@ -239,7 +239,7 @@ export function renderCard(card, isAboutStyle = false) {
         }
 
         return `
-            <div class="card mb-3 about about-home"${card.vt ? ` data-vt="${card.vt}"` : ''}>
+            <div class="card mb-3 about about-home">
                 ${imageHTML}
                 <div class="card-body">
                     ${card.body}
@@ -248,7 +248,7 @@ export function renderCard(card, isAboutStyle = false) {
         `;
     } else {
         return `
-            <div class="card"${card.vt ? ` data-vt="${card.vt}"` : ''}>
+            <div class="card">
                 ${card.header ? `<h5 class="card-header">${card.header}</h5>` : ''}
                 <div class="card-body">
                     ${card.body}

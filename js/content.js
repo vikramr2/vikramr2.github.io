@@ -36,8 +36,8 @@ function processLatex(text) {
 
 // Build the research interest tab widget HTML
 // Each text is a string, or a list of strings for several paragraphs
-function buildResearchTabWidget(shortText, longText, openTab = 'short') {
-    const active = tab => (tab === openTab ? ' active' : '');
+function buildResearchTabWidget(shortText, longText) {
+    const active = tab => (tab === 'short' ? ' active' : '');
     const paragraphs = text => [].concat(text).map(t => `<p class="card-text">${t}</p>`).join('');
     return `<div class="research-tabs">
         <div class="research-tab-buttons">
@@ -136,7 +136,7 @@ const RESEARCH_TABS_MARKER = '[[research-tabs]]';
 // A card's body HTML: the PDF viewer for a card with a PDF, or else its
 // paragraphs, with the research-interests tab widget in place of the
 // "[[research-tabs]]" line when the card has research_short/research_long
-function buildCardBody(card, paragraphs, openTab = 'short') {
+function buildCardBody(card, paragraphs) {
     if (card.pdfUrl) {
         return renderPDFViewer(card.pdfUrl);
     }
@@ -144,7 +144,7 @@ function buildCardBody(card, paragraphs, openTab = 'short') {
         return '';
     }
     if (card.research_short && card.research_long) {
-        const tabWidget = buildResearchTabWidget(card.research_short, card.research_long, openTab);
+        const tabWidget = buildResearchTabWidget(card.research_short, card.research_long);
         return paragraphsToHTML(paragraphs.map(p => (p === RESEARCH_TABS_MARKER ? tabWidget : p)));
     }
     return paragraphsToHTML(paragraphs);
@@ -163,20 +163,6 @@ async function loadSectionContent(section) {
             cards: data.cards.map(card => {
                 const body = buildCardBody(card, card.paragraphs);
 
-                // Corporate mode's version of the card, where corporateParagraphs
-                // replaces paragraphs by position, e.g. { "0": "<b>Hey Guys!</b>" },
-                // and null removes one
-                let corporate = null;
-                const hasResearchTabs = card.research_short && card.research_long;
-                if ((card.corporateParagraphs || hasResearchTabs) && card.paragraphs) {
-                    const overrides = card.corporateParagraphs || {};
-                    const paragraphs = card.paragraphs
-                        .map((p, i) => (String(i) in overrides ? overrides[i] : p))
-                        .filter(p => p !== null);
-                    // Corporate mode opens the research-interests tabs on Long
-                    corporate = { paragraphs, body: buildCardBody(card, paragraphs, 'long') };
-                }
-
                 return {
                     index: card.index,
                     image: card.image,
@@ -186,11 +172,8 @@ async function loadSectionContent(section) {
                     imageScale: card.imageScale,
                     header: card.header,
                     pdfUrl: card.pdfUrl,
-                    hideInCorporate: card.hideInCorporate || false,
-                    corporateSection: card.corporateSection || null,
                     interests: card.interests || [],
                     body: body,
-                    corporate: corporate,
                     paragraphs: card.paragraphs // Preserve original paragraphs for metadata extraction
                 };
             }),
