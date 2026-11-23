@@ -4,11 +4,10 @@
       "image": "assets/me.jpeg?v=2",
       "imageAlt": "Vikram Ramavarapu",
       "corporateParagraphs": {
-        "0": "<b>Hey Guys!</b>",
         "1": "My name's Vikram. I'm a PhD student in Computer Science at the University of Illinois at Urbana-Champaign, advised by <a href=https://ischool.illinois.edu/people/bertram-ludascher>Prof. Bertram Ludäscher</a> at UIUC and <a href=https://mcml.ai/research/groups/diesner/>Prof. Jana Diesner</a> at TUM."
       },
       "paragraphs": [
-        "<b>wsg ~</b>",
+        "<b>Hey Guys!</b>",
         "My name's Vikram.",
         "",
         "<b>Research Interests</b>:",
